@@ -14,6 +14,11 @@
 
 #include <stdio.h>
 #include <dirent.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <errno.h>
+#include <errno.h>
+#include <string.h>
 
 #include <string>
 #include <vector>
@@ -45,8 +50,12 @@ struct DirectoryEntry
  * @brief CLASSE RESPONSAVEL POR GERENCIAR O CARTAO DE MEMORIA
 */
 class Sd {
-    public:
+	public:
 		static bool							sd_init(void);
+		static bool							exist_dir(const char *path);
+		static bool							exist_file(const char *path);
+		static const char					*create_dir(const char *path);
+		static bool							remove_dir(const char *path);
 		static std::vector<DirectoryEntry>	list_dir(const char *path);
 };
 
