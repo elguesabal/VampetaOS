@@ -17,8 +17,8 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <errno.h>
-#include <errno.h>
 #include <string.h>
+#include <fcntl.h>
 
 #include <string>
 #include <vector>
@@ -34,6 +34,7 @@
 #define MOSI		GPIO_NUM_14
 #define CS			GPIO_NUM_12
 #define MOUNT_POINT	"/sdcard"
+#define DIR_SYSTEM	"/VampetaOS"
 
 /**
  * @author elguesabal
@@ -54,9 +55,13 @@ class Sd {
 		static bool							sd_init(void);
 		static bool							exist_dir(const char *path);
 		static bool							exist_file(const char *path);
-		static const char					*create_dir(const char *path);
+		static bool							create_dir(const char *path);
 		static bool							remove_dir(const char *path);
+		static bool							create_file(const char *path);
 		static std::vector<DirectoryEntry>	list_dir(const char *path);
+
+	private:
+		static std::string					full_path(const char *path);
 };
 
 #endif
