@@ -4,16 +4,16 @@
   + -------------------------------------------------------------------------- +
   |                                                                            |
   |  elguesabal@VampetaOS:~$ pwd                                               |
-  |  /sd/sd.cpp                                                                |
+  |  /Sd/Sd.cpp                                                                |
   |                                                                            |
   |  elguesabal@VampetaOS:~$ functions                                         |
-  |  sd_init                                                                   |
+  |  init_sd                                                                   |
   |  list_dir                                                                  |
   |                                                                            |
   + -------------------------------------------------------------------------- +
 */
 
-#include "sd.hpp"
+#include "Sd.hpp"
 
 /**
  * @author elguesabal
@@ -21,7 +21,7 @@
  * @return RETORNA true PARA INICIALIZACAO CORRETA DO CARTAO SD
  * @return RETORNA false PARA ERRO NA INICIALIZACAO DO CARTAO SD
 */
-bool	Sd::sd_init(void) {
+bool	Sd::init_sd(void) {
 	spi_bus_config_t bus_cfg = {};
 	bus_cfg.mosi_io_num = MOSI;
 	bus_cfg.miso_io_num = MISO;
@@ -46,25 +46,24 @@ bool	Sd::sd_init(void) {
 	ret = esp_vfs_fat_sdspi_mount(MOUNT_POINT, &host, &slot_config, &mount_config, &card);
 	if (ret != ESP_OK) {
 		printf("%s\n", esp_err_to_name(ret));
+		spi_bus_free(SPI2_HOST);
 		return (false);
 	}
-	printf("SD card mounted\n");
+	printf("SD card: OK\n");
 	return (true);
 }
-
-// Sd::init_dir()
-// Sd::init_system()
 
 /**
  * @author elguesabal
  * @brief VERIFICA SE O DIRETORIO EXISTE
  * @param path CAMINHO RECEBIDO PARA CONSULTA
  * @return RETORNA true CASO O DIRETORIO EXISTA
- * @return RETORNA false CASO O SEJA UM ARQUIVO OU NAO EXISTA
+ * @return RETORNA false CASO O SEJA UM ARQUIVO
+ * @return RETORNA false CASO NAO EXISTA
 */
 bool	Sd::exist_dir(const char *path) {
 	struct stat info;
-	if (stat(full_path(path).c_str(), &info) != 0) return (false);
+	if (stat(System::full_path(path).c_str(), &info) != 0) return (false);
 	return (S_ISDIR(info.st_mode));
 }
 
@@ -73,11 +72,12 @@ bool	Sd::exist_dir(const char *path) {
  * @brief VERIFICA SE O ARQUIVO EXISTE
  * @param path CAMINHO RECEBIDO PARA CONSULTA
  * @return RETORNA true CASO O ARQUIVO EXISTA
- * @return RETORNA false CASO O SEJA UM DIRETORIO OU NAO EXISTA
+ * @return RETORNA false CASO O SEJA UM DIRETORIO
+ * @return RETORNA false CASO NAO EXISTA
 */
 bool	Sd::exist_file(const char *path) {
 	struct stat info;
-	if (stat(full_path(path).c_str(), &info) != 0) return (false);
+	if (stat(System::full_path(path).c_str(), &info) != 0) return (false);
 	return (S_ISREG(info.st_mode));
 }
 
@@ -86,10 +86,10 @@ bool	Sd::exist_file(const char *path) {
  * @brief CRIA UM DIRETORIO
  * @param path CAMINHO QUE DESEJA CRIAR O DIRETORIO
  * @return RETORNA true CASO O DIRETORIO SEJA CRIADO
- * @return RETORNA false CASO O DIRETORIO NAO SEJA CRIADO OU JA EXISTA ALGO COM MESMO NOME
+ * @return RETORNA false EM CASO DE FALHA
 */
 bool	Sd::create_dir(const char *path) {
-	return (mkdir(full_path(path).c_str(), 0777) == 0);
+	return (mkdir(System::full_path(path).c_str(), 0777) == 0);
 }
 
 /**
@@ -97,28 +97,70 @@ bool	Sd::create_dir(const char *path) {
  * @brief REMOVE UM DIRETORIO
  * @param path CAMINHO QUE DESEJA EXCLUIR O DIRETORIO
  * @return RETORNA true CASO O DIRETORIO SEJA EXCLUIDO
- * @return RETORNA false CASO O DIRETORIO NAO SEJA EXCLUIDO
+ * @return RETORNA false EM CASO DE FALHA
 */
 bool	Sd::remove_dir(const char *path) {
-	return (rmdir(full_path(path).c_str()) == 0);
+	return (rmdir(System::full_path(path).c_str()) == 0);
 }
 
 /**
  * @author elguesabal
- * @brief REMOVE UM DIRETORIO
- * @param path CAMINHO QUE DESEJA EXCLUIR O DIRETORIO
+ * @brief CRIA UM ARQUIVO VAZIO
+ * @param path CAMINHO QUE DESEJA CRIAR O ARQUIVO
  * @return RETORNA true CASO O ARQUIVO SEJA CRIADO
- * @return RETORNA false CASO O ARQUIVO NAO SEJA CRIADO OU JA EXISTA ALGO COM MESMO NOME
+ * @return RETORNA false CASO JA EXISTA ALGO COM MESMO NOME
+ * @return RETORNA false CASO O ARQUIVO NAO SEJA CRIADO
 */
 bool	Sd::create_file(const char *path) {
-	int fd = open(full_path(path).c_str(), O_WRONLY | O_CREAT | O_EXCL, 0666);
+	int fd = open(System::full_path(path).c_str(), O_WRONLY | O_CREAT | O_EXCL, 0666);
 	if (fd == -1) return (false);
 	close(fd);
 	return (true);
 }
 
-// bool	Sd::create_file(const char *path, const char *value) {
+/**
+ * @author elguesabal
+ * @brief CRIA UM ARQUIVO VAZIO E ADICIONA VALOR
+ * @param path CAMINHO QUE DESEJA CRIAR O ARQUIVO
+ * @param content VALOR QUE VAI SER ADICIONADO AO ARQUIVO
+ * @return RETORNA true CASO O ARQUIVO SEJA CRIADO
+ * @return RETORNA false CASO JA EXISTA ALGO COM MESMO NOME
+ * @return RETORNA false CASO O ARQUIVO NAO SEJA CRIADO
+ * @return RETORNA false CASO A FUNCAO WRITE ESCREVA MENOS BYTES DO ENVIADO
+*/
+bool	Sd::create_file(const char *path, const char *content) {
+	if (content == NULL) return (false);
+	int fd = open(System::full_path(path).c_str(), O_WRONLY | O_CREAT | O_EXCL, 0666);
+	if (fd == -1) return (false);
+	ssize_t bytes = write(fd, content, strlen(content));
+	if (bytes != (ssize_t)strlen(content)) {
+		close(fd);
+		return (false);
+	}
+	close(fd);
+	return (true);
+}
 
+// /**
+//  * @author elguesabal
+//  * @brief ADICIONA VALOR NO INICIO DO ARQUIVO
+//  * @param path CAMINHO QUE DESEJA CRIAR O ARQUIVO
+//  * @param content VALOR QUE VAI SER ADICIONADO AO ARQUIVO
+//  * @return RETORNA true CASO O ARQUIVO SEJA ESCRITO
+//  * @return RETORNA false CASO A FUNCAO WRITE ESCREVA MENOS BYTES DO ENVIADO
+//  * @return RETORNA false CASO O ARQUIVO NAO EXISTA
+// */
+// bool	Sd::write_file(const char *path, const char *content) {
+//	if (content == NULL) return (false);
+// 	int fd = open(System::full_path(path).c_str(), O_WRONLY);
+// 	if (fd == -1) return (false);
+// 	ssize_t bytes = write(fd, content, strlen(content));
+// 	if (bytes != (ssize_t)strlen(content)) {
+// 		close(fd);
+// 		return (false);
+// 	}
+// 	close(fd);
+// 	return (true);
 // }
 
 /**
@@ -128,7 +170,7 @@ bool	Sd::create_file(const char *path) {
  * @return RETORNA UMA LISTA DO STRUCT DirectoryEntry CONTENDO OS NOMES E IDENTIFICANDO DIRETORIOS E ARQUIVOS
 */
 std::vector<DirectoryEntry>	Sd::list_dir(const char *path) {		// AINDA SEM TRATAMENTO DE ERRO CORRETO
-	DIR *dir = opendir(full_path(path).c_str());
+	DIR *dir = opendir(System::full_path(path).c_str());
 	if (dir == NULL) {
 		printf("Nao foi possivel abrir o diretorio\n");
 		return (std::vector<DirectoryEntry>());
@@ -143,14 +185,4 @@ std::vector<DirectoryEntry>	Sd::list_dir(const char *path) {		// AINDA SEM TRATA
 	}
 	closedir(dir);
 	return (entries);
-}
-
-/**
- * @author elguesabal
- * @brief CRIA UMA STRING COM O PATH COMPLETO PARA SER USADO INTERNAMENTE (INCLUI NO PATH NOME DA UNIDADE E DIRETORIO DO SISTEMA)
- * @param path CAMINHO POSTERIOR DO NOME DA UNIDADE E DIRETORIO DO SISTEMA
- * @return RETORNA UMA STRING COM O PATH COMPLETO
-*/
-std::string	Sd::full_path(const char *path) {
-	return (std::string(MOUNT_POINT) + DIR_SYSTEM + path);
 }
