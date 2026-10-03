@@ -55,4 +55,6 @@ extern "C" void	app_main(void) {
 	// 	write(1, "VampetaOS\n", 10);
 	// 	sleep(1);
 	// }
+  // write(1, "Windows\n", 8);
+  write(1, "Linux\n", 6);
 }
