@@ -1,9 +1,11 @@
 idf_component_register(
     SRCS 
         "main.cpp"
-        "Sd/Sd.cpp"
-        "System/System.cpp"
-        "Wifi/Wifi.cpp"
+        "Sd/sd.cpp"
+        "Sd/directory.cpp"
+        "Sd/file.cpp"
+        "System/system.cpp"
+        "Wifi/wifi.cpp"
 
     INCLUDE_DIRS
         "."

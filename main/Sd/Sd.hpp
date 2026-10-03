@@ -52,14 +52,16 @@ struct DirectoryEntry
 class Sd {
 	public:
 		static bool							init_sd(void);
+
 		static bool							exist_dir(const char *path);
-		static bool							exist_file(const char *path);
 		static bool							create_dir(const char *path);
 		static bool							remove_dir(const char *path);
+		static std::vector<DirectoryEntry>	list_dir(const char *path);
+
+		static bool							exist_file(const char *path);
 		static bool							create_file(const char *path);
 		static bool							create_file(const char *path, const char *content);
 		// static bool							write_file(const char *path, const char *content);
-		static std::vector<DirectoryEntry>	list_dir(const char *path);
 };
 
 #endif
