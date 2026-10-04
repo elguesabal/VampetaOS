@@ -69,24 +69,24 @@ bool	Sd::create_file(const char *path, const char *content) {
 	return (true);
 }
 
-// /**
-//  * @author elguesabal
-//  * @brief ADICIONA VALOR NO INICIO DO ARQUIVO
-//  * @param path CAMINHO QUE DESEJA CRIAR O ARQUIVO
-//  * @param content VALOR QUE VAI SER ADICIONADO AO ARQUIVO
-//  * @return RETORNA true CASO O ARQUIVO SEJA ESCRITO
-//  * @return RETORNA false CASO A FUNCAO WRITE ESCREVA MENOS BYTES DO ENVIADO
-//  * @return RETORNA false CASO O ARQUIVO NAO EXISTA
-// */
-// bool	Sd::write_file(const char *path, const char *content) {
-//	if (content == NULL) return (false);
-// 	int fd = open(System::full_path(path).c_str(), O_WRONLY);
-// 	if (fd == -1) return (false);
-// 	ssize_t bytes = write(fd, content, strlen(content));
-// 	if (bytes != (ssize_t)strlen(content)) {
-// 		close(fd);
-// 		return (false);
-// 	}
-// 	close(fd);
-// 	return (true);
-// }
+/**
+ * @author elguesabal
+ * @brief ADICIONA VALOR NO INICIO DO ARQUIVO
+ * @param path CAMINHO QUE DESEJA CRIAR O ARQUIVO
+ * @param content VALOR QUE VAI SER ADICIONADO AO ARQUIVO
+ * @return RETORNA true CASO O ARQUIVO SEJA ESCRITO
+ * @return RETORNA false CASO A FUNCAO WRITE ESCREVA MENOS BYTES DO ENVIADO
+ * @return RETORNA false CASO O ARQUIVO NAO EXISTA
+*/
+bool	Sd::write_file(const char *path, const char *content) {
+	if (content == NULL) return (false);
+	int fd = open(System::full_path(path).c_str(), O_WRONLY);
+	if (fd == -1) return (false);
+	ssize_t bytes = write(fd, content, strlen(content));
+	if (bytes != (ssize_t)strlen(content)) {
+		close(fd);
+		return (false);
+	}
+	close(fd);
+	return (true);
+}

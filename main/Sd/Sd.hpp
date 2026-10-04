@@ -61,7 +61,7 @@ class Sd {
 		static bool							exist_file(const char *path);
 		static bool							create_file(const char *path);
 		static bool							create_file(const char *path, const char *content);
-		// static bool							write_file(const char *path, const char *content);
+		static bool							write_file(const char *path, const char *content);
 };
 
 #endif

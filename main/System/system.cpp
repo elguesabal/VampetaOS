@@ -23,27 +23,6 @@
  * @return RETORNA false SE O DIRETORIO DE SISTEMA NAO EXISTE A FALHE NA CRIACAO
 */
 bool	System::init_system(void) {
-	// std::string path_system = std::string(MOUNT_POINT) + DIR_SYSTEM;
-	// struct stat info;
-	// if (stat(path_system.c_str(), &info) == 0) {
-	// 	if (!S_ISDIR(info.st_mode)) {
-	// 		printf("%s must be a directory\n", path_system.c_str());
-	// 		return (false);
-	// 	}
-	// 	printf("System: OK\n");
-	// 	return (true);
-	// }
-	// if (errno != ENOENT) {
-	// 	printf("%s\n", strerror(errno));
-	// 	return (false);
-	// }
-	// if (mkdir(path_system.c_str(), 0777) == -1) {
-	// 	printf("%s\n", strerror(errno));
-	// 	return (false);
-	// }
-	// printf("System: OK\n");
-	// return (true);
-
     if (Sd::exist_dir("/")) {
         printf("System: OK\n");
         return (true);
