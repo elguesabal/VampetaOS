@@ -50,6 +50,11 @@ extern "C" void	app_main(void) {
 // for (const DirectoryEntry& entry : ls) printf("%s\n", entry.name.c_str());
 // write(1, "\n\n\n", 3);
 
+// std::string wifi_config;
+// if (!Sd::read_file("/Wifi/WIFI_CONFIG", wifi_config)) printf("read_file -> %s\n\n\n", strerror(errno));
+// printf("%s\n", wifi_config.c_str());
+// write(1, "\n\n\n", 3);
+
 	write(1, "VampetaOS\n", 10);
 	// while (1) {
 	// 	write(1, "VampetaOS\n", 10);

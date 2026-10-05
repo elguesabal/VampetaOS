@@ -29,6 +29,9 @@
 class Wifi {
 	public:
 		static bool	init_wifi(void);
+
+	private:
+		static bool	init_dir(void);
 };
 
 #endif

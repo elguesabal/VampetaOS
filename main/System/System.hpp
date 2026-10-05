@@ -31,6 +31,9 @@ class System {
 	public:
 		static bool			init_system(void);
 		static std::string	full_path(const char *path);
+
+	private:
+		static bool			init_dir(void);
 };
 
 #endif

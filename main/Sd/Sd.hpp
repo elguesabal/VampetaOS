@@ -59,9 +59,12 @@ class Sd {
 		static std::vector<DirectoryEntry>	list_dir(const char *path);
 
 		static bool							exist_file(const char *path);
+		static off_t						size_file(const char *path);
 		static bool							create_file(const char *path);
 		static bool							create_file(const char *path, const char *content);
-		static bool							write_file(const char *path, const char *content);
+		static bool							write_file_truncate(const char *path, const char *content);
+		static bool							write_file_append(const char *path, const char *content);
+		static bool							read_file(const char *path, std::string &content);
 };
 
 #endif

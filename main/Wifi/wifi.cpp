@@ -8,6 +8,7 @@
   |                                                                            |
   |  elguesabal@VampetaOS:~$ functions                                         |
   |  init_wifi                                                                 |
+  |  init_dir                                                                  |
   |                                                                            |
   + -------------------------------------------------------------------------- +
 */
@@ -15,16 +16,27 @@
 #include "Wifi.hpp"
 
 /**
-* @author elguesabal
-* @brief VERIFICA SE O ARQUIVO DE CONFIGURACAO DO WIFI EXISTE E CRIA CASO NAO
-* @return RETORNA true CASO /Wifi/WIFI_CONFIG EXISTA E ESTEJA CONFIGURADO CORRETAMENTE
-* @return RETORNA false CASO /Wifi SEJA UM ARQUIVO
-* @return RETORNA false CASO /Wifi NAO EXISTA E FALHE NA CRIACAO
-* @return RETORNA false CASO /Wifi/WIFI_CONFIG SEJA UM DIRETORIO
-* @return RETORNA false CASO /Wifi/WIFI_CONFIG NAO EXISTA E FALHE NA CRIACAO
-* @return RETORNA false CASO /Wifi/WIFI_CONFIG NAO EXISTA E SEJA CRIADO (SEM CREDENCIAIS CONFIGURADAS)
+ * @author elguesabal
+ * @brief INICIA O WIFI
+ * @return RETORNA true EM CASO DE WIFI INICIADO COM SUCESSO
+ * @return RETORNA false CASO init_dir FALHE
 */
 bool	Wifi::init_wifi(void) {
+	if (!init_dir()) return (false);
+	return (true);
+}
+
+/**
+ * @author elguesabal
+ * @brief VERIFICA SE O ARQUIVO DE CONFIGURACAO DO WIFI EXISTE E CRIA CASO NAO
+ * @return RETORNA true CASO /Wifi/WIFI_CONFIG EXISTA E ESTEJA CONFIGURADO CORRETAMENTE
+ * @return RETORNA false CASO /Wifi SEJA UM ARQUIVO
+ * @return RETORNA false CASO /Wifi NAO EXISTA E FALHE NA CRIACAO
+ * @return RETORNA false CASO /Wifi/WIFI_CONFIG SEJA UM DIRETORIO
+ * @return RETORNA false CASO /Wifi/WIFI_CONFIG NAO EXISTA E FALHE NA CRIACAO
+ * @return RETORNA false CASO /Wifi/WIFI_CONFIG NAO EXISTA E SEJA CRIADO (SEM CREDENCIAIS CONFIGURADAS)
+*/
+bool	Wifi::init_dir(void) {
 	if (!Sd::exist_dir("/Wifi")) {
 		if (Sd::exist_file("/Wifi")) {
 			printf("/Wifi must be a directory\n");

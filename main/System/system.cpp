@@ -8,6 +8,7 @@
   |                                                                            |
   |  elguesabal@VampetaOS:~$ functions                                         |
   |  init_system                                                               |
+  |  init_dir                                                                  |
   |  full_path                                                                 |
   |                                                                            |
   + -------------------------------------------------------------------------- +
@@ -19,10 +20,21 @@
  * @author elguesabal
  * @brief INICIALIZA O SISTEMA
  * @return RETORNA true PARA ARQUIVOS DE SISTEMA OK
+ * @return RETORNA false CASO init_dir FALHE
+*/
+bool	System::init_system(void) {
+	if (!init_dir()) return (false);
+	return (true);
+}
+
+/**
+ * @author elguesabal
+ * @brief INICIALIZA O SISTEMA
+ * @return RETORNA true PARA ARQUIVOS DE SISTEMA OK
  * @return RETORNA false SE EXISTIR UM ARQUIVO COM O NOME /VampetaOS
  * @return RETORNA false SE O DIRETORIO DE SISTEMA NAO EXISTE A FALHE NA CRIACAO
 */
-bool	System::init_system(void) {
+bool    System::init_dir(void) {
     if (Sd::exist_dir("/")) {
         printf("System: OK\n");
         return (true);
