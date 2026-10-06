@@ -30,7 +30,7 @@
 */
 bool	Sd::exist_file(const char *path) {
 	struct stat info;
-	if (stat(System::full_path(path).c_str(), &info) != 0) return (false);
+	if (stat(System::full_path(path).c_str(), &info) == -1) return (false);
 	return (S_ISREG(info.st_mode));
 }
 
@@ -185,19 +185,43 @@ bool	Sd::read_file(const char *path, std::string &content) {
 	close(fd);
 	if (bytes == -1) return (false);
 	return (true);
+}
 
-	// std::string full_path = System::full_path(path);
-	// struct stat info;
-	// if (stat(System::full_path(path).c_str(), &info) == -1) return (false);
-	// if (!S_ISREG(info.st_mode)) return (false);
-	// int fd = open(full_path.c_str(), O_RDONLY);
-	// if (fd == -1) return (false);
-	// content.resize(info.st_size);
-	// ssize_t bytes = read(fd, content.data(), info.st_size);
-	// close(fd);
-	// if (bytes != info.st_size) {
-	// 	content.clear();
-	// 	return (false);
-	// }
-	// return (true);
+/**
+ * @author elguesabal
+ * @brief ESCREVE AO FINAL DO ARQUIVO
+ * @param path CAMINHO DO ARQUIVO DE CONFIGURACAO
+ * @param name NOME DA CONFIGURACAO
+ * @param value REFERENCIA QUE VAI ARMAZENAR O VALOR DA CONFIGURACAO
+ * @return RETORNA true 
+*/
+bool	Sd::get_config(const char *path, const char *name, std::string &value) {
+	int fd = open(System::full_path(path).c_str(), O_RDONLY);
+	if (fd == -1) return (false);
+	char buffer[256];
+	std::string content;
+	ssize_t bytes;
+	while ((bytes = read(fd, buffer, sizeof(buffer))) > 0) content.append(buffer, bytes);
+	close(fd);
+	if (bytes == -1) return (false);
+	size_t pos = 0;
+	while (pos < content.size()) {
+		size_t end = content.find('\n', pos);
+		if (end == std::string::npos) end = content.size();
+		std::string line = content.substr(pos, end - pos);
+		size_t equal = line.find('=');
+		if (equal != std::string::npos) {
+			std::string current_name = line.substr(0, equal);
+			if (current_name == name) {
+				size_t first_quote = line.find('"', equal);
+				size_t last_quote = line.rfind('"');
+				if (first_quote == std::string::npos || last_quote == std::string::npos || first_quote == last_quote) return (false);
+				value = line.substr(first_quote + 1, last_quote - first_quote - 1);
+				return (true);
+			}
+		}
+		if (end == content.size()) break;
+		pos = end + 1;
+	}
+	return (false);
 }

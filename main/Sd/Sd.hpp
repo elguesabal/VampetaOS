@@ -65,6 +65,7 @@ class Sd {
 		static bool							write_file_truncate(const char *path, const char *content);
 		static bool							write_file_append(const char *path, const char *content);
 		static bool							read_file(const char *path, std::string &content);
+		static bool							get_config(const char *path, const char *name, std::string &value);
 };
 
 #endif
