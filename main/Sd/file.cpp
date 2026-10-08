@@ -170,7 +170,6 @@ bool	Sd::write_file_append(const char *path, const char *content) {
  * @param path CAMINHO QUE DESEJA LER O ARQUIVO
  * @param content REFERENCIA QUE VAI ARMAZENAR O CONTEUDO DO ARQUIVO
  * @return RETORNA true CASO O ARQUIVO SEJA LIDO CORRETAMENTE
- * @return RETORNA false CASO O ARGUMENTO content SEJA NULL
  * @return RETORNA false CASO A FUNCAO open RETORNE GERE UM ERRO
  * @return RETORNA false CASO A FUNCAO write RETORNE GERE UM ERRO
  * @return RETORNA false CASO A FUNCAO write ESCREVA MENOS BYTES DO ENVIADO
@@ -189,11 +188,15 @@ bool	Sd::read_file(const char *path, std::string &content) {
 
 /**
  * @author elguesabal
- * @brief ESCREVE AO FINAL DO ARQUIVO
+ * @brief LE UMA CONFIGURACAO COM BASE NO path E name
  * @param path CAMINHO DO ARQUIVO DE CONFIGURACAO
  * @param name NOME DA CONFIGURACAO
  * @param value REFERENCIA QUE VAI ARMAZENAR O VALOR DA CONFIGURACAO
- * @return RETORNA true 
+ * @return RETORNA true CASO A CONFIGURACAO SEJA LIDA E ARMAZENADA EM value COM SUCESSO E SALVA 0 DENTRO DE errno
+ * @return RETORNA false CASO A FUNCAO open RETORNE GERE UM ERRO
+ * @return RETORNA false CASO A FUNCAO read RETORNE GERE UM ERRO
+ * @return RETORNA false CASO A CONFIGURACAO ESTEJA INVALIDA
+ * @return RETORNA false CASO A CONFIGURACAO NAO SEJA ENCONTRADA
 */
 bool	Sd::get_config(const char *path, const char *name, std::string &value) {
 	int fd = open(System::full_path(path).c_str(), O_RDONLY);
@@ -223,5 +226,52 @@ bool	Sd::get_config(const char *path, const char *name, std::string &value) {
 		if (end == content.size()) break;
 		pos = end + 1;
 	}
+	errno = 0;
 	return (false);
+}
+
+/**
+ * @author elguesabal
+ * @brief ESCREVE UMA CONFIGURACAO COM BASE NO path E name
+ * @param path CAMINHO DO ARQUIVO DE CONFIGURACAO
+ * @param name NOME DA CONFIGURACAO
+ * @param value REFERENCIA QUE VAI ARMAZENAR O VALOR DA CONFIGURACAO
+ * @return RETORNA true CASO A CONFIGURACAO SEJA SALVA COM SUCESSO
+ * @return RETORNA false CASO A FUNCAO open RETORNE GERE UM ERRO
+ * @return RETORNA false CASO A FUNCAO read RETORNE GERE UM ERRO
+ * @return RETORNA false CASO A FUNCAO open RETORNE GERE UM ERRO
+ * @return RETORNA false CASO A QUANTIDADE DE BYTES ESCRITOS SEJA DIFERENTE DO PEDIDO
+*/
+bool	Sd::set_config(const char *path, const char *name, const char *value) {
+	int fd = open(System::full_path(path).c_str(), O_RDONLY);
+	if (fd == -1) return (false);
+	char buffer[256];
+	std::string content;
+	ssize_t bytes;
+	while ((bytes = read(fd, buffer, sizeof(buffer))) > 0) content.append(buffer, bytes);
+	close(fd);
+	if (bytes == -1) return (false);
+	size_t pos = 0;
+	while (pos < content.size()) {
+		size_t end = content.find('\n', pos);
+		if (end == std::string::npos) end = content.size();
+		std::string line = content.substr(pos, end - pos);
+		size_t equal = line.find('=');
+		if (equal != std::string::npos) {
+			std::string current_name = line.substr(0, equal);
+			if (current_name == name) {
+				std::string new_line;
+				new_line = std::string(name) + "=\"" + value + "\"";
+				content.replace(pos, end - pos, new_line);
+				break;
+			}
+		}
+		if (end == content.size()) break;
+		pos = end + 1;
+	}
+	fd = open(System::full_path(path).c_str(), O_WRONLY | O_TRUNC);
+	if (fd == -1) return (false);
+	bytes = write(fd, content.c_str(), content.size());
+	close(fd);
+	return (bytes == (ssize_t)content.size());
 }
