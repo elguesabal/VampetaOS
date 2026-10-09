@@ -46,6 +46,17 @@ extern "C" void	app_main(void) {
 
 // if (!Sd::write_file("/file.txt", "VampetaOS")) printf("write_file -> %s\n\n\n", strerror(errno));
 
+if (!Sd::set_config("/Wifi/WIFI_CONFIG", "WIFI", "VampetaOS")) printf("set_config -> %s\n\n\n", strerror(errno));
+
+std::string wifi = Sd::get_config("/Wifi/WIFI_CONFIG", "WIFI");
+if (!wifi.empty()) {
+	printf("%s\n", wifi.c_str());
+} else if (errno) {
+	printf("get_config -> %s\n\n\n", strerror(errno));
+} else if (errno == 0) {
+	printf("errno == 0");
+}
+
 // std::vector<DirectoryEntry>	ls = Sd::list_dir("/");
 // for (const DirectoryEntry& entry : ls) printf("%s\n", entry.name.c_str());
 // write(1, "\n\n\n", 3);
@@ -55,11 +66,12 @@ extern "C" void	app_main(void) {
 // printf("%s\n", wifi_config.c_str());
 // write(1, "\n\n\n", 3);
 
-	write(1, "VampetaOS\n", 10);
+	// write(1, "VampetaOS\n", 10);
+	printf("\n\nVampetaOS\n");
 	// while (1) {
 	// 	write(1, "VampetaOS\n", 10);
 	// 	sleep(1);
 	// }
 	// write(1, "Windows\n", 8);
-	write(1, "Linux\n", 6);
+	// write(1, "Linux\n", 6);
 }
