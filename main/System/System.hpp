@@ -29,10 +29,12 @@
 */
 class System {
 	public:
+		// /System/System.cpp
 		static bool			init_system(void);
 		static std::string	full_path(const char *path);
 
 	private:
+		// /System/System.cpp
 		static bool			init_dir(void);
 };
 

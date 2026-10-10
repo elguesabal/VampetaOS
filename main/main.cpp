@@ -46,20 +46,27 @@ extern "C" void	app_main(void) {
 
 // if (!Sd::write_file("/file.txt", "VampetaOS")) printf("write_file -> %s\n\n\n", strerror(errno));
 
-if (!Sd::set_config("/Wifi/WIFI_CONFIG", "WIFI", "VampetaOS")) printf("set_config -> %s\n\n\n", strerror(errno));
+// if (!Sd::set_config("/Wifi/WIFI_CONFIG", "WIFI", "VampetaOS")) printf("set_config -> %s\n\n\n", strerror(errno));
 
-std::string wifi = Sd::get_config("/Wifi/WIFI_CONFIG", "WIFI");
-if (!wifi.empty()) {
-	printf("%s\n", wifi.c_str());
-} else if (errno) {
-	printf("get_config -> %s\n\n\n", strerror(errno));
-} else if (errno == 0) {
-	printf("errno == 0");
-}
+// std::string wifi = Sd::get_config("/Wifi/WIFI_CONFIG", "WIFI");
+// if (!wifi.empty()) {
+// 	printf("%s\n", wifi.c_str());
+// } else if (errno) {
+// 	printf("get_config -> %s\n\n\n", strerror(errno));
+// } else if (errno == 0) {
+// 	printf("errno == 0");
+// }
+// printf("\n\n\n");
 
 // std::vector<DirectoryEntry>	ls = Sd::list_dir("/");
-// for (const DirectoryEntry& entry : ls) printf("%s\n", entry.name.c_str());
-// write(1, "\n\n\n", 3);
+// if (errno != 0) {
+// 	printf("list_dir -> %s\n\n\n", strerror(errno));
+// } else if (!ls.empty()) {
+// 	for (const DirectoryEntry& entry : ls) printf("%s\n\n\n", entry.name.c_str());
+// 	printf("\n\n\n");
+// }
+
+// if (!Sd::delete_dir("/test")) printf("delete_dir -> %s\n\n\n", strerror(errno));
 
 // std::string wifi_config;
 // if (!Sd::read_file("/Wifi/WIFI_CONFIG", wifi_config)) printf("read_file -> %s\n\n\n", strerror(errno));
@@ -67,7 +74,7 @@ if (!wifi.empty()) {
 // write(1, "\n\n\n", 3);
 
 	// write(1, "VampetaOS\n", 10);
-	printf("\n\nVampetaOS\n");
+	printf("VampetaOS\n");
 	// while (1) {
 	// 	write(1, "VampetaOS\n", 10);
 	// 	sleep(1);

@@ -51,13 +51,17 @@ struct DirectoryEntry
 */
 class Sd {
 	public:
+		// /Sd/sd.cpp
 		static bool							init_sd(void);
 
+		// /Sd/directory.cpp
 		static bool							exist_dir(const char *path);
 		static bool							create_dir(const char *path);
 		static bool							remove_dir(const char *path);
+		static bool							delete_dir(const char *path);
 		static std::vector<DirectoryEntry>	list_dir(const char *path);
 
+		// /Sd/file.cpp
 		static bool							exist_file(const char *path);
 		static off_t						size_file(const char *path);
 		static bool							create_file(const char *path);
@@ -65,7 +69,9 @@ class Sd {
 		static bool							write_file_truncate(const char *path, const char *content);
 		static bool							write_file_append(const char *path, const char *content);
 		static bool							read_file(const char *path, std::string &content);
-		// static bool							get_config(const char *path, const char *name, std::string &value);
+		static bool							delete_file(const char *path);
+
+		// /Sd/config.cpp
 		static std::string					get_config(const char *path, const char *name);
 		static bool							set_config(const char *path, const char *name, const char *value);
 };

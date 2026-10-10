@@ -28,9 +28,11 @@
 */
 class Wifi {
 	public:
+		// /Wifi/wifi.cpp
 		static bool	init_wifi(void);
 
 	private:
+		// /Wifi/wifi.cpp
 		static bool	init_dir(void);
 };
 

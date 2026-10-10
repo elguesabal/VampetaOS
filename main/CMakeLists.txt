@@ -4,6 +4,7 @@ idf_component_register(
         "Sd/sd.cpp"
         "Sd/directory.cpp"
         "Sd/file.cpp"
+        "Sd/config.cpp"
         "System/system.cpp"
         "Wifi/wifi.cpp"
 
