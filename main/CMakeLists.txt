@@ -7,6 +7,8 @@ idf_component_register(
         "Sd/config.cpp"
         "System/system.cpp"
         "Wifi/wifi.cpp"
+        "Wifi/getters.cpp"
+        "Wifi/setters.cpp"
 
     INCLUDE_DIRS
         "."

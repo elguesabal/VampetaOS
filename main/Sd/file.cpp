@@ -14,6 +14,7 @@
   |  write_file_truncate                                                       |
   |  write_file_append                                                         |
   |  read_file                                                                 |
+  |  delete_file                                                               |
   |                                                                            |
   + -------------------------------------------------------------------------- +
 */

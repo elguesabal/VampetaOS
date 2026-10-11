@@ -7,32 +7,22 @@
   |  /main.c                                                                   |
   |                                                                            |
   |  elguesabal@VampetaOS:~$ functions                                         |
+  |  test                                                                      |
   |  app_main                                                                  |
   |                                                                            |
   + -------------------------------------------------------------------------- +
 */
 
+#include "VampetaOS.hpp"
+
 #include "Sd/Sd.hpp"
 #include "System/System.hpp"
 #include "Wifi/Wifi.hpp"
 
-#include <stdio.h>
-#include <unistd.h>
-
-#include <string>
-#include <vector>
-
 // #include "esp_heap_caps.h"
 
-/**
-* @author elguesabal
-* @brief FUNCAO PRINCIPAL
-*/
-extern "C" void	app_main(void) {
+void	test(void) {
 // printf("RAM livre: %u KB\n\n\n", heap_caps_get_free_size(MALLOC_CAP_INTERNAL) / 1024);
-	if (!Sd::init_sd()) return;
-	if (!System::init_system()) return;
-	if (!Wifi::init_wifi()) return;
 
 // if (!Sd::create_dir("/directory")) printf("reate_dir -> %s\n\n\n", strerror(errno));
 
@@ -70,15 +60,24 @@ extern "C" void	app_main(void) {
 
 // std::string wifi_config;
 // if (!Sd::read_file("/Wifi/WIFI_CONFIG", wifi_config)) printf("read_file -> %s\n\n\n", strerror(errno));
-// printf("%s\n", wifi_config.c_str());
-// write(1, "\n\n\n", 3);
+// printf("%s\n\n\n", wifi_config.c_str());
+// printf("\n\n\n");
 
-	// write(1, "VampetaOS\n", 10);
+printf("SSID -> \"%s\"\n", Wifi::get_ssid().c_str());
+printf("PASSWORD -> \"%s\"\n", Wifi::get_password().c_str());
+printf("\n\n\n");
+}
+
+/**
+* @author elguesabal
+* @brief FUNCAO PRINCIPAL
+*/
+extern "C" void	app_main(void) {
+	if (!Sd::init_sd()) return;
+	if (!System::init_system()) return;
+	if (!Wifi::init_wifi()) return;
+
+	test();
+
 	printf("VampetaOS\n");
-	// while (1) {
-	// 	write(1, "VampetaOS\n", 10);
-	// 	sleep(1);
-	// }
-	// write(1, "Windows\n", 8);
-	// write(1, "Linux\n", 6);
 }

@@ -12,11 +12,13 @@
 #ifndef SYSTEM_H
 #define SYSTEM_H
 
-#include <sys/stat.h>
-#include <errno.h>
-#include <string.h>
+// #include <sys/stat.h>
+// #include <errno.h>
+// #include <string.h>
 
-#include <string>
+// #include <string>
+
+#include "../VampetaOS.hpp"
 
 #include "../Sd/Sd.hpp"
 
