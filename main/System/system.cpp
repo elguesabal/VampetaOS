@@ -4,7 +4,7 @@
   + -------------------------------------------------------------------------- +
   |                                                                            |
   |  elguesabal@VampetaOS:~$ pwd                                               |
-  |  /System/System.cpp                                                        |
+  |  /System/system.cpp                                                        |
   |                                                                            |
   |  elguesabal@VampetaOS:~$ functions                                         |
   |  init_system                                                               |
@@ -21,9 +21,11 @@
  * @brief INICIALIZA O SISTEMA
  * @return RETORNA true PARA ARQUIVOS DE SISTEMA OK
  * @return RETORNA false CASO init_dir FALHE
+ * @return RETORNA false CASO init_nvs_flash FALHE
 */
 bool	System::init_system(void) {
-	if (!init_dir()) return (false);
+	if (!System::init_dir()) return (false);
+    if (!System::init_nvs_flash()) return (false);
 	return (true);
 }
 

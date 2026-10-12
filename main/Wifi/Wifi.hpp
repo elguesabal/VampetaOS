@@ -12,17 +12,21 @@
 #ifndef WIFI_H
 #define WIFI_H
 
-// #include <sys/stat.h>
-// #include <errno.h>
-// #include <string.h>
-// #include <stdio.h>
-
-// #include <string>
-
 #include "../VampetaOS.hpp"
-
 #include "../Sd/Sd.hpp"
-// #include "../System/System.hpp"
+
+
+
+#include <string.h>
+#include <stdio.h>
+
+#include "esp_wifi.h"
+#include "esp_event.h"
+#include "esp_netif.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/event_groups.h"
+
+
 
 /**
  * @author elguesabal
@@ -36,6 +40,7 @@ class Wifi {
 	public:
 		// /Wifi/wifi.cpp
 		static bool					init_wifi(void);
+static bool	connect(void);
 
 		// /Wifi/getters.cpp
 		static const std::string	&get_ssid(void);
@@ -48,6 +53,7 @@ class Wifi {
 	private:
 		// /Wifi/wifi.cpp
 		static bool					init_dir(void);
+static void					wifi_event_handler(void *arg, esp_event_base_t event_base, int32_t event_id, void *event_data);
 };
 
 #endif

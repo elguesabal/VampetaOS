@@ -19,6 +19,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <string.h> //
 
 // C++
 #include <string>
@@ -30,5 +31,6 @@
 #include "esp_vfs_fat.h"
 #include "sdmmc_cmd.h"
 #include "driver/sdspi_host.h"
+#include "nvs_flash.h"
 
 #endif

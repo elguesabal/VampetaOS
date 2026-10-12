@@ -21,6 +21,10 @@
 
 // #include "esp_heap_caps.h"
 
+/**
+ * @author elguesabal
+ * @brief FUNCAO DE TESTES
+*/
 void	test(void) {
 // printf("RAM livre: %u KB\n\n\n", heap_caps_get_free_size(MALLOC_CAP_INTERNAL) / 1024);
 
@@ -63,14 +67,14 @@ void	test(void) {
 // printf("%s\n\n\n", wifi_config.c_str());
 // printf("\n\n\n");
 
-printf("SSID -> \"%s\"\n", Wifi::get_ssid().c_str());
-printf("PASSWORD -> \"%s\"\n", Wifi::get_password().c_str());
-printf("\n\n\n");
+// printf("SSID -> \"%s\"\n", Wifi::get_ssid().c_str());
+// printf("PASSWORD -> \"%s\"\n", Wifi::get_password().c_str());
+// printf("\n\n\n");
 }
 
 /**
-* @author elguesabal
-* @brief FUNCAO PRINCIPAL
+ * @author elguesabal
+ * @brief FUNCAO PRINCIPAL
 */
 extern "C" void	app_main(void) {
 	if (!Sd::init_sd()) return;

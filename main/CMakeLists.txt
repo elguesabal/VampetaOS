@@ -6,6 +6,7 @@ idf_component_register(
         "Sd/file.cpp"
         "Sd/config.cpp"
         "System/system.cpp"
+        "System/flash.cpp"
         "Wifi/wifi.cpp"
         "Wifi/getters.cpp"
         "Wifi/setters.cpp"
@@ -15,4 +16,10 @@ idf_component_register(
         "Sd"
         "System"
         "Wifi"
+
+    PRIV_REQUIRES
+        nvs_flash
+        esp_driver_spi
+        fatfs
+        esp_wifi
 )

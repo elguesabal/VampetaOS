@@ -4,7 +4,7 @@
   + -------------------------------------------------------------------------- +
   |                                                                            |
   |  elguesabal@VampetaOS:~$ pwd                                               |
-  |  /Wifi/Wifi.cpp                                                            |
+  |  /Wifi/wifi.cpp                                                            |
   |                                                                            |
   |  elguesabal@VampetaOS:~$ functions                                         |
   |  init_wifi                                                                 |
@@ -14,6 +14,17 @@
 */
 
 #include "Wifi.hpp"
+
+
+
+#define WIFI_CONNECTED_BIT BIT0
+#define WIFI_FAIL_BIT      BIT1
+#define WIFI_MAX_RETRIES   5
+
+static EventGroupHandle_t wifi_event_group;
+static int retry_count = 0;
+
+
 
 std::string Wifi::ssid = "";
 std::string Wifi::password = "";
@@ -25,7 +36,11 @@ std::string Wifi::password = "";
  * @return RETORNA false CASO init_dir FALHE
 */
 bool	Wifi::init_wifi(void) {
-	if (!init_dir()) return (false);
+	if (!Wifi::init_dir()) return (false);
+	if (!Wifi::connect()) {
+		// printf("VampetaOS: Wi-Fi initialization failed\n");
+		return (false);
+	}
 	return (true);
 }
 
@@ -91,4 +106,100 @@ bool	Wifi::init_dir(void) {
 	}
 	printf("Enter valid Wi-Fi details in the /VampetaOS/Wifi/WIFI_CONFIG file\n");
 	return (false);
+}
+
+
+
+
+
+void	Wifi::wifi_event_handler(void *arg, esp_event_base_t event_base, int32_t event_id, void *event_data) {
+    (void)arg;
+    (void)event_data;
+    if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_START) {
+        esp_wifi_connect();
+    } else if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_DISCONNECTED) {
+        if (retry_count < WIFI_MAX_RETRIES) {
+            retry_count++;
+            esp_wifi_connect();
+        } else {
+            xEventGroupSetBits(wifi_event_group, WIFI_FAIL_BIT);
+        }
+    } else if (event_base == IP_EVENT && event_id == IP_EVENT_STA_GOT_IP) {
+        retry_count = 0;
+        xEventGroupSetBits(wifi_event_group, WIFI_CONNECTED_BIT);
+    }
+}
+
+bool	Wifi::connect(void) {
+    if (Wifi::ssid.empty()) {
+        printf("SSID is empty\n");
+        return (false);
+    }
+    // if (Wifi::ssid.size() > sizeof(wifi_config_t().sta.ssid) ||
+    //     Wifi::password.size() > sizeof(wifi_config_t().sta.password))
+    // {
+    //     printf("Invalid Wi-Fi credentials length\n");
+    //     return false;
+    // }
+    wifi_event_group = xEventGroupCreate();
+    if (wifi_event_group == NULL) {
+        printf("Failed to create Wi-Fi event group\n");
+        return (false);
+    }
+    esp_err_t ret = esp_netif_init();
+    if (ret != ESP_OK) {
+        printf("esp_netif_init: %s\n", esp_err_to_name(ret));
+        return (false);
+    }
+    ret = esp_event_loop_create_default();
+    if (ret != ESP_OK) {
+        printf("esp_event_loop_create_default: %s\n", esp_err_to_name(ret));
+        return (false);
+    }
+    esp_netif_create_default_wifi_sta();
+    wifi_init_config_t init_config = WIFI_INIT_CONFIG_DEFAULT();
+    ret = esp_wifi_init(&init_config);
+    if (ret != ESP_OK) {
+        printf("esp_wifi_init: %s\n", esp_err_to_name(ret));
+        return (false);
+    }
+    ret = esp_event_handler_register(WIFI_EVENT, ESP_EVENT_ANY_ID, wifi_event_handler, NULL);
+    if (ret != ESP_OK) {
+        printf("Failed to register Wi-Fi handler: %s\n", esp_err_to_name(ret));
+        return (false);
+    }
+    ret = esp_event_handler_register(IP_EVENT, IP_EVENT_STA_GOT_IP, wifi_event_handler, NULL);
+    if (ret != ESP_OK) {
+        printf("Failed to register IP handler: %s\n", esp_err_to_name(ret));
+        return (false);
+    }
+    wifi_config_t config = {};
+    memcpy(config.sta.ssid, Wifi::ssid.c_str(), Wifi::ssid.size());
+    memcpy(config.sta.password, Wifi::password.c_str(), Wifi::password.size());
+    ret = esp_wifi_set_mode(WIFI_MODE_STA);
+    if (ret != ESP_OK) {
+        printf("esp_wifi_set_mode: %s\n", esp_err_to_name(ret));
+        return (false);
+    }
+    ret = esp_wifi_set_config(WIFI_IF_STA, &config);
+    if (ret != ESP_OK) {
+        printf("esp_wifi_set_config: %s\n", esp_err_to_name(ret));
+        return (false);
+    }
+    ret = esp_wifi_start();
+    if (ret != ESP_OK) {
+        printf("esp_wifi_start: %s\n", esp_err_to_name(ret));
+        return (false);
+    }
+    EventBits_t bits = xEventGroupWaitBits(wifi_event_group, WIFI_CONNECTED_BIT | WIFI_FAIL_BIT, pdFALSE, pdFALSE, pdMS_TO_TICKS(20000));
+    if (bits & WIFI_CONNECTED_BIT) {
+        printf("Wi-Fi connected\n");
+        return (true);
+    }
+    if (bits & WIFI_FAIL_BIT) {
+        printf("Failed to connect to Wi-Fi\n");
+	} else {
+        printf("Wi-Fi connection timeout\n");
+	}
+    return (false);
 }

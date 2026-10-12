@@ -12,24 +12,7 @@
 #ifndef SD_H
 #define SD_H
 
-// #include <stdio.h>
-// #include <dirent.h>
-// #include <sys/stat.h>
-// #include <unistd.h>
-// #include <string.h>
-// #include <fcntl.h>
-
-// #include <string>
-// #include <vector>
-
-// #include "esp_err.h"
-// #include "esp_vfs_fat.h"
-// #include "sdmmc_cmd.h"
-// #include "driver/sdspi_host.h"
-// #include "driver/spi_common.h"
-
 #include "../VampetaOS.hpp"
-
 #include "../System/System.hpp"
 
 #define SCK			GPIO_NUM_40

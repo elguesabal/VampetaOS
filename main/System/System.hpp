@@ -12,14 +12,7 @@
 #ifndef SYSTEM_H
 #define SYSTEM_H
 
-// #include <sys/stat.h>
-// #include <errno.h>
-// #include <string.h>
-
-// #include <string>
-
 #include "../VampetaOS.hpp"
-
 #include "../Sd/Sd.hpp"
 
 #define MOUNT_POINT	"/sdcard"
@@ -31,12 +24,14 @@
 */
 class System {
 	public:
-		// /System/System.cpp
+		// /System/system.cpp
 		static bool			init_system(void);
 		static std::string	full_path(const char *path);
 
+		// /System/flash.cpp
+		static bool			init_nvs_flash(void);
 	private:
-		// /System/System.cpp
+		// /System/system.cpp
 		static bool			init_dir(void);
 };
 

@@ -4,7 +4,7 @@
   + -------------------------------------------------------------------------- +
   |                                                                            |
   |  elguesabal@VampetaOS:~$ pwd                                               |
-  |  /Sd/Sd.cpp                                                                |
+  |  /Sd/sd.cpp                                                                |
   |                                                                            |
   |  elguesabal@VampetaOS:~$ functions                                         |
   |  init_sd                                                                   |
