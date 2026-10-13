@@ -65,42 +65,42 @@ bool	Sd::remove_dir(const char *path) {
  * @return RETORNA false CASO A O METODO remove_dir GERE UM ERRO
 */
 bool	Sd::delete_dir(const char *path) {
-	std::vector<DirectoryEntry> entries = list_dir(path);
+	std::vector<Sd::DirectoryEntry> entries = Sd::list_dir(path);
 	if (errno != 0) return (false);
 	for (size_t i = 0; i < entries.size(); i++) {
 		std::string entry_path = std::string(path);
 		if (!entry_path.empty() && entry_path[entry_path.size() - 1] != '/') entry_path += '/';
 		entry_path += entries[i].name;
 		if (entries[i].isDirectory) {
-			if (!delete_dir(entry_path.c_str())) return (false);
+			if (!Sd::delete_dir(entry_path.c_str())) return (false);
 		} else {
-			if (!delete_file(entry_path.c_str())) return (false);
+			if (!Sd::delete_file(entry_path.c_str())) return (false);
 		}
 	}
-	return (remove_dir(path));
+	return (Sd::remove_dir(path));
 }
 
 /**
  * @author elguesabal
  * @brief LISTA OS DIRETORIOS NO path RECEBIDO
  * @param path CAMINHO RECEBIDO PARA CONSULTA
- * @return RETORNA UMA LISTA DO STRUCT DirectoryEntry CONTENDO OS NOMES E IDENTIFICANDO DIRETORIOS E ARQUIVOS EM CASO DE SUCESSO E SALVA 0 EM errno
- * @return RETORNA UMA LISTA DO STRUCT DirectoryEntry VAZIA EM CASO DE opendir GERAR UM ERRO
- * @return RETORNA UMA LISTA DO STRUCT DirectoryEntry VAZIA EM CASO DE readdir GERAR UM ERRO
+ * @return RETORNA UMA LISTA DO STRUCT Sd::DirectoryEntry CONTENDO OS NOMES E IDENTIFICANDO DIRETORIOS E ARQUIVOS EM CASO DE SUCESSO E SALVA 0 EM errno
+ * @return RETORNA UMA LISTA DO STRUCT Sd::DirectoryEntry VAZIA EM CASO DE opendir GERAR UM ERRO
+ * @return RETORNA UMA LISTA DO STRUCT Sd::DirectoryEntry VAZIA EM CASO DE readdir GERAR UM ERRO
 */
-std::vector<DirectoryEntry>	Sd::list_dir(const char *path) {
+std::vector<Sd::DirectoryEntry>	Sd::list_dir(const char *path) {
 	DIR *dir = opendir(System::full_path(path).c_str());
-	if (dir == NULL) return (std::vector<DirectoryEntry>());
+	if (dir == NULL) return (std::vector<Sd::DirectoryEntry>());
 	struct dirent *entry;
-	std::vector<DirectoryEntry> entries;
+	std::vector<Sd::DirectoryEntry> entries;
 	errno = 0;
 	while ((entry = readdir(dir)) != NULL) {
-		DirectoryEntry	item;
+		Sd::DirectoryEntry	item;
 		item.name = entry->d_name;
 		item.isDirectory = (entry->d_type == DT_DIR);
 		entries.push_back(item);
 	}
 	closedir(dir);
-	if (errno != 0) return (std::vector<DirectoryEntry>());
+	if (errno != 0) return (std::vector<Sd::DirectoryEntry>());
 	return (entries);
 }

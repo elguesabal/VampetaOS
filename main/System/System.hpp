@@ -26,13 +26,16 @@ class System {
 	public:
 		// /System/system.cpp
 		static bool			init_system(void);
-		static std::string	full_path(const char *path);
 
 		// /System/flash.cpp
 		static bool			init_nvs_flash(void);
+
+		// /System/path.cpp
+		static std::string	full_path(const char *path);
+
 	private:
-		// /System/system.cpp
-		static bool			init_dir(void);
+		// /System/directory.cpp
+		static bool			check_dir(void);
 };
 
 #endif

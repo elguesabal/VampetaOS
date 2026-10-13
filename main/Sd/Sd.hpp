@@ -15,26 +15,26 @@
 #include "../VampetaOS.hpp"
 #include "../System/System.hpp"
 
-#define SCK			GPIO_NUM_40
-#define MISO		GPIO_NUM_39
-#define MOSI		GPIO_NUM_14
-#define CS			GPIO_NUM_12
-
-/**
- * @author elguesabal
- * @brief GUARDA NOME E SE E UM DIRETORIO (USADO PARA LISTAGEM DE DIRETORIO)
-*/
-struct DirectoryEntry
-{
-	std::string	name;
-	bool 		isDirectory;
-};
+#define SCK		GPIO_NUM_40
+#define MISO	GPIO_NUM_39
+#define MOSI	GPIO_NUM_14
+#define CS		GPIO_NUM_12
 
 /**
  * @author elguesabal
  * @brief CLASSE RESPONSAVEL POR GERENCIAR O CARTAO DE MEMORIA
 */
 class Sd {
+	public:
+		/**
+		 * @author elguesabal
+		 * @brief GUARDA NOME E SE E UM DIRETORIO (USADO PARA LISTAGEM DE DIRETORIO)
+		*/
+		struct DirectoryEntry {
+			std::string	name;
+			bool 		isDirectory;
+		};
+
 	public:
 		// /Sd/sd.cpp
 		static bool							init_sd(void);

@@ -52,11 +52,11 @@ void	test(void) {
 // }
 // printf("\n\n\n");
 
-// std::vector<DirectoryEntry>	ls = Sd::list_dir("/");
+// std::vector<Sd::DirectoryEntry>	ls = Sd::list_dir("/");
 // if (errno != 0) {
 // 	printf("list_dir -> %s\n\n\n", strerror(errno));
 // } else if (!ls.empty()) {
-// 	for (const DirectoryEntry& entry : ls) printf("%s\n\n\n", entry.name.c_str());
+// 	for (const Sd::DirectoryEntry& entry : ls) printf("%s\n\n\n", entry.name.c_str());
 // 	printf("\n\n\n");
 // }
 

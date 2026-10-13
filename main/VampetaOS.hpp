@@ -19,7 +19,6 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <fcntl.h>
-#include <string.h> //
 
 // C++
 #include <string>
@@ -32,5 +31,10 @@
 #include "sdmmc_cmd.h"
 #include "driver/sdspi_host.h"
 #include "nvs_flash.h"
+#include "esp_wifi.h"
+#include "esp_event.h"
+#include "esp_netif.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/event_groups.h"
 
 #endif

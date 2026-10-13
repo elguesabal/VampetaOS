@@ -15,18 +15,9 @@
 #include "../VampetaOS.hpp"
 #include "../Sd/Sd.hpp"
 
-
-
-#include <string.h>
-#include <stdio.h>
-
-#include "esp_wifi.h"
-#include "esp_event.h"
-#include "esp_netif.h"
-#include "freertos/FreeRTOS.h"
-#include "freertos/event_groups.h"
-
-
+#define WIFI_CONNECTED_BIT	BIT0
+#define WIFI_FAIL_BIT		BIT1
+#define WIFI_MAX_RETRIES	5
 
 /**
  * @author elguesabal
@@ -34,13 +25,14 @@
 */
 class Wifi {
 	private:
-		static std::string	ssid;
-		static std::string	password;
+		static EventGroupHandle_t	wifi_event_group;
+		static int					retry_count;
+		static std::string			ssid;
+		static std::string			password;
 
 	public:
 		// /Wifi/wifi.cpp
 		static bool					init_wifi(void);
-static bool	connect(void);
 
 		// /Wifi/getters.cpp
 		static const std::string	&get_ssid(void);
@@ -50,10 +42,18 @@ static bool	connect(void);
 		static bool					set_ssid(const char *ssid);
 		static bool					set_password(const char *password);
 
+		// /Wifi/connect.cpp
+static bool	connect(const char *ssid, const char *password);
+
 	private:
-		// /Wifi/wifi.cpp
-		static bool					init_dir(void);
-static void					wifi_event_handler(void *arg, esp_event_base_t event_base, int32_t event_id, void *event_data);
+		// /Wifi/directory.cpp
+		static bool					check_dir(void);
+
+		// /Wifi/connect.cpp
+static bool	init(void);
+static void	wifi_event_handler(void *arg, esp_event_base_t event_base, int32_t event_id, void *event_data);
+static bool	register_events(void);
+static bool	connect(void);
 };
 
 #endif

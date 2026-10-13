@@ -37,13 +37,13 @@ bool	Wifi::set_ssid(const char *ssid) {
  * @param password PASSWORD QUE SERA SALVO
  * @return RETORNA true EM CASO DE SUCESSO
  * @return RETORNA false EM CASO DE password SER NULL
- * @return RETORNA false EM CASO DE password SER MENOR QUE 8 CARACTERES
+ * @return RETORNA false EM CASO DE password SER MENOR QUE 8 CARACTERES (SER FOR UMA STRING VAZIA O ERRO NAO ACONTECE E SALVA CORRETAMENTE)
  * @return RETORNA false EM CASO DE password SER MAIOR QUE 64 BYTES
 */
 bool	Wifi::set_password(const char *password) {
 	if (password == NULL) return (false);
 	size_t len = strlen(password);
-	if (len < 8 || len >= sizeof(wifi_config_t().sta.password)) return (false);
+	if (len > 0 && (len < 8 || len >= sizeof(wifi_config_t().sta.password))) return (false);
 	Wifi::password = password;
 	return (true);
 }
