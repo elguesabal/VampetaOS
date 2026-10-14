@@ -43,7 +43,7 @@ class Wifi {
 		static bool					set_password(const char *password);
 
 		// /Wifi/connect.cpp
-static bool	connect(const char *ssid, const char *password);
+// static bool	connect(const char *ssid, const char *password);
 
 	private:
 		// /Wifi/directory.cpp

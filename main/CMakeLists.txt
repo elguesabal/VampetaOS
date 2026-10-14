@@ -26,4 +26,5 @@ idf_component_register(
         esp_driver_spi
         fatfs
         esp_wifi
+        freertos
 )

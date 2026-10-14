@@ -20,6 +20,15 @@
 #include "Wifi/Wifi.hpp"
 
 // #include "esp_heap_caps.h"
+// #include "freertos/task.h"
+
+// void task_example(void *arg)
+// {
+//     while (1) {
+//         printf("Minha task está executando\n");
+//         vTaskDelay(pdMS_TO_TICKS(1000));
+//     }
+// }
 
 /**
  * @author elguesabal
@@ -70,6 +79,15 @@ void	test(void) {
 // printf("SSID -> \"%s\"\n", Wifi::get_ssid().c_str());
 // printf("PASSWORD -> \"%s\"\n", Wifi::get_password().c_str());
 // printf("\n\n\n");
+
+// xTaskCreate(
+//     task_example,   // Função de entrada
+//     "task_example", // Nome
+//     2048,           // Stack em bytes no ESP-IDF
+//     NULL,           // Parâmetro da task
+//     5,              // Prioridade
+//     NULL            // Handle opcional
+// );
 }
 
 /**

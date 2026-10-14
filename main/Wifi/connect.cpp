@@ -34,7 +34,11 @@ bool	Wifi::init(void) {
 		printf("esp_event_loop_create_default: %s\n", esp_err_to_name(ret));
 		return (false);
 	}
-	esp_netif_create_default_wifi_sta();
+	esp_netif_t *sta_netif = esp_netif_create_default_wifi_sta();
+	if (sta_netif == NULL) {
+		printf("Failed to create default Wi-Fi STA interface\n");
+		return (false);
+	}
 	wifi_init_config_t init_config = WIFI_INIT_CONFIG_DEFAULT();
 	ret = esp_wifi_init(&init_config);
 	if (ret != ESP_OK) {
@@ -43,6 +47,62 @@ bool	Wifi::init(void) {
 	}
 	return (true);
 }
+// static bool netif_initialized = false;
+// static bool event_loop_initialized = false;
+// static bool wifi_initialized = false;
+// static esp_netif_t *sta_netif = NULL;
+
+// bool	Wifi::init(void) {
+// 	if (Wifi::wifi_event_group == NULL) {
+// 		Wifi::wifi_event_group = xEventGroupCreate();
+// 		if (Wifi::wifi_event_group == NULL) {
+// 			printf("Failed to create Wi-Fi event group\n");
+// 			return (false);
+// 		}
+// 	}
+
+// 	esp_err_t ret;
+
+// 	if (!netif_initialized) {
+// 		ret = esp_netif_init();
+// 		if (ret != ESP_OK) {
+// 			printf("esp_netif_init: %s\n", esp_err_to_name(ret));
+// 			return (false);
+// 		}
+// 		netif_initialized = true;
+// 	}
+
+// 	if (!event_loop_initialized) {
+// 		ret = esp_event_loop_create_default();
+// 		if (ret != ESP_OK) {
+// 			printf("esp_event_loop_create_default: %s\n",
+// 				esp_err_to_name(ret));
+// 			return (false);
+// 		}
+// 		event_loop_initialized = true;
+// 	}
+
+// 	if (sta_netif == NULL) {
+// 		sta_netif = esp_netif_create_default_wifi_sta();
+// 		if (sta_netif == NULL) {
+// 			printf("Failed to create default Wi-Fi STA interface\n");
+// 			return (false);
+// 		}
+// 	}
+
+// 	if (!wifi_initialized) {
+// 		wifi_init_config_t init_config = WIFI_INIT_CONFIG_DEFAULT();
+
+// 		ret = esp_wifi_init(&init_config);
+// 		if (ret != ESP_OK) {
+// 			printf("esp_wifi_init: %s\n", esp_err_to_name(ret));
+// 			return (false);
+// 		}
+// 		wifi_initialized = true;
+// 	}
+
+// 	return (true);
+// }
 
 void	Wifi::wifi_event_handler(void *arg, esp_event_base_t event_base, int32_t event_id, void *event_data) {
 	(void)arg;
@@ -108,13 +168,17 @@ bool	Wifi::connect(void) {
 	return (false);
 }
 
-bool	Wifi::connect(const char *ssid, const char *password) {
-	if (!Wifi::set_ssid(ssid)) return (false);
-	if (!Wifi::set_password(password)) return (false);
-	return (Wifi::connect());
-}
+// bool	Wifi::connect(const char *ssid, const char *password) {
+// 	if (!Wifi::set_ssid(ssid)) return (false);
+// 	if (!Wifi::set_password(password)) return (false);
+// 	return (Wifi::connect());
+// }
 
-// VERIFICAR SE TEM COMO VER SE A NVS ESTA INICIAR
+// bool	Wifi::disconnect(void) {
+
+// }
+
+// VERIFICAR SE TEM COMO VER SE A NVS ESTA INICIAR // NAO TEM
 // ENTENDER MELHOR O CODIGO E VER SE ESTOU ERRANDO
 // RENOMEAR METODOS E PENSAR MELHOR NA ESTRUTURA
 // ENTENDER MELHOR COMO O FreeRTOS FUNCIONA E SUA ASYNC
