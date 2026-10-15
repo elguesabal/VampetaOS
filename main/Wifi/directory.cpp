@@ -63,7 +63,6 @@ bool	Wifi::check_dir(void) {
 			printf("Invalid \"PASSWORD\"\n");
 			return (false);
 		}
-		printf("Wifi: OK\n");
 		return (true);
 	}
 	if (Sd::exist_dir("/Wifi/WIFI_CONFIG")) {

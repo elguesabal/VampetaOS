@@ -38,6 +38,7 @@ class Sd {
 	public:
 		// /Sd/sd.cpp
 		static bool							init_sd(void);
+		static bool							init(void);
 
 		// /Sd/directory.cpp
 		static bool							exist_dir(const char *path);

@@ -14,17 +14,20 @@ idf_component_register(
         "Wifi/connect.cpp"
         "Wifi/getters.cpp"
         "Wifi/setters.cpp"
+        "WebServer/webserver.cpp"
+        "WebServer/directory.cpp"
 
     INCLUDE_DIRS
         "."
         "Sd"
         "System"
         "Wifi"
+        "WebServer"
 
     PRIV_REQUIRES
         nvs_flash
         esp_driver_spi
         fatfs
         esp_wifi
-        freertos
+        esp_http_server
 )

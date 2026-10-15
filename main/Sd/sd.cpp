@@ -7,6 +7,7 @@
   |  /Sd/sd.cpp                                                                |
   |                                                                            |
   |  elguesabal@VampetaOS:~$ functions                                         |
+  |  init                                                                      |
   |  init_sd                                                                   |
   |                                                                            |
   + -------------------------------------------------------------------------- +
@@ -16,11 +17,12 @@
 
 /**
  * @author elguesabal
- * @brief INICIALIZA O CARTAO SD
+ * @brief INICIALIZA O CARTAO SD E MONTA O SISTEMA DE ARQUIVOS FAT
  * @return RETORNA true PARA INICIALIZACAO CORRETA DO CARTAO SD
- * @return RETORNA false PARA ERRO NA INICIALIZACAO DO CARTAO SD
+ * @return RETORNA false CASO spi_bus_initialize FALHE
+ * @return RETORNA false CASO esp_vfs_fat_sdspi_mount FALHE
 */
-bool	Sd::init_sd(void) {
+bool	Sd::init(void) {
 	spi_bus_config_t bus_cfg = {};
 	bus_cfg.mosi_io_num = MOSI;
 	bus_cfg.miso_io_num = MISO;
@@ -48,6 +50,17 @@ bool	Sd::init_sd(void) {
 		spi_bus_free(SPI2_HOST);
 		return (false);
 	}
+	return (true);
+}
+
+/**
+ * @author elguesabal
+ * @brief INICIALIZA O CARTAO SD
+ * @return RETORNA true PARA INICIALIZACAO CORRETA DO CARTAO SD
+ * @return RETORNA false CASO init FALHE
+*/
+bool	Sd::init_sd(void) {
+	if (!Sd::init()) return (false);
 	printf("SD card: OK\n");
 	return (true);
 }

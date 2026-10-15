@@ -24,5 +24,6 @@
 bool	System::init_system(void) {
 	if (!System::check_dir()) return (false);
 	if (!System::init_nvs_flash()) return (false);
+	printf("System: OK\n");
 	return (true);
 }

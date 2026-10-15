@@ -25,6 +25,7 @@
 */
 class Wifi {
 	private:
+		// /Wifi/wifi.cpp
 		static EventGroupHandle_t	wifi_event_group;
 		static int					retry_count;
 		static std::string			ssid;
@@ -43,17 +44,17 @@ class Wifi {
 		static bool					set_password(const char *password);
 
 		// /Wifi/connect.cpp
-// static bool	connect(const char *ssid, const char *password);
+		// static bool	connect(const char *ssid, const char *password);
 
 	private:
 		// /Wifi/directory.cpp
 		static bool					check_dir(void);
 
 		// /Wifi/connect.cpp
-static bool	init(void);
-static void	wifi_event_handler(void *arg, esp_event_base_t event_base, int32_t event_id, void *event_data);
-static bool	register_events(void);
-static bool	connect(void);
+		static bool	init(void);
+		static void	wifi_event_handler(void *arg, esp_event_base_t event_base, int32_t event_id, void *event_data);
+		static bool	register_events(void);
+		static bool	connect(void);
 };
 
 #endif
