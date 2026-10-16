@@ -16,6 +16,9 @@ idf_component_register(
         "Wifi/setters.cpp"
         "WebServer/webserver.cpp"
         "WebServer/directory.cpp"
+        "WebServer/port.cpp"
+        "WebServer/route.cpp"
+        "WebServer/terminal.cpp"
 
     INCLUDE_DIRS
         "."

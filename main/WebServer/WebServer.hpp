@@ -22,18 +22,20 @@
 class WebServer {
 	private:
 		// /WebServer/webserver.cpp
-		static httpd_handle_t	server;
+		static std::map<uint16_t, httpd_handle_t>	servers;
 
 	public:
 		// /WebServer/webserver.cpp
 		static bool				init_webserver(void);
+		static bool				open_port(uint16_t port);
+		static bool				close_port(uint16_t port);
+		static bool				register_routes(uint16_t port, const char *url);
 
 		// /WebServer/directory.cpp
 		static bool				check_dir(void);
 
-	private:
-		// /WebServer/webserver.cpp
-		static bool				init(void);
+		// /WebServer/terminal.cpp
+		static esp_err_t		test_html(httpd_req_t *req);
 };
 
 #endif

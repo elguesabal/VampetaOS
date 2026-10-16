@@ -23,6 +23,7 @@
 // C++
 #include <string>
 #include <vector>
+#include <map>
 
 // ESP-IDF
 #include "esp_err.h"
