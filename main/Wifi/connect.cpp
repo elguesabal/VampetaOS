@@ -37,12 +37,12 @@ bool	Wifi::init(void) {
 	}
 	esp_err_t ret = esp_netif_init();
 	if (ret != ESP_OK) {
-		printf("esp_netif_init: %s\n", esp_err_to_name(ret));
+		printf("%s\n", esp_err_to_name(ret));
 		return (false);
 	}
 	ret = esp_event_loop_create_default();
 	if (ret != ESP_OK) {
-		printf("esp_event_loop_create_default: %s\n", esp_err_to_name(ret));
+		printf("%s\n", esp_err_to_name(ret));
 		return (false);
 	}
 	esp_netif_t *sta_netif = esp_netif_create_default_wifi_sta();
@@ -53,7 +53,7 @@ bool	Wifi::init(void) {
 	wifi_init_config_t init_config = WIFI_INIT_CONFIG_DEFAULT();
 	ret = esp_wifi_init(&init_config);
 	if (ret != ESP_OK) {
-		printf("esp_wifi_init: %s\n", esp_err_to_name(ret));
+		printf("%s\n", esp_err_to_name(ret));
 		return (false);
 	}
 	return (true);
@@ -117,17 +117,17 @@ bool	Wifi::connect(void) {
 	memcpy(config.sta.password, Wifi::password.c_str(), Wifi::password.size());
 	esp_err_t ret = esp_wifi_set_mode(WIFI_MODE_STA);
 	if (ret != ESP_OK) {
-		printf("esp_wifi_set_mode: %s\n", esp_err_to_name(ret));
+		printf("%s\n", esp_err_to_name(ret));
 		return (false);
 	}
 	ret = esp_wifi_set_config(WIFI_IF_STA, &config);
 	if (ret != ESP_OK) {
-		printf("esp_wifi_set_config: %s\n", esp_err_to_name(ret));
+		printf("%s\n", esp_err_to_name(ret));
 		return (false);
 	}
 	ret = esp_wifi_start();
 	if (ret != ESP_OK) {
-		printf("esp_wifi_start: %s\n", esp_err_to_name(ret));
+		printf("%s\n", esp_err_to_name(ret));
 		return (false);
 	}
 	EventBits_t bits = xEventGroupWaitBits(Wifi::wifi_event_group, WIFI_CONNECTED_BIT | WIFI_FAIL_BIT, pdFALSE, pdFALSE, pdMS_TO_TICKS(20000));

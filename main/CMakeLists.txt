@@ -33,4 +33,9 @@ idf_component_register(
         fatfs
         esp_wifi
         esp_http_server
+
+    EMBED_TXTFILES
+        "WebServer/terminal/index.html"
+        "WebServer/terminal/css/style.css"
+        "WebServer/terminal/js/print.js"
 )

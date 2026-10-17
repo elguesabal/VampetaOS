@@ -30,11 +30,11 @@ bool	WebServer::open_port(uint16_t port) {
 	}
 	httpd_config_t config = HTTPD_DEFAULT_CONFIG();
 	config.server_port = port;
-    config.ctrl_port = port + 1;
+    config.ctrl_port = port;
 	httpd_handle_t handle = NULL;
 	esp_err_t ret = httpd_start(&handle, &config);
 	if (ret != ESP_OK) {
-		printf("httpd_start: %s\n", esp_err_to_name(ret));
+		printf("%s\n", esp_err_to_name(ret));
 		return (false);
 	}
 	WebServer::servers.emplace(port, handle);
@@ -56,7 +56,7 @@ bool	WebServer::close_port(uint16_t port) {
 	}
 	esp_err_t ret = httpd_stop(server->second);
 	if (ret != ESP_OK) {
-		printf("Failed to stop server: %s\n", esp_err_to_name(ret));
+		printf("%s\n", esp_err_to_name(ret));
 		return (false);
 	}
 	WebServer::servers.erase(server);

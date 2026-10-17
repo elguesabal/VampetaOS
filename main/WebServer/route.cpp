@@ -34,8 +34,7 @@ bool	WebServer::register_routes(uint16_t port, const char *url) {
 	uri.user_ctx = NULL;
 	esp_err_t ret = httpd_register_uri_handler(server->second, &uri);
 	if (ret != ESP_OK) {
-		printf("register route: %s\n", esp_err_to_name(ret));
-		// WebServer::close_port(port); ???
+		printf("%s\n", esp_err_to_name(ret));
 		return (false);
 	}
 	return (true);

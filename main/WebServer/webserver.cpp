@@ -8,7 +8,6 @@
   |                                                                            |
   |  elguesabal@VampetaOS:~$ functions                                         |
   |  init_webserver                                                            |
-  |  register_routes                                                           |
   |                                                                            |
   + -------------------------------------------------------------------------- +
 */
@@ -28,7 +27,15 @@ std::map<uint16_t, httpd_handle_t> WebServer::servers;
 bool	WebServer::init_webserver(void) {
 	if (!WebServer::check_dir()) return (false);
 	if (!WebServer::open_port(80)) return (false);
-	if (!WebServer::register_routes(80, "/")) return (false);
+	if (!WebServer::register_routes(80, "/")) {
+		WebServer::close_port(80);
+		return (false);
+	}
+	// if (!WebServer::open_port(4242)) return (false);
+	// if (!WebServer::register_routes(4242, "/")) {
+	// 	WebServer::close_port(4242);
+	// 	return (false);
+	// }
 	printf("WebServer: OK\n");
 	return (true);
 }
