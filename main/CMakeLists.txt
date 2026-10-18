@@ -19,6 +19,9 @@ idf_component_register(
         "WebServer/port.cpp"
         "WebServer/route.cpp"
         "WebServer/terminal.cpp"
+        "WebTerminal/WebTerminal.cpp"
+        "WebTerminal/register.cpp"
+        "WebTerminal/files.cpp"
 
     INCLUDE_DIRS
         "."
@@ -35,7 +38,7 @@ idf_component_register(
         esp_http_server
 
     EMBED_TXTFILES
-        "WebServer/terminal/index.html"
-        "WebServer/terminal/css/style.css"
-        "WebServer/terminal/js/print.js"
+        "WebTerminal/src/index.html"
+        "WebTerminal/src/css/style.css"
+        "WebTerminal/src/js/print.js"
 )

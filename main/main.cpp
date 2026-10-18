@@ -19,6 +19,7 @@
 #include "System/System.hpp"
 #include "Wifi/Wifi.hpp"
 #include "WebServer/WebServer.hpp"
+#include "WebTerminal/WebTerminal.hpp"
 
 // #include "esp_heap_caps.h"
 
@@ -82,6 +83,7 @@ extern "C" void	app_main(void) {
 	if (!System::init_system()) return;
 	if (!Wifi::init_wifi()) return;
 	if (!WebServer::init_webserver()) return;
+	if (!WebTerminal::init_webterminal()) return;
 
 	test();
 

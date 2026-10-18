@@ -4,10 +4,10 @@
   + -------------------------------------------------------------------------- +
   |                                                                            |
   |  elguesabal@VampetaOS:~$ pwd                                               |
-  |  /WebServer/webserver.cpp                                                  |
+  |  /WebServer/terminal.cpp                                                   |
   |                                                                            |
   |  elguesabal@VampetaOS:~$ functions                                         |
-  |  test_html                                                                 |
+  |                                                                            |
   |                                                                            |
   + -------------------------------------------------------------------------- +
 */
@@ -16,14 +16,22 @@
 
 /**
  * @author elguesabal
- * @brief PREPARA A PAGINA HTML PARA SER ENVIADA
- * @return RETORNA ESP_OK EM CASO DE SUCESSO 
+ * @brief RESPONDE A REQUISICAO COM UM ARQUIVO DA MEMORIA FLASH
+ * @return RETORNA ESP_OK EM CASO DE SUCESSO
 */
-esp_err_t	WebServer::test_html(httpd_req_t *req) {
-	extern const uint8_t terminal_html_start[] asm("_binary_index_html_start");
-	extern const uint8_t terminal_html_end[] asm("_binary_index_html_end");
-	httpd_resp_set_type(req, "text/html; charset=UTF-8");
-	return (httpd_resp_send(req, reinterpret_cast<const char *>(terminal_html_start), terminal_html_end - terminal_html_start));
+esp_err_t	WebServer::send_file_flash(httpd_req_t *req, const char *content_type, const uint8_t *start, const uint8_t *end) {
+	httpd_resp_set_type(req, content_type);
+	return (httpd_resp_send(req, reinterpret_cast<const char *>(start), end - start));
 }
 
-// PAREI AKI TENTANDO ENTENDER COMO ENVIAR O CSS E JS EM OUTRAS ROTAS
+/**
+ * @author elguesabal
+ * @brief RESPONDE A REQUISICAO HTTP COM UM TEXTO SIMPLES
+ * @return RETORNA ESP_OK EM CASO DE SUCESSO
+*/
+esp_err_t	WebServer::send_text(httpd_req_t *req, const char *text) {
+	httpd_resp_set_type(req, "text/plain; charset=UTF-8");
+	return (httpd_resp_send(req, text, HTTPD_RESP_USE_STRLEN));
+}
+
+// PQ ESSE ARQUIVO SE CHAMA "terminal.cpp"? DEVERIA SE CHAR "res.cpp" OU "response.cpp"
