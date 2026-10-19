@@ -8,6 +8,7 @@
   |                                                                            |
   |  elguesabal@VampetaOS:~$ functions                                         |
   |  register_route                                                            |
+  |  get                                                                       |
   |                                                                            |
   + -------------------------------------------------------------------------- +
 */
@@ -21,7 +22,7 @@
  * @return RETORNA false CASO A PORTA NAO ESTEJA SENDO USADA
  * @return RETORNA false CASO httpd_register_uri_handler FALHE
 */
-bool	WebServer::register_route(uint16_t port, const char *url, esp_err_t (*handler)(httpd_req_t *)) {
+bool	WebServer::register_route(uint16_t port, httpd_method_t method, const char *url, esp_err_t (*handler)(httpd_req_t *)) {
 	std::map<uint16_t, httpd_handle_t>::iterator server = WebServer::servers.find(port);
 	if (server == WebServer::servers.end()) {
 		printf("This door is not in use.\n");
@@ -29,7 +30,7 @@ bool	WebServer::register_route(uint16_t port, const char *url, esp_err_t (*handl
 	}
 	httpd_uri_t uri = {};
 	uri.uri = url;
-	uri.method = HTTP_GET; // EU DEVERIA RECEBER ISSO COMO ARGUMENTO
+	uri.method = method;
 	uri.handler = handler;
 	uri.user_ctx = NULL;
 	esp_err_t ret = httpd_register_uri_handler(server->second, &uri);
@@ -40,3 +41,16 @@ bool	WebServer::register_route(uint16_t port, const char *url, esp_err_t (*handl
 	}
 	return (true);
 }
+
+bool	WebServer::get(uint16_t port, const char *url, esp_err_t (*handler)(httpd_req_t *)) {
+	if (!WebServer::register_route(port, HTTP_GET, url, handler)) return (false);
+	return (true);
+}
+// bool	WebServer::post()
+// bool	WebServer::put()
+// bool	WebServer::delete()
+// bool	WebServer::patch()
+// bool	WebServer::head()
+// bool	WebServer::options()
+// bool	WebServer::trace()
+// bool	WebServer::connect()

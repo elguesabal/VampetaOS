@@ -32,7 +32,7 @@ class WebTerminal {
 		static bool			register_print_js(void);
 static bool			register_test(void);
 
-		// /WebTerminal/files.cpp
+		// /WebTerminal/routes.cpp
 		static esp_err_t	index_html(httpd_req_t *req);
 		static esp_err_t	style_css(httpd_req_t *req);
 		static esp_err_t	print_js(httpd_req_t *req);

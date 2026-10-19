@@ -23,7 +23,7 @@
  * @return RETORNA false CASO register_route FALHE
 */
 bool WebTerminal::register_index_html(void) {
-	if (!WebServer::register_route(PORT, "/", WebTerminal::index_html)) {
+	if (!WebServer::register_route(PORT, HTTP_GET, "/", WebTerminal::index_html)) {
 		WebServer::close_port(PORT);
 		return (false);
 	}
@@ -37,7 +37,7 @@ bool WebTerminal::register_index_html(void) {
  * @return RETORNA false CASO register_route FALHE
 */
 bool WebTerminal::register_style_css(void) {
-	if (!WebServer::register_route(PORT, "/css/style.css", WebTerminal::style_css)) {
+	if (!WebServer::register_route(PORT, HTTP_GET, "/css/style.css", WebTerminal::style_css)) {
 		WebServer::close_port(PORT);
 		return (false);
 	}
@@ -51,7 +51,7 @@ bool WebTerminal::register_style_css(void) {
  * @return RETORNA false CASO register_route FALHE
 */
 bool WebTerminal::register_print_js(void) {
-	if (!WebServer::register_route(PORT, "/js/print.js", WebTerminal::print_js)) {
+	if (!WebServer::register_route(PORT, HTTP_GET, "/js/print.js", WebTerminal::print_js)) {
 		WebServer::close_port(PORT);
 		return (false);
 	}
@@ -61,7 +61,8 @@ bool WebTerminal::register_print_js(void) {
 
 
 bool WebTerminal::register_test(void) {
-	if (!WebServer::register_route(PORT, "/test", WebTerminal::test)) {
+	// if (!WebServer::register_route(PORT, HTTP_GET, "/test", WebTerminal::test)) {
+	if (!WebServer::get(PORT, "/test", WebTerminal::test)) {
 		WebServer::close_port(PORT);
 		return (false);
 	}
