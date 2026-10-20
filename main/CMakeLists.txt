@@ -19,7 +19,7 @@ idf_component_register(
         "WebServer/port.cpp"
         "WebServer/route.cpp"
         "WebServer/response.cpp"
-        "WebTerminal/WebTerminal.cpp"
+        "WebTerminal/webterminal.cpp"
         "WebTerminal/register.cpp"
         "WebTerminal/routes.cpp"
 

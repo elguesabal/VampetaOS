@@ -133,6 +133,13 @@ bool	Wifi::connect(void) {
 	EventBits_t bits = xEventGroupWaitBits(Wifi::wifi_event_group, WIFI_CONNECTED_BIT | WIFI_FAIL_BIT, pdFALSE, pdFALSE, pdMS_TO_TICKS(20000));
 	if (bits & WIFI_CONNECTED_BIT) {
 		// printf("Wi-Fi connected\n");
+esp_netif_ip_info_t ip_info = {};
+esp_netif_t *netif = esp_netif_get_handle_from_ifkey("WIFI_STA_DEF");
+if (netif != NULL && esp_netif_get_ip_info(netif, &ip_info) == ESP_OK) {
+    char ip[16];
+    esp_ip4addr_ntoa(&ip_info.ip, ip, sizeof(ip));
+    printf("IP: %s\n", ip);
+}
 		return (true);
 	}
 	if (bits & WIFI_FAIL_BIT) {

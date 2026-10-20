@@ -29,6 +29,7 @@ bool	WebTerminal::init_webterminal(void) {
 	if (!WebTerminal::register_style_css()) return (false);
 	if (!WebTerminal::register_print_js()) return (false);
 if (!WebTerminal::register_test()) return (false);
+if (!WebServer::unregister_route(PORT, HTTP_GET, "/test")) return (false);
 	printf("WebTerminal: OK\n");
 	return (true);
 }

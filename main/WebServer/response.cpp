@@ -7,7 +7,8 @@
   |  /WebServer/response.cpp                                                   |
   |                                                                            |
   |  elguesabal@VampetaOS:~$ functions                                         |
-  |                                                                            |
+  |  send_file_flash                                                           |
+  |  send_text                                                                 |
   |                                                                            |
   + -------------------------------------------------------------------------- +
 */
@@ -24,8 +25,8 @@ esp_err_t	WebServer::send_file_flash(httpd_req_t *req, const char *content_type,
 	// return (httpd_resp_send(req, reinterpret_cast<const char *>(start), end - start));
 
 	if (req == nullptr || start == nullptr || end == nullptr || end < start) return (ESP_ERR_INVALID_ARG);
-    esp_err_t err = httpd_resp_set_type(req, content_type);
-    if (err != ESP_OK) return (err);
+	esp_err_t err = httpd_resp_set_type(req, content_type);
+	if (err != ESP_OK) return (err);
 	return (httpd_resp_send(req, reinterpret_cast<const char *>(start), (end - 1) - start)); // ESTUDAR MELHOR SE EU DEVERIA SUBTRAIR 1 DO ENDERECO FINAL DO ARQUIVO
 }
 
