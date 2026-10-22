@@ -18,6 +18,7 @@
 /**
  * @author elguesabal
  * @brief INICIA UMA PORTA
+ * @param port PORTA QUE SERA UTILIZADA PARA ESCUTAR REQUISICOES
  * @return RETORNA true EM CASO DA PORTA SEJA INICIADA COM SUCESSO
  * @return RETORNA false CASO A PORTA JA ESTEJA OCUPADA
  * @return RETORNA false CASO httpd_start FALHE
@@ -44,6 +45,7 @@ bool	WebServer::open_port(uint16_t port) {
 /**
  * @author elguesabal
  * @brief FECHA UMA PORTA
+ * @param port PORTA QUE VAI SER FECHADA
  * @return RETORNA true EM CASO DA PORTA SEJA FECHADA COM SUCESSO
  * @return RETORNA false CASO A PORTA NAO ESTEJA SENDO USADA
  * @return RETORNA false CASO httpd_stop FALHE

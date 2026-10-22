@@ -19,10 +19,14 @@
 /**
  * @author elguesabal
  * @brief REGISTRA UMA ROTA NA PORTA ESPECIFICADA
+ * @param port NUMERO DA PORTA EM QUE A ROTA SERA REGISTRADA
+ * @param method METODO HTTP ASSOCIADO A PORTA (GET, POST, PUT E DELETE)
+ * @param url CAMINHO DA URL QUE IDENTIFICA A ROTA
+ * @param handle FUNCAO RESPONSAVEL POR PROCESSAR AS REQUISICOES RECEBIDAS PELA ROTA
  * @return RETORNA true EM CASO DA ROTA SEJA REGISTRADA COM SUCESSO
  * @return RETORNA false CASO A PORTA NAO ESTEJA SENDO USADA
- * @return RETORNA 
  * @return RETORNA false CASO httpd_register_uri_handler FALHE
+ * @return RETORNA false CASO unregister_route FALHE
 */
 bool	WebServer::register_route(uint16_t port, httpd_method_t method, const char *url, esp_err_t (*handler)(httpd_req_t *)) {
 	std::map<uint16_t, httpd_handle_t>::iterator server = WebServer::servers.find(port);
@@ -51,6 +55,9 @@ bool	WebServer::register_route(uint16_t port, httpd_method_t method, const char 
 /**
  * @author elguesabal
  * @brief REMOVE O REGISTRO DE UMA ROTA NA PORTA ESPECIFICADA
+ * @param port NUMERO DA PORTA DO SERVIDOR HTTP EM QUE A ROTA ESTA REGISTRADA
+ * @param method METODO HTTP ASSOCIADO A ROTA QUE SERA REMOVIDA
+ * @param url CAMINHO DA URL QUE IDENTIFICA A ROTA A SER REMOVIDA
  * @return RETORNA true EM CASO DO REGISTRO DA ROTA SEJA REMOVIDA COM SUCESSO
  * @return RETORNA true CASO A PORTA NAO ESTEJA SENDO USADA
  * @return RETORNA false CASO httpd_unregister_uri_handler FALHE
@@ -69,8 +76,31 @@ bool	WebServer::unregister_route(uint16_t port, httpd_method_t method, const cha
 	return (true);
 }
 
-bool	WebServer::get(uint16_t port, const char *url, esp_err_t (*handler)(httpd_req_t *)) {
+/**
+ * @author elguesabal
+ * @brief REGISTRA UMA ROTA GET NA PORTA ESPECIFICADA
+ * @param port NUMERO DA PORTA EM QUE A ROTA SERA REGISTRADA
+ * @param url CAMINHO DA URL QUE IDENTIFICA A ROTA
+ * @param handle FUNCAO RESPONSAVEL POR PROCESSAR AS REQUISICOES RECEBIDAS PELA ROTA
+ * @return RETORNA true EM CASO DA ROTA SEJA REGISTRADA COM SUCESSO
+ * @return RETORNA false CASO register_route FALHE
+*/
+bool	WebServer::register_get(uint16_t port, const char *url, esp_err_t (*handler)(httpd_req_t *)) {
 	if (!WebServer::register_route(port, HTTP_GET, url, handler)) return (false);
+	return (true);
+}
+
+/**
+ * @author elguesabal
+ * @brief REMOVE O REGISTRO DE UMA ROTA GET NA PORTA ESPECIFICADA
+ * @param port NUMERO DA PORTA DO SERVIDOR HTTP EM QUE A ROTA ESTA REGISTRADA
+ * @param url CAMINHO DA URL QUE IDENTIFICA A ROTA A SER REMOVIDA
+ * @return RETORNA true EM CASO DO REGISTRO DA ROTA SEJA REMOVIDA COM SUCESSO
+ * @return RETORNA true CASO A PORTA NAO ESTEJA SENDO USADA
+ * @return RETORNA false CASO unregister_route FALHE
+*/
+bool	WebServer::unregister_get(uint16_t port, const char *url) {
+	if (!WebServer::unregister_route(port, HTTP_GET, url)) return (false);
 	return (true);
 }
 // bool	WebServer::post()

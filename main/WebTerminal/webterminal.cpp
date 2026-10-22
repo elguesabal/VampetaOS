@@ -25,11 +25,9 @@
 */
 bool	WebTerminal::init_webterminal(void) {
 	if (!WebServer::open_port(PORT)) return (false);
-	if (!WebTerminal::register_index_html()) return (false);
-	if (!WebTerminal::register_style_css()) return (false);
-	if (!WebTerminal::register_print_js()) return (false);
-if (!WebTerminal::register_test()) return (false);
-if (!WebServer::unregister_route(PORT, HTTP_GET, "/test")) return (false);
+	if (!WebServer::register_get(PORT, "/", WebTerminal::index_html)) return (false);
+	if (!WebServer::register_get(PORT, "/css/style.css", WebTerminal::style_css)) return (false);
+	if (!WebServer::register_get(PORT, "/js/print.js", WebTerminal::print_js)) return (false);
 	printf("WebTerminal: OK\n");
 	return (true);
 }

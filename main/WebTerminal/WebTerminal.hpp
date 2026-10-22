@@ -26,17 +26,10 @@ class WebTerminal {
 		// /WebTerminal/webterminal.cpp
 		static bool			init_webterminal(void);
 
-		// /WebTerminal/register.cpp
-		static bool			register_index_html(void);
-		static bool			register_style_css(void);
-		static bool			register_print_js(void);
-static bool			register_test(void);
-
 		// /WebTerminal/routes.cpp
 		static esp_err_t	index_html(httpd_req_t *req);
 		static esp_err_t	style_css(httpd_req_t *req);
 		static esp_err_t	print_js(httpd_req_t *req);
-static esp_err_t	test(httpd_req_t *req);
 };
 
 #endif
