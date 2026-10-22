@@ -36,12 +36,10 @@ bool	WebServer::register_route(uint16_t port, httpd_method_t method, const char 
 	uri.handler = handler;
 	uri.user_ctx = NULL;
 	esp_err_t ret = httpd_register_uri_handler(server->second, &uri);
-// if () {
-// 	// E SE EU TENTAR REGISTRAR UMA ROTA JA REGISTRADA?
-// 	// QUERO SUBSTITUIR A RESPOSTA ANTIGA PELA A NOVA
-// 	// NAO CAUSAR NENHUM TIPO DE ERRO
-// 	// ACHO QUE DEVO CRIAR UMA FUNCAO DE REMOCAO DE ROTA ANTES
-// }
+	if (ret == ESP_ERR_HTTPD_HANDLER_EXISTS) {
+		if (!WebServer::unregister_route(port, method, url)) return (false);
+		ret = httpd_register_uri_handler(server->second, &uri);
+	}
 	if (ret != ESP_OK) {
 		printf("%s\n", esp_err_to_name(ret));
 		// WebServer::close_port(port); // DEVO ADICIONAR ISSO PARA EVITAR VERIFICACOES?
@@ -58,7 +56,6 @@ bool	WebServer::register_route(uint16_t port, httpd_method_t method, const char 
  * @return RETORNA false CASO httpd_unregister_uri_handler FALHE
 */
 bool	WebServer::unregister_route(uint16_t port, httpd_method_t method, const char *url) {
-// if (url == nullptr) return (false); // DEVERIA SEMPRE ME PREOCUPAR COM ISSO???
 	std::map<uint16_t, httpd_handle_t>::iterator server = WebServer::servers.find(port);
 	if (server == WebServer::servers.end()) {
 		printf("This door is not in use.\n");

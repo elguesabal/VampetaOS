@@ -69,4 +69,4 @@ bool WebTerminal::register_test(void) {
 	return (true);
 }
 
-// DEVO ADICIONAR close_port A register_route PARA EVITAR ESSES METODOS ACIMA?
+// DEVO ADICIONAR WebServer::close_port A WebServer::register_route PARA EVITAR ESSES METODOS ACIMA???
