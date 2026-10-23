@@ -18,6 +18,10 @@
 /**
  * @author elguesabal
  * @brief RESPONDE A REQUISICAO COM UM ARQUIVO DA MEMORIA FLASH
+ * @param req PONTEIRO PARA ESTRUTURA QUE CONTEM AS INFORMACOES DA REQUISICAO HTTP RECEBIDA PELO SERVIDOR
+ * @param content_type TIPO DE CONTEUDO (MIME) DO ARQUIVO QUE SERA ENVIADO NA RESPOSTA HTTP
+ * @param start PONTEIRO PARA O INICIO DOS DADOS DO ARQUIVO ARMAZENADO NA MEMORIA FLASH
+ * @param end PONTEIRO PARA O FINAL DOS DADOS DO ARQUIVO ARMAZENADO NA MEMORIA FLASH
  * @return RETORNA ESP_OK EM CASO DE SUCESSO
 */
 esp_err_t	WebServer::send_file_flash(httpd_req_t *req, const char *content_type, const uint8_t *start, const uint8_t *end) {
@@ -30,6 +34,8 @@ esp_err_t	WebServer::send_file_flash(httpd_req_t *req, const char *content_type,
 /**
  * @author elguesabal
  * @brief RESPONDE A REQUISICAO HTTP COM UM TEXTO SIMPLES
+ * @param req PONTEIRO PARA ESTRUTURA QUE CONTEM AS INFORMACOES DA REQUISICAO HTTP RECEBIDA PELO SERVIDOR
+ * @param text TEXTO QUE SERA ENVIADO AO CLIENTE COMO RESPOSTA A REQUISICAO HTTP
  * @return RETORNA ESP_OK EM CASO DE SUCESSO
 */
 esp_err_t	WebServer::send_text(httpd_req_t *req, const char *text) {

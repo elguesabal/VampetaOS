@@ -45,6 +45,7 @@ class Wifi {
 
 		// /Wifi/connect.cpp
 		// static bool	connect(const char *ssid, const char *password);
+		static std::string			ip(void);
 
 	private:
 		// /Wifi/directory.cpp

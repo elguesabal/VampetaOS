@@ -19,6 +19,7 @@
 /**
  * @author elguesabal
  * @brief METODO DE RESPOSTA DA ROTA /
+ * @param req PONTEIRO PARA ESTRUTURA QUE CONTEM AS INFORMACOES DA REQUISICAO HTTP RECEBIDA PELO SERVIDOR
  * @return RETORNA true EM CASO DE RESPONDER CORRETAMENTE COM O ARQUIVO /VampetaOS/WebTerminal/src/index.html
  * @return RETORNA false CASO send_file_flash FALHE
 */
@@ -31,6 +32,7 @@ esp_err_t	WebTerminal::index_html(httpd_req_t *req) {
 /**
  * @author elguesabal
  * @brief METODO DE RESPOSTA DA ROTA /css/style.css
+ * @param req PONTEIRO PARA ESTRUTURA QUE CONTEM AS INFORMACOES DA REQUISICAO HTTP RECEBIDA PELO SERVIDOR
  * @return RETORNA true EM CASO DE RESPONDER CORRETAMENTE COM O ARQUIVO /VampetaOS/WebTerminal/src/css/style.css
  * @return RETORNA false CASO send_file_flash FALHE
 */
@@ -43,6 +45,7 @@ esp_err_t	WebTerminal::style_css(httpd_req_t *req) {
 /**
  * @author elguesabal
  * @brief METODO DE RESPOSTA DA ROTA /js/print.js
+ * @param req PONTEIRO PARA ESTRUTURA QUE CONTEM AS INFORMACOES DA REQUISICAO HTTP RECEBIDA PELO SERVIDOR
  * @return RETORNA true EM CASO DE RESPONDER CORRETAMENTE COM O ARQUIVO /VampetaOS/WebTerminal/src/js/print.js
  * @return RETORNA false CASO send_file_flash FALHE
 */

@@ -62,6 +62,10 @@ bool	Wifi::init(void) {
 /**
  * @author elguesabal
  * @brief PROCESSA EVENTOS DA INTERFACE WIFI E DA OBTENCAO DE ENDERECO IP
+ * @param arg PONTEIRO PARA UM ARGUMENTO PERSONALIZADO PASSADO AO REGISTRAR O HANDLER DE EVENTOS
+ * @param event_base BASE DO EVENTO QUE IDENTIFICA A CATEGORIA DO EVENTO RECEBIDO, COMO WIFI_EVENT OU IP_EVENT
+ * @param event_id IDENTIFICADOR DO EVENTO ESPECIFICO QUE OCORREU, COMO WIFI_EVENT_STA_START, WIFI_EVENT_STA_DISCONNECTED OU IP_EVENT_STA_GOT_IP
+ * @param event_data PONTEIRO PARA OS DADOS ASSOCIADOS AO EVENTO RECEBIDO, QUANDO DISPONIVEIS
 */
 void	Wifi::wifi_event_handler(void *arg, esp_event_base_t event_base, int32_t event_id, void *event_data) {
 	(void)arg;
@@ -132,14 +136,7 @@ bool	Wifi::connect(void) {
 	}
 	EventBits_t bits = xEventGroupWaitBits(Wifi::wifi_event_group, WIFI_CONNECTED_BIT | WIFI_FAIL_BIT, pdFALSE, pdFALSE, pdMS_TO_TICKS(20000));
 	if (bits & WIFI_CONNECTED_BIT) {
-		// printf("Wi-Fi connected\n");
-esp_netif_ip_info_t ip_info = {};
-esp_netif_t *netif = esp_netif_get_handle_from_ifkey("WIFI_STA_DEF");
-if (netif != NULL && esp_netif_get_ip_info(netif, &ip_info) == ESP_OK) {
-    char ip[16];
-    esp_ip4addr_ntoa(&ip_info.ip, ip, sizeof(ip));
-    printf("IP: %s\n", ip);
-}
+		printf("Wi-Fi connected: %s\n", Wifi::ip().c_str());
 		return (true);
 	}
 	if (bits & WIFI_FAIL_BIT) {
@@ -159,3 +156,19 @@ if (netif != NULL && esp_netif_get_ip_info(netif, &ip_info) == ESP_OK) {
 // bool	Wifi::disconnect(void) {
 
 // }
+
+/**
+ * @author elguesabal
+ * @brief IDENTIFICA O ATUAL IP DO ESP
+ * @return RETORNA O ENDERECO IPV4 EM CASO DE SUCESSO
+ * @return RETORNA UMA STRING VAZIA EM CASO DE FALHA OU NENHUMA REDE CONECTADA
+*/
+std::string	Wifi::ip(void) {
+	esp_netif_ip_info_t ip_info = {};
+	esp_netif_t *netif = esp_netif_get_handle_from_ifkey("WIFI_STA_DEF");
+	if (netif != nullptr && esp_netif_get_ip_info(netif, &ip_info) == ESP_OK) {
+		char ip[16] = {};
+		if (esp_ip4addr_ntoa(&ip_info.ip, ip, sizeof(ip)) != nullptr) return (std::string(ip));
+	}
+	return ("");
+}
