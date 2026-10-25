@@ -7,14 +7,14 @@
   |  /HttpServer/httpserver.cpp                                                |
   |                                                                            |
   |  elguesabal@VampetaOS:~$ functions                                         |
-  |                                                                            |
+  |  init_httpserver                                                           |
+  |  HttpServer                                                                |
+  |  ~HttpServer                                                               |
   |                                                                            |
   + -------------------------------------------------------------------------- +
 */
 
 #include "HttpServer.hpp"
-
-std::map<uint16_t, httpd_handle_t> HttpServer::servers;
 
 /**
  * @author elguesabal
@@ -31,9 +31,15 @@ bool	HttpServer::init_httpserver(void) {
 }
 
 HttpServer::HttpServer(uint16_t port) {
-
+	if (!WebServer::open_port(port)) {
+		this.port = -1;
+		return;
+	}
+	this.port = port;
+	// this.server = ; // BUSCAR PORTA
 }
 
 HttpServer::~HttpServer(void) {
-	
+	if (!WebServer::close_port(this.port)) return;
+	// this.port = -1;
 }

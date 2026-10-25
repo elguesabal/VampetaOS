@@ -14,6 +14,7 @@
 
 #include "../VampetaOS.hpp"
 #include "../Sd/Sd.hpp"
+#include "../WebServer/WebServer.hpp"
 
 /**
  * @author elguesabal
@@ -23,9 +24,6 @@ class HttpServer {
 	private:
 		uint16_t		port;
 		httpd_handle_t	server;
-
-		// /HttpServer/HttpServer.cpp
-		static std::map<uint16_t, httpd_handle_t>	servers;
 
 	public:
 		// /HttpServer/HttpServer.cpp

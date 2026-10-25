@@ -47,14 +47,14 @@ bool	WebServer::open_port(uint16_t port) {
  * @brief FECHA UMA PORTA
  * @param port PORTA QUE VAI SER FECHADA
  * @return RETORNA true EM CASO DA PORTA SEJA FECHADA COM SUCESSO
- * @return RETORNA false CASO A PORTA NAO ESTEJA SENDO USADA
+ * @return RETORNA true CASO A PORTA NAO ESTEJA SENDO USADA
  * @return RETORNA false CASO httpd_stop FALHE
 */
 bool	WebServer::close_port(uint16_t port) {
 	std::map<uint16_t, httpd_handle_t>::iterator server = WebServer::servers.find(port);
 	if (server == WebServer::servers.end()) {
 		printf("This door is not in use.\n");
-		return (false);
+		return (true);
 	}
 	esp_err_t ret = httpd_stop(server->second);
 	if (ret != ESP_OK) {
