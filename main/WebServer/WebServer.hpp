@@ -1,4 +1,4 @@
-VampetaOs/*
+/*
   + -------------------------------------------------------------------------- +
   |  o o o                                                          VampetaOs  |
   + -------------------------------------------------------------------------- +
@@ -31,6 +31,7 @@ class WebServer {
 		// /WebServer/port.cpp
 		static bool				open_port(uint16_t port);
 		static bool				close_port(uint16_t port);
+		static httpd_handle_t	get_server(uint16_t port);
 
 		// /WebServer/route.cpp
 		static bool				register_route(uint16_t port, httpd_method_t method, const char *url, esp_err_t (*handler)(httpd_req_t *));

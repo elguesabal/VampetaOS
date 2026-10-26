@@ -14,6 +14,8 @@
 
 #include "WebTerminal.hpp"
 
+HttpServer *WebTerminal::server = NULL;
+
 /**
  * @author elguesabal
  * @brief ABRE UMA PORTA E REGISTRA AS ROTAS NECESSARIAS PARA INICIAR O WEBTERMINAL
@@ -24,10 +26,18 @@
  * @return RETORNA false CASO register_print_js FALHE
 */
 bool	WebTerminal::init_webterminal(void) {
-	if (!WebServer::open_port(PORT)) return (false);
-	if (!WebServer::register_get(PORT, "/", WebTerminal::index_html)) return (false);
-	if (!WebServer::register_get(PORT, "/css/style.css", WebTerminal::style_css)) return (false);
-	if (!WebServer::register_get(PORT, "/js/print.js", WebTerminal::print_js)) return (false);
+	// if (!WebServer::open_port(PORT)) return (false);
+	// if (!WebServer::register_get(PORT, "/", WebTerminal::index_html)) return (false);
+	// if (!WebServer::register_get(PORT, "/css/style.css", WebTerminal::style_css)) return (false);
+	// if (!WebServer::register_get(PORT, "/js/print.js", WebTerminal::print_js)) return (false);
+
+	WebTerminal::server = new (std::nothrow) HttpServer(PORT);
+	if (!WebTerminal::server->is_valid()) {
+		delete WebTerminal::server;
+		WebTerminal::server = NULL;
+		return (false);
+	}
+
 	printf("WebTerminal: OK\n");
 	return (true);
 }

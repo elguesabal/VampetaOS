@@ -64,3 +64,16 @@ bool	WebServer::close_port(uint16_t port) {
 	WebServer::servers.erase(server);
 	return (true);
 }
+
+/**
+ * @author elguesabal
+ * @brief BUSCA O HANDLE DO SERVIDOR ASSOCIADO A UMA PORTA
+ * @param port PORTA QUE SERA BUSCADA
+ * @return RETORNA O HANDLE DO SERVIDOR CASO A PORTA ESTEJA EM USO
+ * @return RETORNA NULL CASO NAO EXISTA UM SERVIDOR ASSOCIADO A PORTA
+*/
+httpd_handle_t	WebServer::get_server(uint16_t port) {
+	std::map<uint16_t, httpd_handle_t>::iterator it = WebServer::servers.find(port);
+	if (it == WebServer::servers.end()) return (NULL);
+	return (it->second);
+}

@@ -29,7 +29,8 @@ class HttpServer {
 		// /HttpServer/HttpServer.cpp
 		static bool				init_httpserver(void);
 		HttpServer(uint16_t port);
-		~HttpServer();
+		~HttpServer(void);
+		bool					is_valid(void) const;
 
 	private:
 		// /WebServer/directory.cpp

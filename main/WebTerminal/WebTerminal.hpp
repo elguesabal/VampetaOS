@@ -14,6 +14,7 @@
 
 #include "../VampetaOS.hpp"
 #include "../WebServer/WebServer.hpp"
+#include "../HttpServer/HttpServer.hpp"
 
 #define PORT 80
 
@@ -22,6 +23,9 @@
  * @brief CLASSE RESPONSAVEL POR GERENCIAR O WEBTERMINAL
 */
 class WebTerminal {
+	private:
+		static HttpServer	*server;
+
 	public:
 		// /WebTerminal/webterminal.cpp
 		static bool			init_webterminal(void);
