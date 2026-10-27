@@ -20,6 +20,7 @@ idf_component_register(
         "WebServer/route.cpp"
         "HttpServer/httpserver.cpp"
         "HttpServer/directory.cpp"
+        "HttpServer/route.cpp"
         "WebServer/response.cpp"
         "WebTerminal/webterminal.cpp"
         "WebTerminal/routes.cpp"

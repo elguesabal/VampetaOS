@@ -18,26 +18,44 @@ HttpServer *WebTerminal::server = NULL;
 
 /**
  * @author elguesabal
- * @brief ABRE UMA PORTA E REGISTRA AS ROTAS NECESSARIAS PARA INICIAR O WEBTERMINAL
+ * @brief INICIA O WEBTERMINAL
  * @return RETORNA true EM CASO DO WEBTERMINAL INICIADO COM SUCESSO
- * @return RETORNA false CASO open_port FALHE
- * @return RETORNA false CASO register_index_html FALHE
- * @return RETORNA false CASO register_style_css FALHE
- * @return RETORNA false CASO register_print_js FALHE
+ * @return RETORNA false CASO init_server FALHE
+ * @return RETORNA false CASO init_routes FALHE
 */
 bool	WebTerminal::init_webterminal(void) {
-	// if (!WebServer::open_port(PORT)) return (false);
-	// if (!WebServer::register_get(PORT, "/", WebTerminal::index_html)) return (false);
-	// if (!WebServer::register_get(PORT, "/css/style.css", WebTerminal::style_css)) return (false);
-	// if (!WebServer::register_get(PORT, "/js/print.js", WebTerminal::print_js)) return (false);
+	if (!WebTerminal::init_server()) return (false);
+	if (!WebTerminal::init_routes()) return (false);
+	printf("WebTerminal: OK\n");
+	return (true);
+}
 
+/**
+ * @author elguesabal
+ * @brief INICIA O SERVIDOR INSTANCIANDO O OBJETO E ABRINDO A PORTA
+ * @return RETORNA true EM CASO DO SERVIDOR INICIADO COM SUCESSO
+ * @return RETORNA false CASO HttpServer FALHE
+*/
+bool	WebTerminal::init_server(void) {
 	WebTerminal::server = new (std::nothrow) HttpServer(PORT);
 	if (!WebTerminal::server->is_valid()) {
 		delete WebTerminal::server;
-		WebTerminal::server = NULL;
 		return (false);
 	}
+	return (true);
+}
 
-	printf("WebTerminal: OK\n");
+/**
+ * @author elguesabal
+ * @brief REGISTRA AS ROTAS NECESSARIAS PARA INICIAR O WEBTERMINAL
+ * @return RETORNA true EM CASO DAS ROTAS INICIADAS COM SUCESSO
+ * @return RETORNA false CASO server->add_get FALHE
+ * @return RETORNA false CASO server->add_get FALHE
+ * @return RETORNA false CASO server->add_get FALHE
+*/
+bool	WebTerminal::init_routes(void) {
+	if (!server->add_get("/", WebTerminal::index_html)) return (false);
+	if (!server->add_get("/css/style.css", WebTerminal::style_css)) return (false);
+	if (!server->add_get("/js/print.js", WebTerminal::print_js)) return (false);
 	return (true);
 }

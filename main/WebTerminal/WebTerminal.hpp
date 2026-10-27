@@ -30,6 +30,11 @@ class WebTerminal {
 		// /WebTerminal/webterminal.cpp
 		static bool			init_webterminal(void);
 
+	private:
+		// /WebTerminal/webterminal.cpp
+		static bool			init_server(void);
+		static bool			init_routes(void);
+
 		// /WebTerminal/routes.cpp
 		static esp_err_t	index_html(httpd_req_t *req);
 		static esp_err_t	style_css(httpd_req_t *req);

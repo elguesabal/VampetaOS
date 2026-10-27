@@ -8,8 +8,27 @@ main {
 	height: 100vh;
 	background-color: black;
 	color: white;
+	white-space: pre-wrap;
 }
 
 p {
 	white-space: pre-wrap;
 }
+
+
+
+/* 
+#input-line {
+	display: flex;
+	align-items: center;
+}
+
+#command-input {
+	flex: 1;
+	min-width: 0;
+	background: transparent;
+	color: inherit;
+	border: none;
+	outline: none;
+	font: inherit;
+} */

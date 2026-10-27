@@ -9,6 +9,7 @@
   |  elguesabal@VampetaOS:~$ functions                                         |
   |  open_port                                                                 |
   |  close_port                                                                |
+  |  get_server                                                                |
   |                                                                            |
   + -------------------------------------------------------------------------- +
 */

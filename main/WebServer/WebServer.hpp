@@ -36,12 +36,13 @@ class WebServer {
 		// /WebServer/route.cpp
 		static bool				register_route(uint16_t port, httpd_method_t method, const char *url, esp_err_t (*handler)(httpd_req_t *));
 		static bool				unregister_route(uint16_t port, httpd_method_t method, const char *url);
-		static bool				register_get(uint16_t port, const char *url, esp_err_t (*handler)(httpd_req_t *));
-		static bool				unregister_get(uint16_t port, const char *url);
 
 		// /WebServer/response.cpp
-		static esp_err_t		send_file_flash(httpd_req_t *req, const char *content_type, const uint8_t *start, const uint8_t *end);
-		static esp_err_t		send_text(httpd_req_t *req, const char *text);
+		static const char		*status(const uint16_t code);
+		static esp_err_t		send_status(httpd_req_t *req, const uint16_t status);
+		static esp_err_t		send_file_flash(httpd_req_t *req, const uint16_t status, const char *content_type, const uint8_t *start, const uint8_t *end);
+		static esp_err_t		send_text(httpd_req_t *req, const uint16_t status, const char *text);
+		static esp_err_t		send_json(httpd_req_t *req, const uint16_t status, const char *json);
 
 	private:
 		// /WebServer/directory.cpp

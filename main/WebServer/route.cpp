@@ -9,7 +9,6 @@
   |  elguesabal@VampetaOS:~$ functions                                         |
   |  register_route                                                            |
   |  unregister_route                                                          |
-  |  get                                                                       |
   |                                                                            |
   + -------------------------------------------------------------------------- +
 */
@@ -46,7 +45,6 @@ bool	WebServer::register_route(uint16_t port, httpd_method_t method, const char 
 	}
 	if (ret != ESP_OK) {
 		printf("%s\n", esp_err_to_name(ret));
-		// WebServer::close_port(port); // DEVO ADICIONAR ISSO PARA EVITAR VERIFICACOES?
 		return (false);
 	}
 	return (true);
@@ -75,39 +73,3 @@ bool	WebServer::unregister_route(uint16_t port, httpd_method_t method, const cha
 	}
 	return (true);
 }
-
-/**
- * @author elguesabal
- * @brief REGISTRA UMA ROTA GET NA PORTA ESPECIFICADA
- * @param port NUMERO DA PORTA EM QUE A ROTA SERA REGISTRADA
- * @param url CAMINHO DA URL QUE IDENTIFICA A ROTA
- * @param handle FUNCAO RESPONSAVEL POR PROCESSAR AS REQUISICOES RECEBIDAS PELA ROTA
- * @return RETORNA true EM CASO DA ROTA SEJA REGISTRADA COM SUCESSO
- * @return RETORNA false CASO register_route FALHE
-*/
-bool	WebServer::register_get(uint16_t port, const char *url, esp_err_t (*handler)(httpd_req_t *)) {
-	if (!WebServer::register_route(port, HTTP_GET, url, handler)) return (false);
-	return (true);
-}
-
-/**
- * @author elguesabal
- * @brief REMOVE O REGISTRO DE UMA ROTA GET NA PORTA ESPECIFICADA
- * @param port NUMERO DA PORTA DO SERVIDOR HTTP EM QUE A ROTA ESTA REGISTRADA
- * @param url CAMINHO DA URL QUE IDENTIFICA A ROTA A SER REMOVIDA
- * @return RETORNA true EM CASO DO REGISTRO DA ROTA SEJA REMOVIDA COM SUCESSO
- * @return RETORNA true CASO A PORTA NAO ESTEJA SENDO USADA
- * @return RETORNA false CASO unregister_route FALHE
-*/
-bool	WebServer::unregister_get(uint16_t port, const char *url) {
-	if (!WebServer::unregister_route(port, HTTP_GET, url)) return (false);
-	return (true);
-}
-// bool	WebServer::post()
-// bool	WebServer::put()
-// bool	WebServer::delete()
-// bool	WebServer::patch()
-// bool	WebServer::head()
-// bool	WebServer::options()
-// bool	WebServer::trace()
-// bool	WebServer::connect()
