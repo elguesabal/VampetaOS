@@ -56,6 +56,8 @@ bool	WebTerminal::init_server(void) {
 bool	WebTerminal::init_routes(void) {
 	if (!server->add_get("/", WebTerminal::index_html)) return (false);
 	if (!server->add_get("/css/style.css", WebTerminal::style_css)) return (false);
+	if (!server->add_get("/js/events.js", WebTerminal::events_js)) return (false);
+	if (!server->add_get("/js/keys.js", WebTerminal::keys_js)) return (false);
 	if (!server->add_get("/js/print.js", WebTerminal::print_js)) return (false);
 	return (true);
 }

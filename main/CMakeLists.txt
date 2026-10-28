@@ -42,5 +42,7 @@ idf_component_register(
     EMBED_TXTFILES
         "WebTerminal/src/index.html"
         "WebTerminal/src/css/style.css"
+        "WebTerminal/src/js/events.js"
+        "WebTerminal/src/js/keys.js"
         "WebTerminal/src/js/print.js"
 )

@@ -38,6 +38,8 @@ class WebTerminal {
 		// /WebTerminal/routes.cpp
 		static esp_err_t	index_html(httpd_req_t *req);
 		static esp_err_t	style_css(httpd_req_t *req);
+		static esp_err_t	events_js(httpd_req_t *req);
+		static esp_err_t	keys_js(httpd_req_t *req);
 		static esp_err_t	print_js(httpd_req_t *req);
 };
 

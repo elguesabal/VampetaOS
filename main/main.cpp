@@ -75,11 +75,6 @@ void	test(void) {
 // printf("\n\n\n");
 }
 
-// esp_err_t	response(httpd_req_t *req) {
-// 	// return (WebServer::send_text(req, 200, "VampetaOS"));
-// 	return (WebServer::send_json(req, 200, "{\"os\":\"VampetaOS\",\"status\":\"running\"}"));
-// }
-
 /**
  * @author elguesabal
  * @brief FUNCAO PRINCIPAL
@@ -93,9 +88,6 @@ extern "C" void	app_main(void) {
 	if (!WebTerminal::init_webterminal()) return;
 
 	test();
-
-// static HttpServer server(4242);
-// server.add_get("/vampeta", response);
 
 	printf("VampetaOS\n");
 }

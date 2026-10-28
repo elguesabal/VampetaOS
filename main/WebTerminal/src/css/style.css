@@ -1,34 +1,45 @@
 * {
 	margin: 0;
 	padding: 0;
+	box-sizing: border-box;
+}
+
+html {
+	height: 100%;
+}
+
+body {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
 }
 
 main {
-	width: 100%;
-	height: 100vh;
-	background-color: black;
-	color: white;
-	white-space: pre-wrap;
+	flex: 1;
 }
 
-p {
+#terminal {
 	white-space: pre-wrap;
+	overflow-wrap: anywhere;
+	background-color: #000;
+	color: #fff;
 }
+
+
 
 
 
 /* 
-#input-line {
-	display: flex;
-	align-items: center;
+
+
+#cursor {
+	color: black;
+	background-color: white;
+	animation: blink 1s steps(2, start) infinite;
 }
 
-#command-input {
-	flex: 1;
-	min-width: 0;
-	background: transparent;
-	color: inherit;
-	border: none;
-	outline: none;
-	font: inherit;
+@keyframes blink {
+	to {
+		visibility: hidden;
+	}
 } */
