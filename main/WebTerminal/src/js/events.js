@@ -1,8 +1,8 @@
 const terminal = document.getElementById("terminal");
 const input = document.getElementById("input");
-let command = "";
-// let history = [];
-// let posHistory = 0;
+let history = [];
+let posHistory = history.length;
+let currentCommand = "";
 
 /**
  * @author elguesabal
