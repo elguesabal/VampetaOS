@@ -1,5 +1,8 @@
+const terminal = document.getElementById("terminal");
+const input = document.getElementById("input");
 let command = "";
-let cursor = 0;
+// let history = [];
+// let posHistory = 0;
 
 /**
  * @author elguesabal
@@ -7,35 +10,38 @@ let cursor = 0;
  * @param event OBJETO CONTENDO AS INFORMACOES DO EVENTO DE TECLADO
 */
 function events(event) {
-console.log(event.key);
+// console.log(event.key);
 	switch (event.key) {
 		case "Enter":
 			Enter(event);
 			break;
-		case "ArrowLeft":
-			ArrowLeft(event);
+		// case "ArrowLeft":
+		// 	ArrowLeft(event);
+		// 	break;
+		// case "ArrowRight":
+		// 	ArrowRight(event);
+		// 	break;
+		case "ArrowUp":
+			ArrowUp(event);
 			break;
-		case "ArrowRight":
-			ArrowRight(event);
+		case "ArrowDown":
+			ArrowDown(event);
 			break;
-		case "Backspace":
-			Backspace(event);
-			break;
-		default:
-			eventDefault(event);
+		// case "Backspace":
+		// 	Backspace(event);
+		// 	break;
+		// default:
+		// 	eventDefault(event);
 	}
 }
 
 /**
  * @author elguesabal
  * @brief CONTROLA O COMPORTAMENTO DO CLICK NO TERMINAL
- * @param event OBJETO CONTENDO AS INFORMACOES DO EVENTO DO MOUSE
 */
-function clickTerminal(event) {
-	// event.preventDefault();
-	// document.getElementById("terminal").focus();
-	// event.currentTarget.focus();
+function clickTerminal() {
+	input.focus();
 }
 
 document.addEventListener("keydown", events);
-document.getElementById("terminal").addEventListener("mousedown", clickTerminal);
+terminal.addEventListener("click", clickTerminal);
