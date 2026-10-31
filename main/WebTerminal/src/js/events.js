@@ -10,28 +10,16 @@ let currentCommand = "";
  * @param event OBJETO CONTENDO AS INFORMACOES DO EVENTO DE TECLADO
 */
 function events(event) {
-// console.log(event.key);
 	switch (event.key) {
 		case "Enter":
 			Enter(event);
 			break;
-		// case "ArrowLeft":
-		// 	ArrowLeft(event);
-		// 	break;
-		// case "ArrowRight":
-		// 	ArrowRight(event);
-		// 	break;
 		case "ArrowUp":
 			ArrowUp(event);
 			break;
 		case "ArrowDown":
 			ArrowDown(event);
 			break;
-		// case "Backspace":
-		// 	Backspace(event);
-		// 	break;
-		// default:
-		// 	eventDefault(event);
 	}
 }
 

@@ -27,7 +27,8 @@
  * @return RETORNA false CASO httpd_register_uri_handler FALHE
  * @return RETORNA false CASO unregister_route FALHE
 */
-bool	WebServer::register_route(uint16_t port, httpd_method_t method, const char *url, esp_err_t (*handler)(httpd_req_t *)) {
+// bool	WebServer::register_route(uint16_t port, httpd_method_t method, const char *url, esp_err_t (*handler)(httpd_req_t *)) {
+bool	WebServer::register_route(uint16_t port, httpd_method_t method, const char *url, esp_err_t (*handler)(httpd_req_t *), bool websocket = false) {
 	std::map<uint16_t, httpd_handle_t>::iterator server = WebServer::servers.find(port);
 	if (server == WebServer::servers.end()) {
 		printf("This door is not in use.\n");
@@ -38,6 +39,7 @@ bool	WebServer::register_route(uint16_t port, httpd_method_t method, const char 
 	uri.method = method;
 	uri.handler = handler;
 	uri.user_ctx = NULL;
+uri.is_websocket = websocket;
 	esp_err_t ret = httpd_register_uri_handler(server->second, &uri);
 	if (ret == ESP_ERR_HTTPD_HANDLER_EXISTS) {
 		if (!WebServer::unregister_route(port, method, url)) return (false);
@@ -48,6 +50,10 @@ bool	WebServer::register_route(uint16_t port, httpd_method_t method, const char 
 		return (false);
 	}
 	return (true);
+}
+
+bool	WebServer::register_route_websocket(uint16_t port, const char *url, esp_err_t (*handler)(httpd_req_t *)) {
+	return (WebServer::register_route(port, HTTP_GET, url, handler, true));
 }
 
 /**
