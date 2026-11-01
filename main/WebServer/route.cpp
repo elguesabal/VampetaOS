@@ -22,12 +22,12 @@
  * @param method METODO HTTP ASSOCIADO A PORTA (GET, POST, PUT E DELETE)
  * @param url CAMINHO DA URL QUE IDENTIFICA A ROTA
  * @param handle FUNCAO RESPONSAVEL POR PROCESSAR AS REQUISICOES RECEBIDAS PELA ROTA
+ * @param websocket VARIAVEL QUE DECIDE SE SERA UM WEBSOCKET
  * @return RETORNA true EM CASO DA ROTA SEJA REGISTRADA COM SUCESSO
  * @return RETORNA false CASO A PORTA NAO ESTEJA SENDO USADA
  * @return RETORNA false CASO httpd_register_uri_handler FALHE
  * @return RETORNA false CASO unregister_route FALHE
 */
-// bool	WebServer::register_route(uint16_t port, httpd_method_t method, const char *url, esp_err_t (*handler)(httpd_req_t *)) {
 bool	WebServer::register_route(uint16_t port, httpd_method_t method, const char *url, esp_err_t (*handler)(httpd_req_t *), bool websocket = false) {
 	std::map<uint16_t, httpd_handle_t>::iterator server = WebServer::servers.find(port);
 	if (server == WebServer::servers.end()) {
@@ -39,7 +39,7 @@ bool	WebServer::register_route(uint16_t port, httpd_method_t method, const char 
 	uri.method = method;
 	uri.handler = handler;
 	uri.user_ctx = NULL;
-uri.is_websocket = websocket;
+	uri.is_websocket = websocket;
 	esp_err_t ret = httpd_register_uri_handler(server->second, &uri);
 	if (ret == ESP_ERR_HTTPD_HANDLER_EXISTS) {
 		if (!WebServer::unregister_route(port, method, url)) return (false);
@@ -52,6 +52,15 @@ uri.is_websocket = websocket;
 	return (true);
 }
 
+/**
+ * @author elguesabal
+ * @brief REGISTRA UMA WEBSOCKET NA ROTA E PORTA ESPECIFICADA
+ * @param port NUMERO DA PORTA EM QUE A ROTA SERA REGISTRADA
+ * @param url CAMINHO DA URL QUE IDENTIFICA A ROTA
+ * @param handle FUNCAO RESPONSAVEL POR PROCESSAR AS REQUISICOES RECEBIDAS PELA ROTA
+ * @return RETORNA true EM CASO DA ROTA SEJA REGISTRADA COM SUCESSO
+ * @return RETORNA false CASO register_route FALHE
+*/
 bool	WebServer::register_route_websocket(uint16_t port, const char *url, esp_err_t (*handler)(httpd_req_t *)) {
 	return (WebServer::register_route(port, HTTP_GET, url, handler, true));
 }
