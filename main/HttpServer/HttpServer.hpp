@@ -37,6 +37,7 @@ class HttpServer {
 		bool		remove_get(const char *path);
 		bool		add_post(const char *path, esp_err_t (*handler)(httpd_req_t *));
 		bool		remove_post(const char *path);
+		bool		add_websocket(const char *path, esp_err_t (*handler)(httpd_req_t *));
 
 	private:
 		// /WebServer/directory.cpp

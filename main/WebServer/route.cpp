@@ -8,6 +8,8 @@
   |                                                                            |
   |  elguesabal@VampetaOS:~$ functions                                         |
   |  register_route                                                            |
+  |  register_route_http                                                       |
+  |  register_route_websocket                                                  |
   |  unregister_route                                                          |
   |                                                                            |
   + -------------------------------------------------------------------------- +
@@ -22,13 +24,13 @@
  * @param method METODO HTTP ASSOCIADO A PORTA (GET, POST, PUT E DELETE)
  * @param url CAMINHO DA URL QUE IDENTIFICA A ROTA
  * @param handle FUNCAO RESPONSAVEL POR PROCESSAR AS REQUISICOES RECEBIDAS PELA ROTA
- * @param websocket VARIAVEL QUE DECIDE SE SERA UM WEBSOCKET
+ * @param websocket VARIAVEL QUE DECIDE SE SERA UM WEBSOCKET (OPCIONAL)
  * @return RETORNA true EM CASO DA ROTA SEJA REGISTRADA COM SUCESSO
  * @return RETORNA false CASO A PORTA NAO ESTEJA SENDO USADA
  * @return RETORNA false CASO httpd_register_uri_handler FALHE
  * @return RETORNA false CASO unregister_route FALHE
 */
-bool	WebServer::register_route(uint16_t port, httpd_method_t method, const char *url, esp_err_t (*handler)(httpd_req_t *), bool websocket = false) {
+bool	WebServer::register_route(uint16_t port, httpd_method_t method, const char *url, esp_err_t (*handler)(httpd_req_t *), bool websocket) {
 	std::map<uint16_t, httpd_handle_t>::iterator server = WebServer::servers.find(port);
 	if (server == WebServer::servers.end()) {
 		printf("This door is not in use.\n");
@@ -51,6 +53,16 @@ bool	WebServer::register_route(uint16_t port, httpd_method_t method, const char 
 	}
 	return (true);
 }
+
+/**
+ * @author elguesabal
+ * @brief 
+ * @param 
+ * @return 
+*/
+// bool	WebServer::register_route_http() {
+
+// }
 
 /**
  * @author elguesabal
