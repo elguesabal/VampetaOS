@@ -81,3 +81,18 @@ esp_err_t	WebTerminal::print_js(httpd_req_t *req) {
 	extern const uint8_t print_js_end[] asm("_binary_print_js_end");
 	return (WebServer::send_file_flash(req, 200, "text/javascript; charset=UTF-8", print_js_start, print_js_end));
 }
+
+/**
+ * @author elguesabal
+ * @brief METODO DE CONTROLE DO WEBSOCKET 
+ * @param req PONTEIRO PARA ESTRUTURA QUE CONTEM AS INFORMACOES DA REQUISICAO HTTP RECEBIDA PELO SERVIDOR
+ * @return RETORNA true EM CASO DE RESPONDER CORRETAMENTE COM UM "Hello"
+ * @return RETORNA false CASO httpd_ws_send_frame FALHE
+*/
+esp_err_t	WebTerminal::webterminal(httpd_req_t *req) {
+	httpd_ws_frame_t frame = {};
+	frame.type = HTTPD_WS_TYPE_TEXT;
+	frame.payload = reinterpret_cast<uint8_t *>(const_cast<char *>("Hello"));
+	frame.len = 5;
+	return (httpd_ws_send_frame(req, &frame));
+}

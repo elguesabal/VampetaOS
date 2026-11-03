@@ -12,6 +12,7 @@
   |  add_post                                                                  |
   |  remove_post                                                               |
   |  add_websocket                                                             |
+  |  remove_websocket                                                          |
   |                                                                            |
   + -------------------------------------------------------------------------- +
 */
@@ -27,7 +28,7 @@
  * @return RETORNA false CASO register_route FALHE
 */
 bool	HttpServer::add_get(const char *path, esp_err_t (*handler)(httpd_req_t *)) {
-	return (WebServer::register_route(this->port, HTTP_GET, path, handler));
+	return (WebServer::register_route_http(this->port, HTTP_GET, path, handler));
 }
 
 /**
@@ -51,7 +52,7 @@ bool	HttpServer::remove_get(const char *path) {
  * @return RETORNA false CASO register_route FALHE
 */
 bool	HttpServer::add_post(const char *path, esp_err_t (*handler)(httpd_req_t *)) {
-	return (WebServer::register_route(this->port, HTTP_POST, path, handler));
+	return (WebServer::register_route_http(this->port, HTTP_POST, path, handler));
 }
 
 /**
@@ -78,14 +79,14 @@ bool	HttpServer::add_websocket(const char *path, esp_err_t (*handler)(httpd_req_
 	return (WebServer::register_route_websocket(this->port, path, handler));
 }
 
-// /**
-//  * @author elguesabal
-//  * @brief REMOVE O REGISTRO DE UMA ROTA WEBSOCKET NA PORTA this->port
-//  * @param path CAMINHO DA URL QUE IDENTIFICA A ROTA A SER REMOVIDA
-//  * @return RETORNA true EM CASO DO REGISTRO DA ROTA SEJA REMOVIDA COM SUCESSO
-//  * @return RETORNA true CASO A PORTA NAO ESTEJA SENDO USADA
-//  * @return RETORNA false CASO unregister_route FALHE
-// */
-// bool	HttpServer::remove_post(const char *path) {
-
-// }
+/**
+ * @author elguesabal
+ * @brief REMOVE O REGISTRO DE UMA ROTA WEBSOCKET NA PORTA this->port
+ * @param path CAMINHO DA URL QUE IDENTIFICA A ROTA A SER REMOVIDA
+ * @return RETORNA true EM CASO DO REGISTRO DA ROTA SEJA REMOVIDA COM SUCESSO
+ * @return RETORNA true CASO A PORTA NAO ESTEJA SENDO USADA
+ * @return RETORNA false CASO unregister_route FALHE
+*/
+bool	HttpServer::remove_websocket(const char *path) {
+	return (WebServer::unregister_route(this->port, HTTP_GET, path));
+}

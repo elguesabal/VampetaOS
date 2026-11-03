@@ -24,7 +24,7 @@
  * @param method METODO HTTP ASSOCIADO A PORTA (GET, POST, PUT E DELETE)
  * @param url CAMINHO DA URL QUE IDENTIFICA A ROTA
  * @param handle FUNCAO RESPONSAVEL POR PROCESSAR AS REQUISICOES RECEBIDAS PELA ROTA
- * @param websocket VARIAVEL QUE DECIDE SE SERA UM WEBSOCKET (OPCIONAL)
+ * @param websocket VARIAVEL QUE DECIDE SE SERA UM WEBSOCKET
  * @return RETORNA true EM CASO DA ROTA SEJA REGISTRADA COM SUCESSO
  * @return RETORNA false CASO A PORTA NAO ESTEJA SENDO USADA
  * @return RETORNA false CASO httpd_register_uri_handler FALHE
@@ -56,17 +56,20 @@ bool	WebServer::register_route(uint16_t port, httpd_method_t method, const char 
 
 /**
  * @author elguesabal
- * @brief 
- * @param 
+ * @brief REGISTRA UMA ROTA HTTP NA PORTA ESPECIFICADA
+ * @param port NUMERO DA PORTA EM QUE A ROTA SERA REGISTRADA
+ * @param method METODO HTTP ASSOCIADO A PORTA (GET, POST, PUT E DELETE)
+ * @param url CAMINHO DA URL QUE IDENTIFICA A ROTA
+ * @param handle FUNCAO RESPONSAVEL POR PROCESSAR AS REQUISICOES RECEBIDAS PELA ROTA
  * @return 
 */
-// bool	WebServer::register_route_http() {
-
-// }
+bool	WebServer::register_route_http(uint16_t port, httpd_method_t method, const char *url, esp_err_t (*handler)(httpd_req_t *)) {
+	return (WebServer::register_route(port, method, url, handler, false));
+}
 
 /**
  * @author elguesabal
- * @brief REGISTRA UMA WEBSOCKET NA ROTA E PORTA ESPECIFICADA
+ * @brief REGISTRA UM WEBSOCKET NA ROTA E PORTA ESPECIFICADA
  * @param port NUMERO DA PORTA EM QUE A ROTA SERA REGISTRADA
  * @param url CAMINHO DA URL QUE IDENTIFICA A ROTA
  * @param handle FUNCAO RESPONSAVEL POR PROCESSAR AS REQUISICOES RECEBIDAS PELA ROTA

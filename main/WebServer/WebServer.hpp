@@ -34,8 +34,7 @@ class WebServer {
 		static httpd_handle_t	get_server(uint16_t port);
 
 		// /WebServer/route.cpp
-		static bool				register_route(uint16_t port, httpd_method_t method, const char *url, esp_err_t (*handler)(httpd_req_t *), bool websocket = false);
-		// static bool				register_route_http();
+		static bool				register_route_http(uint16_t port, httpd_method_t method, const char *url, esp_err_t (*handler)(httpd_req_t *));
 		static bool				register_route_websocket(uint16_t port, const char *url, esp_err_t (*handler)(httpd_req_t *));
 		static bool				unregister_route(uint16_t port, httpd_method_t method, const char *url);
 
@@ -49,6 +48,9 @@ class WebServer {
 	private:
 		// /WebServer/directory.cpp
 		static bool				check_dir(void);
+
+		// /WebServer/response.cpp
+		static bool				register_route(uint16_t port, httpd_method_t method, const char *url, esp_err_t (*handler)(httpd_req_t *), bool websocket);
 };
 
 #endif
