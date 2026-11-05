@@ -11,6 +11,7 @@
   |  style_css                                                                 |
   |  events_js                                                                 |
   |  print_js                                                                  |
+  |  webterminal                                                               |
   |                                                                            |
   + -------------------------------------------------------------------------- +
 */
@@ -22,12 +23,12 @@
  * @brief METODO DE RESPOSTA DA ROTA /
  * @param req PONTEIRO PARA ESTRUTURA QUE CONTEM AS INFORMACOES DA REQUISICAO HTTP RECEBIDA PELO SERVIDOR
  * @return RETORNA true EM CASO DE RESPONDER CORRETAMENTE COM O ARQUIVO /VampetaOS/WebTerminal/src/index.html
- * @return RETORNA false CASO send_file_flash FALHE
+ * @return RETORNA false CASO send_file_flash_http FALHE
 */
 esp_err_t	WebTerminal::index_html(httpd_req_t *req) {
 	extern const uint8_t index_html_start[] asm("_binary_index_html_start");
 	extern const uint8_t index_html_end[] asm("_binary_index_html_end");
-	return (WebServer::send_file_flash(req, 200, "text/html; charset=UTF-8", index_html_start, index_html_end));
+	return (WebServer::send_file_flash_http(req, 200, "text/html; charset=UTF-8", index_html_start, index_html_end));
 }
 
 /**
@@ -35,12 +36,38 @@ esp_err_t	WebTerminal::index_html(httpd_req_t *req) {
  * @brief METODO DE RESPOSTA DA ROTA /css/style.css
  * @param req PONTEIRO PARA ESTRUTURA QUE CONTEM AS INFORMACOES DA REQUISICAO HTTP RECEBIDA PELO SERVIDOR
  * @return RETORNA true EM CASO DE RESPONDER CORRETAMENTE COM O ARQUIVO /VampetaOS/WebTerminal/src/css/style.css
- * @return RETORNA false CASO send_file_flash FALHE
+ * @return RETORNA false CASO send_file_flash_http FALHE
 */
 esp_err_t	WebTerminal::style_css(httpd_req_t *req) {
 	extern const uint8_t style_css_start[] asm("_binary_style_css_start");
 	extern const uint8_t style_css_end[] asm("_binary_style_css_end");
-	return (WebServer::send_file_flash(req, 200, "text/css; charset=UTF-8", style_css_start, style_css_end));
+	return (WebServer::send_file_flash_http(req, 200, "text/css; charset=UTF-8", style_css_start, style_css_end));
+}
+
+/**
+ * @author elguesabal
+ * @brief METODO DE RESPOSTA DA ROTA /js/variables.js
+ * @param req PONTEIRO PARA ESTRUTURA QUE CONTEM AS INFORMACOES DA REQUISICAO HTTP RECEBIDA PELO SERVIDOR
+ * @return RETORNA true EM CASO DE RESPONDER CORRETAMENTE COM O ARQUIVO /VampetaOS/WebTerminal/src/js/variables.js
+ * @return RETORNA false CASO send_file_flash_http FALHE
+*/
+esp_err_t	WebTerminal::variables_js(httpd_req_t *req) {
+	extern const uint8_t variables_js_start[] asm("_binary_variables_js_start");
+	extern const uint8_t variables_js_end[] asm("_binary_variables_js_end");
+	return (WebServer::send_file_flash_http(req, 200, "text/javascript; charset=UTF-8", variables_js_start, variables_js_end));
+}
+
+/**
+ * @author elguesabal
+ * @brief METODO DE RESPOSTA DA ROTA /js/connection.js
+ * @param req PONTEIRO PARA ESTRUTURA QUE CONTEM AS INFORMACOES DA REQUISICAO HTTP RECEBIDA PELO SERVIDOR
+ * @return RETORNA true EM CASO DE RESPONDER CORRETAMENTE COM O ARQUIVO /VampetaOS/WebTerminal/src/js/connection.js
+ * @return RETORNA false CASO send_file_flash_http FALHE
+*/
+esp_err_t	WebTerminal::connection_js(httpd_req_t *req) {
+	extern const uint8_t connection_js_start[] asm("_binary_connection_js_start");
+	extern const uint8_t connection_js_end[] asm("_binary_connection_js_end");
+	return (WebServer::send_file_flash_http(req, 200, "text/javascript; charset=UTF-8", connection_js_start, connection_js_end));
 }
 
 /**
@@ -48,12 +75,12 @@ esp_err_t	WebTerminal::style_css(httpd_req_t *req) {
  * @brief METODO DE RESPOSTA DA ROTA /js/events.js
  * @param req PONTEIRO PARA ESTRUTURA QUE CONTEM AS INFORMACOES DA REQUISICAO HTTP RECEBIDA PELO SERVIDOR
  * @return RETORNA true EM CASO DE RESPONDER CORRETAMENTE COM O ARQUIVO /VampetaOS/WebTerminal/src/js/events.js
- * @return RETORNA false CASO send_file_flash FALHE
+ * @return RETORNA false CASO send_file_flash_http FALHE
 */
 esp_err_t	WebTerminal::events_js(httpd_req_t *req) {
 	extern const uint8_t events_js_start[] asm("_binary_events_js_start");
 	extern const uint8_t events_js_end[] asm("_binary_events_js_end");
-	return (WebServer::send_file_flash(req, 200, "text/javascript; charset=UTF-8", events_js_start, events_js_end));
+	return (WebServer::send_file_flash_http(req, 200, "text/javascript; charset=UTF-8", events_js_start, events_js_end));
 }
 
 /**
@@ -61,12 +88,12 @@ esp_err_t	WebTerminal::events_js(httpd_req_t *req) {
  * @brief METODO DE RESPOSTA DA ROTA /js/keys.js
  * @param req PONTEIRO PARA ESTRUTURA QUE CONTEM AS INFORMACOES DA REQUISICAO HTTP RECEBIDA PELO SERVIDOR
  * @return RETORNA true EM CASO DE RESPONDER CORRETAMENTE COM O ARQUIVO /VampetaOS/WebTerminal/src/js/keys.js
- * @return RETORNA false CASO send_file_flash FALHE
+ * @return RETORNA false CASO send_file_flash_http FALHE
 */
 esp_err_t	WebTerminal::keys_js(httpd_req_t *req) {
 	extern const uint8_t keys_js_start[] asm("_binary_keys_js_start");
 	extern const uint8_t keys_js_end[] asm("_binary_keys_js_end");
-	return (WebServer::send_file_flash(req, 200, "text/javascript; charset=UTF-8", keys_js_start, keys_js_end));
+	return (WebServer::send_file_flash_http(req, 200, "text/javascript; charset=UTF-8", keys_js_start, keys_js_end));
 }
 
 /**
@@ -74,25 +101,21 @@ esp_err_t	WebTerminal::keys_js(httpd_req_t *req) {
  * @brief METODO DE RESPOSTA DA ROTA /js/print.js
  * @param req PONTEIRO PARA ESTRUTURA QUE CONTEM AS INFORMACOES DA REQUISICAO HTTP RECEBIDA PELO SERVIDOR
  * @return RETORNA true EM CASO DE RESPONDER CORRETAMENTE COM O ARQUIVO /VampetaOS/WebTerminal/src/js/print.js
- * @return RETORNA false CASO send_file_flash FALHE
+ * @return RETORNA false CASO send_file_flash_http FALHE
 */
 esp_err_t	WebTerminal::print_js(httpd_req_t *req) {
 	extern const uint8_t print_js_start[] asm("_binary_print_js_start");
 	extern const uint8_t print_js_end[] asm("_binary_print_js_end");
-	return (WebServer::send_file_flash(req, 200, "text/javascript; charset=UTF-8", print_js_start, print_js_end));
+	return (WebServer::send_file_flash_http(req, 200, "text/javascript; charset=UTF-8", print_js_start, print_js_end));
 }
 
 /**
  * @author elguesabal
  * @brief METODO DE CONTROLE DO WEBSOCKET 
  * @param req PONTEIRO PARA ESTRUTURA QUE CONTEM AS INFORMACOES DA REQUISICAO HTTP RECEBIDA PELO SERVIDOR
- * @return RETORNA true EM CASO DE RESPONDER CORRETAMENTE COM UM "Hello"
+ * @return RETORNA true EM CASO DE RESPONDER CORRETAMENTE COM UM "VampetaOS"
  * @return RETORNA false CASO httpd_ws_send_frame FALHE
 */
 esp_err_t	WebTerminal::webterminal(httpd_req_t *req) {
-	httpd_ws_frame_t frame = {};
-	frame.type = HTTPD_WS_TYPE_TEXT;
-	frame.payload = reinterpret_cast<uint8_t *>(const_cast<char *>("Hello"));
-	frame.len = 5;
-	return (httpd_ws_send_frame(req, &frame));
+	return (WebServer::send_text_ws(req, "VampetaOS"));
 }

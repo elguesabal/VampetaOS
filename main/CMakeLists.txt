@@ -18,10 +18,11 @@ idf_component_register(
         "WebServer/directory.cpp"
         "WebServer/port.cpp"
         "WebServer/route.cpp"
+        "WebServer/response_http.cpp"
+        "WebServer/response_ws.cpp"
         "HttpServer/httpserver.cpp"
         "HttpServer/directory.cpp"
         "HttpServer/route.cpp"
-        "WebServer/response.cpp"
         "WebTerminal/webterminal.cpp"
         "WebTerminal/routes.cpp"
 
@@ -42,6 +43,8 @@ idf_component_register(
     EMBED_TXTFILES
         "WebTerminal/src/index.html"
         "WebTerminal/src/css/style.css"
+        "WebTerminal/src/js/variables.js"
+        "WebTerminal/src/js/connection.js"
         "WebTerminal/src/js/events.js"
         "WebTerminal/src/js/keys.js"
         "WebTerminal/src/js/print.js"

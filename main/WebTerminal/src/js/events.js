@@ -1,9 +1,3 @@
-const terminal = document.getElementById("terminal");
-const input = document.getElementById("input");
-let history = [];
-let posHistory = history.length;
-let currentCommand = "";
-
 /**
  * @author elguesabal
  * @brief TRATA EVENTOS DE TECLADO PARA SIMULAR A ENTRADA DE COMANDOS NO TERMINAL
