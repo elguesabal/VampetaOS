@@ -13,14 +13,25 @@ function Enter(event) {
 	}
 	history.push(input.textContent);
 	posHistory = history.length;
-if (input.textContent === "ls") {
-	print("a.out  test.c\n");
-}
-if (input.textContent === "clear") {
-	terminal.replaceChildren(input);
-	input.focus();
-}
+// if (input.textContent === "ls") {
+// 	print("a.out  test.c\n");
+// }
+	if (input.textContent === "clear") {
+		terminal.replaceChildren(input);
+		input.textContent = "";
+		print("elguesabal@VampetaOS:~$ ");
+		input.focus();
+		return;
+	}
 // REQUISICAO PARA A API RECEBER O COMANDO
+if (ws.readyState === WebSocket.OPEN) {
+	ws.send(input.textContent);
+console.log("foi")
+	// return;
+} else {
+// console.log("ERROR")
+	// print("ERROR");
+}
 	input.textContent = "";
 	print("elguesabal@VampetaOS:~$ ");
 }

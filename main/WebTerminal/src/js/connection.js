@@ -1,17 +1,18 @@
-const ws = new WebSocket(`ws://${window.location.host}/webterminal`);
-
-ws.onopen = () => {
-	console.log("WebSocket: Connected");
+ws.onopen = (event) => {
+	console.log("onopen:", event);
 };
 
 ws.onmessage = (event) => {
-	console.log("Server:", event.data);
+	console.log("onmessage:", event);
+	print(event.data);
+// input.textContent = "";
+// print("elguesabal@VampetaOS:~$ ");
 };
 
-ws.onerror = (error) => {
-	console.error("WebSocket Error:", error);
+ws.onerror = (event) => {
+	console.log("onerror:", event);
 };
 
-ws.onclose = () => {
-	console.log("WebSocket: Disconnected");
+ws.onclose = (event) => {
+	console.log("onclose:", event);
 };

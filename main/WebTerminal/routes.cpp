@@ -117,5 +117,22 @@ esp_err_t	WebTerminal::print_js(httpd_req_t *req) {
  * @return RETORNA false CASO httpd_ws_send_frame FALHE
 */
 esp_err_t	WebTerminal::webterminal(httpd_req_t *req) {
+printf("aconteceu\n");
 	return (WebServer::send_text_ws(req, "VampetaOS"));
+
+
+	// printf("Handler chamado!\n");
+	// printf("Method: %d\n", req->method);
+
+	// httpd_ws_frame_t frame = {};
+	// esp_err_t ret = httpd_ws_recv_frame(req, &frame, 0);
+
+	// printf("Receive: %s\n", esp_err_to_name(ret));
+
+	// if (ret == ESP_OK) {
+	// 	printf("Frame type: %d\n", frame.type);
+	// 	printf("Frame length: %d\n", (int)frame.len);
+	// }
+
+	// return (ESP_OK);
 }
