@@ -65,6 +65,20 @@ esp_err_t	WebTerminal::variables_js(httpd_req_t *req) {
  * @return RETORNA false CASO send_file_flash_http FALHE
 */
 esp_err_t	WebTerminal::connection_js(httpd_req_t *req) {
+	// Resquest_http request = WebServer::build_request_http(req);
+
+	// printf("\n========== HTTP REQUEST ==========\n");
+	// printf("Valid: %s\n", request.valid ? "true" : "false");
+	// printf("Method: %d\n", request.method);
+	// printf("Path: %s\n", request.path.c_str());
+	// printf("Query: %s\n", request.query.c_str());
+	// printf("Body: %s\n", request.body.c_str());
+	// printf("Content-Type: %s\n", request.content_type.c_str());
+	// printf("Content-Length: %u\n", (unsigned int)request.content_length);
+	// printf("==================================\n\n");
+
+
+
 	extern const uint8_t connection_js_start[] asm("_binary_connection_js_start");
 	extern const uint8_t connection_js_end[] asm("_binary_connection_js_end");
 	return (WebServer::send_file_flash_http(req, 200, "text/javascript; charset=UTF-8", connection_js_start, connection_js_end));
@@ -117,8 +131,8 @@ esp_err_t	WebTerminal::print_js(httpd_req_t *req) {
  * @return RETORNA false CASO httpd_ws_send_frame FALHE
 */
 esp_err_t	WebTerminal::webterminal(httpd_req_t *req) {
-printf("aconteceu\n");
-	return (WebServer::send_text_ws(req, "VampetaOS"));
+// printf("Handler chamado!\n");
+	// return (WebServer::send_text_ws(req, "VampetaOS"));
 
 
 	// printf("Handler chamado!\n");
@@ -135,4 +149,31 @@ printf("aconteceu\n");
 	// }
 
 	// return (ESP_OK);
+
+
+
+	// httpd_ws_frame_t frame = {};
+	// esp_err_t ret = httpd_ws_recv_frame(req, &frame, 0);
+	// if (ret != ESP_OK) return (ret);
+	// printf("Frame recebido: %d bytes\n\n", (int)frame.len);
+	// return (WebServer::send_text_ws(req, "VampetaOS"));
+
+
+
+	httpd_ws_frame_t frame = {};
+	esp_err_t ret = httpd_ws_recv_frame(req, &frame, 0);
+	if (ret != ESP_OK) return (ret);
+	printf("Frame recebido: %d bytes\n", (int)frame.len);
+	if (frame.type != HTTPD_WS_TYPE_TEXT) return (ESP_OK);
+	char *payload = (char *)malloc(frame.len + 1);
+	if (payload == NULL) return (ESP_ERR_NO_MEM);
+	frame.payload = (uint8_t *)payload;
+	ret = httpd_ws_recv_frame(req, &frame, frame.len);
+	if (ret == ESP_OK) {
+		payload[frame.len] = '\0';
+		printf("Mensagem: %s\n\n", payload);
+		ret = WebServer::send_text_ws(req, "VampetaOS\n");
+	}
+	free(payload);
+	return (ret);
 }

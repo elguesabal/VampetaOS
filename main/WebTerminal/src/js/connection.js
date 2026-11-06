@@ -5,8 +5,7 @@ ws.onopen = (event) => {
 ws.onmessage = (event) => {
 	console.log("onmessage:", event);
 	print(event.data);
-// input.textContent = "";
-// print("elguesabal@VampetaOS:~$ ");
+print("elguesabal@VampetaOS:~$ ");
 };
 
 ws.onerror = (event) => {

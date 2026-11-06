@@ -26,8 +26,9 @@ function Enter(event) {
 // REQUISICAO PARA A API RECEBER O COMANDO
 if (ws.readyState === WebSocket.OPEN) {
 	ws.send(input.textContent);
-console.log("foi")
-	// return;
+	input.textContent = "";
+// console.log("foi")
+	return;
 } else {
 // console.log("ERROR")
 	// print("ERROR");

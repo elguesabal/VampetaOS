@@ -18,6 +18,7 @@ idf_component_register(
         "WebServer/directory.cpp"
         "WebServer/port.cpp"
         "WebServer/route.cpp"
+        "WebServer/request_http.cpp"
         "WebServer/response_http.cpp"
         "WebServer/response_ws.cpp"
         "HttpServer/httpserver.cpp"

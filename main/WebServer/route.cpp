@@ -26,11 +26,14 @@
  * @param handle FUNCAO RESPONSAVEL POR PROCESSAR AS REQUISICOES RECEBIDAS PELA ROTA
  * @param websocket VARIAVEL QUE DECIDE SE SERA UM WEBSOCKET
  * @return RETORNA true EM CASO DA ROTA SEJA REGISTRADA COM SUCESSO
+ * @return RETORNA false CASO A url SEJA NULL
+ * @return RETORNA false CASO O handler SEJA NULL
  * @return RETORNA false CASO A PORTA NAO ESTEJA SENDO USADA
  * @return RETORNA false CASO httpd_register_uri_handler FALHE
  * @return RETORNA false CASO unregister_route FALHE
 */
 bool	WebServer::register_route(uint16_t port, httpd_method_t method, const char *url, esp_err_t (*handler)(httpd_req_t *), bool websocket) {
+	if (url == NULL || handler == NULL) return (false);
 	std::map<uint16_t, httpd_handle_t>::iterator server = WebServer::servers.find(port);
 	if (server == WebServer::servers.end()) {
 		printf("This door is not in use.\n");

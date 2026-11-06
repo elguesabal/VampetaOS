@@ -15,6 +15,34 @@
 #include "../VampetaOS.hpp"
 #include "../Sd/Sd.hpp"
 
+#define MAX_REQUEST_BODY_SIZE 4096
+
+/**
+ * @author elguesabal
+ * @brief STRUCT USADO PARA ARMAZENAR OS DADOS INTERPRETADOS DE UMA REQUISICAO HTTP REBIDA
+*/
+struct Resquest_http {
+	bool			valid;
+    httpd_method_t	method;
+    std::string		path;
+    std::string		query;
+    std::string		body;
+    std::string		content_type;
+    size_t			content_length;
+	// headers
+	// client_ip
+	// cookies
+	// authorization
+};
+
+/**
+ * @author elguesabal
+ * @brief STRUCT USADO PARA ARMAZENAR OS DADOS INTERPRETADOS DE UMA REQUISICAO WS REBIDA
+*/
+struct Resquest_ws {
+
+};
+
 /**
  * @author elguesabal
  * @brief CLASSE RESPONSAVEL POR GERENCIAR O WEBSERVER
@@ -37,6 +65,12 @@ class WebServer {
 		static bool				register_route_http(uint16_t port, httpd_method_t method, const char *url, esp_err_t (*handler)(httpd_req_t *));
 		static bool				register_route_websocket(uint16_t port, const char *url, esp_err_t (*handler)(httpd_req_t *));
 		static bool				unregister_route(uint16_t port, httpd_method_t method, const char *url);
+
+		// /WebServer/request_http.cpp
+		static Resquest_http	build_request_http(httpd_req_t *req);
+
+		// /WebServer/request_ws.cpp
+		// static Resquest_http	build_request_ws(httpd_req_t *req);
 
 		// /WebServer/response_http.cpp
 		static const char		*status_http(const uint16_t code);
