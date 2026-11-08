@@ -38,27 +38,6 @@ struct Resquest_http {
 
 // /**
 //  * @author elguesabal
-//  * @brief STRUCT USADO PARA ARMAZENAR OS DADOS INTERPRETADOS DE UMA REQUISICAO WS REBIDA
-// */
-// struct Resquest_ws {
-// 	bool                    valid;
-
-// 	// Handshake
-// 	std::string             path;
-// 	std::string             query;
-// 	std::string             origin;
-// 	std::string             user_agent;
-// 	std::string             protocol;
-
-// 	// Frame
-// 	httpd_ws_type_t         type;
-// 	std::string             payload;
-// 	size_t                  length;
-// 	bool                    final;
-// };
-
-// /**
-//  * @author elguesabal
 //  * @brief STRUCT USADO PARA ARMAZENAR OS DADOS INTERPRETADOS DE UMA REQUISICAO DE CONEXAO WS REBIDA
 // */
 // struct WebSocket_connection {
@@ -98,7 +77,7 @@ class WebServer {
 
 		// /WebServer/route.cpp
 		static bool				register_route_http(uint16_t port, httpd_method_t method, const char *url, esp_err_t (*handler)(httpd_req_t *));
-		static bool				register_route_websocket(uint16_t port, const char *url, esp_err_t (*handler)(httpd_req_t *));
+		static bool				register_route_websocket(uint16_t port, const char *url, esp_err_t (*handler)(httpd_req_t *), esp_err_t (*connect)(httpd_req_t *));
 		static bool				unregister_route(uint16_t port, httpd_method_t method, const char *url);
 
 		// /WebServer/request_http.cpp
@@ -122,7 +101,7 @@ class WebServer {
 		static bool				check_dir(void);
 
 		// /WebServer/route.cpp
-		static bool				register_route(uint16_t port, httpd_method_t method, const char *url, esp_err_t (*handler)(httpd_req_t *), bool websocket);
+		static bool				register_route(uint16_t port, httpd_method_t method, const char *url, esp_err_t (*handler)(httpd_req_t *), bool websocket, esp_err_t (*ws_connect)(httpd_req_t *));
 
 		// /WebServer/request_http.cpp
 		static bool				get_request_method(httpd_req_t *req, Resquest_http *request);
@@ -137,6 +116,11 @@ class WebServer {
 		static bool				get_websocket_frame_payload(httpd_req_t *req, httpd_ws_frame_t *ws_frame, WebSocket_frame *frame);
 		static bool				get_websocket_frame_length(httpd_ws_frame_t *ws_frame, WebSocket_frame *frame);
 		static bool				get_websocket_frame_final(httpd_ws_frame_t *ws_frame, WebSocket_frame *frame);
+
+		// /WebServer/response_error.cpp
+		static bool				register_response_error(httpd_handle_t server);
+		static esp_err_t		not_found(httpd_req_t *req, httpd_err_code_t error);
+		static esp_err_t		internal_server_error(httpd_req_t *req, httpd_err_code_t error);
 };
 
 #endif

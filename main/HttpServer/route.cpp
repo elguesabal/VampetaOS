@@ -72,11 +72,12 @@ bool	HttpServer::remove_post(const char *path) {
  * @brief REGISTRA UMA ROTA WEBSOCKET NA PORTA this->port
  * @param path CAMINHO DA URL QUE IDENTIFICA A ROTA
  * @param handle FUNCAO RESPONSAVEL POR PROCESSAR AS REQUISICOES RECEBIDAS PELA ROTA
+ * @param connect FUNCAO ACIONADA TODA VEZ QUE UM WEBSOCKET FOR CONECTADO (OPICIONAL)
  * @return RETORNA true EM CASO DA ROTA SEJA REGISTRADA COM SUCESSO
  * @return RETORNA false CASO register_route_websocket FALHE
 */
-bool	HttpServer::add_websocket(const char *path, esp_err_t (*handler)(httpd_req_t *)) {
-	return (WebServer::register_route_websocket(this->port, path, handler));
+bool	HttpServer::add_websocket(const char *path, esp_err_t (*handler)(httpd_req_t *), esp_err_t (*connect)(httpd_req_t *) = NULL) {
+	return (WebServer::register_route_websocket(this->port, path, handler, connect));
 }
 
 /**

@@ -9,8 +9,12 @@
   |  elguesabal@VampetaOS:~$ functions                                         |
   |  index_html                                                                |
   |  style_css                                                                 |
+  |  variables_js                                                              |
+  |  connection_js                                                             |
   |  events_js                                                                 |
+  |  keys_js                                                                   |
   |  print_js                                                                  |
+  |  connect_ws                                                                |
   |  webterminal                                                               |
   |                                                                            |
   + -------------------------------------------------------------------------- +
@@ -65,20 +69,6 @@ esp_err_t	WebTerminal::variables_js(httpd_req_t *req) {
  * @return RETORNA false CASO send_file_flash_http FALHE
 */
 esp_err_t	WebTerminal::connection_js(httpd_req_t *req) {
-	// Resquest_http request = WebServer::build_request_http(req);
-
-	// printf("\n========== HTTP REQUEST ==========\n");
-	// printf("Valid: %s\n", request.valid ? "true" : "false");
-	// printf("Method: %d\n", request.method);
-	// printf("Path: %s\n", request.path.c_str());
-	// printf("Query: %s\n", request.query.c_str());
-	// printf("Body: %s\n", request.body.c_str());
-	// printf("Content-Type: %s\n", request.content_type.c_str());
-	// printf("Content-Length: %u\n", (unsigned int)request.content_length);
-	// printf("==================================\n\n");
-
-
-
 	extern const uint8_t connection_js_start[] asm("_binary_connection_js_start");
 	extern const uint8_t connection_js_end[] asm("_binary_connection_js_end");
 	return (WebServer::send_file_flash_http(req, 200, "text/javascript; charset=UTF-8", connection_js_start, connection_js_end));
@@ -125,74 +115,42 @@ esp_err_t	WebTerminal::print_js(httpd_req_t *req) {
 
 /**
  * @author elguesabal
+ * @brief METODO QUE SERA DISPARADO CADA VEZ QUE UM WEBSOCKET E CONECTADO
+ * @param req PONTEIRO PARA ESTRUTURA QUE CONTEM AS INFORMACOES DA REQUISICAO HTTP RECEBIDA PELO SERVIDOR
+ * @return RETORNA ESP_OK
+*/
+esp_err_t	WebTerminal::connect_ws(httpd_req_t *req) {
+	printf("WebTerminal: client connected\n");
+	extern const uint8_t ascii_art_start[] asm("_binary_ascii_art_start");
+	extern const uint8_t ascii_art_end[] asm("_binary_ascii_art_end");
+	// return (WebServer::send_text_ws(req, "testeeeee VampetaOS\n"));
+
+
+
+size_t len = ascii_art_end - ascii_art_start;
+
+char *ascii_art = new (std::nothrow) char[len + 1];
+if (ascii_art == nullptr) return (ESP_ERR_NO_MEM);
+
+memcpy(ascii_art, ascii_art_start, len);
+ascii_art[len] = '\0';
+
+esp_err_t ret = WebServer::send_text_ws(req, ascii_art);
+
+delete[] ascii_art;
+
+return (ret);
+}
+
+/**
+ * @author elguesabal
  * @brief METODO DE CONTROLE DO WEBSOCKET 
  * @param req PONTEIRO PARA ESTRUTURA QUE CONTEM AS INFORMACOES DA REQUISICAO HTTP RECEBIDA PELO SERVIDOR
  * @return RETORNA true EM CASO DE RESPONDER CORRETAMENTE COM UM "VampetaOS"
  * @return RETORNA false CASO httpd_ws_send_frame FALHE
 */
 esp_err_t	WebTerminal::webterminal(httpd_req_t *req) {
-// printf("Handler chamado!\n");
-	// return (WebServer::send_text_ws(req, "VampetaOS"));
-
-
-	// printf("Handler chamado!\n");
-	// printf("Method: %d\n", req->method);
-
-	// httpd_ws_frame_t frame = {};
-	// esp_err_t ret = httpd_ws_recv_frame(req, &frame, 0);
-
-	// printf("Receive: %s\n", esp_err_to_name(ret));
-
-	// if (ret == ESP_OK) {
-	// 	printf("Frame type: %d\n", frame.type);
-	// 	printf("Frame length: %d\n", (int)frame.len);
-	// }
-
-	// return (ESP_OK);
-
-
-
-	// httpd_ws_frame_t frame = {};
-	// esp_err_t ret = httpd_ws_recv_frame(req, &frame, 0);
-	// if (ret != ESP_OK) return (ret);
-	// printf("Frame recebido: %d bytes\n\n", (int)frame.len);
-	// return (WebServer::send_text_ws(req, "VampetaOS"));
-
-
-
-	// httpd_ws_frame_t frame = {};
-	// esp_err_t ret = httpd_ws_recv_frame(req, &frame, 0);
-	// if (ret != ESP_OK) return (ret);
-	// printf("Frame recebido: %d bytes\n", (int)frame.len);
-	// if (frame.type != HTTPD_WS_TYPE_TEXT) return (ESP_OK);
-	// char *payload = (char *)malloc(frame.len + 1);
-	// if (payload == NULL) return (ESP_ERR_NO_MEM);
-	// frame.payload = (uint8_t *)payload;
-	// ret = httpd_ws_recv_frame(req, &frame, frame.len);
-	// if (ret == ESP_OK) {
-	// 	payload[frame.len] = '\0';
-	// 	printf("Mensagem: %s\n\n", payload);
-	// 	ret = WebServer::send_text_ws(req, "VampetaOS\n");
-	// }
-	// free(payload);
-	// return (ret);
-
-
-
 	WebSocket_frame frame = WebServer::build_websocket_frame(req);
-	// printf("\n========== WS REQUEST ==========\n");
-	// printf("Valid: %s\n", (frame.valid) ? "true" : "false");
-	// printf("Type: %d\n", frame.type);
-	// printf("Length: %zu\n", frame.length);
-	// printf("Final: %s\n", (frame.final) ? "true" : "false");
-    // printf("Payload: ");
-    // if (frame.type == HTTPD_WS_TYPE_TEXT) {
-    //     printf("%.*s\n", (int)frame.length, frame.payload.c_str());
-	// } else {
-    //     printf("[binary data]\n");
-	// }
-	// printf("==================================\n\n");
-	// esp_err_t ret = WebServer::send_text_ws(req, "VampetaOS\n");
 	std::string output = WebShell::shell(frame.payload);
 	esp_err_t ret = WebServer::send_text_ws(req, output.c_str());
 	return (ret);

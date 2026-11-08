@@ -23,6 +23,7 @@
  * @return RETORNA true EM CASO DA PORTA SEJA INICIADA COM SUCESSO
  * @return RETORNA false CASO A PORTA JA ESTEJA OCUPADA
  * @return RETORNA false CASO httpd_start FALHE
+ * @return RETORNA false CASO register_response_error FALHE
 */
 bool	WebServer::open_port(uint16_t port) {
 	std::map<uint16_t, httpd_handle_t>::iterator server = WebServer::servers.find(port);
@@ -37,6 +38,11 @@ bool	WebServer::open_port(uint16_t port) {
 	esp_err_t ret = httpd_start(&handle, &config);
 	if (ret != ESP_OK) {
 		printf("%s\n", esp_err_to_name(ret));
+		return (false);
+	}
+	if (!WebServer::register_response_error(handle)) {
+		ret = httpd_stop(handle);
+		if (ret != ESP_OK) printf("Failed to stop server: %s\n", esp_err_to_name(ret));
 		return (false);
 	}
 	WebServer::servers.emplace(port, handle);

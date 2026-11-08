@@ -22,6 +22,7 @@ idf_component_register(
         "WebServer/request_ws.cpp"
         "WebServer/response_http.cpp"
         "WebServer/response_ws.cpp"
+        "WebServer/response_error.cpp"
         "HttpServer/httpserver.cpp"
         "HttpServer/directory.cpp"
         "HttpServer/route.cpp"
@@ -47,6 +48,8 @@ idf_component_register(
         esp_http_server
 
     EMBED_TXTFILES
+        "WebServer/pages_error/not_found.html"
+        "WebServer/pages_error/internal_server_error.html"
         "WebTerminal/src/index.html"
         "WebTerminal/src/css/style.css"
         "WebTerminal/src/js/variables.js"
@@ -54,4 +57,11 @@ idf_component_register(
         "WebTerminal/src/js/events.js"
         "WebTerminal/src/js/keys.js"
         "WebTerminal/src/js/print.js"
+        "WebTerminal/src/ascii_art"
+)
+
+target_compile_options(${COMPONENT_LIB} PRIVATE
+    -Wall
+    -Wextra
+    -Werror
 )

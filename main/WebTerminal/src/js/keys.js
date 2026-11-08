@@ -5,36 +5,27 @@
 */
 function Enter(event) {
 	event.preventDefault();
-	print(input.textContent + "\n");
-	if (input.textContent === "") {
-		input.textContent = "";
+	const command = input.textContent;
+	print(command + "\n");
+	input.textContent = "";
+	if (command === "") {
 		print("elguesabal@VampetaOS:~$ ");
 		return;
 	}
-	history.push(input.textContent);
+	history.push(command);
 	posHistory = history.length;
-// if (input.textContent === "ls") {
-// 	print("a.out  test.c\n");
-// }
-	if (input.textContent === "clear") {
+	if (command === "clear") {
 		terminal.replaceChildren(input);
-		input.textContent = "";
 		print("elguesabal@VampetaOS:~$ ");
 		input.focus();
 		return;
 	}
-// REQUISICAO PARA A API RECEBER O COMANDO
-if (ws.readyState === WebSocket.OPEN) {
-	ws.send(input.textContent);
-	input.textContent = "";
-// console.log("foi")
-	return;
-} else {
-// console.log("ERROR")
-	// print("ERROR");
-}
-	input.textContent = "";
-	print("elguesabal@VampetaOS:~$ ");
+	if (ws.readyState !== WebSocket.OPEN) {
+		print("WebSocket: connection unavailable\n");
+		print("elguesabal@VampetaOS:~$ ");
+		return;
+	}
+	ws.send(command);
 }
 
 /**

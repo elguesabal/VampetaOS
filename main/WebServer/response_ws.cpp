@@ -17,6 +17,8 @@
 /**
  * @author elguesabal
  * @brief ENVIA UM TEXTO PARA UMA CONEXAO DO WEBSOCKET
+ * @return RETORNA ESP_ERR_INVALID_ARG EM CASO req SER nullptr
+ * @return RETORNA ESP_ERR_INVALID_ARG EM CASO text SER nullptr
  * @return RETORNA ESP_OK EM CASO DE SUCESSO
 */
 esp_err_t	WebServer::send_text_ws(httpd_req_t *req, const char *text) {

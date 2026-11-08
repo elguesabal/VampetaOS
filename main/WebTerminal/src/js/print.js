@@ -9,4 +9,4 @@ function print(text) {
 	terminal.insertBefore(element, document.getElementById("input"));
 }
 
-print("elguesabal@VampetaOS:~$ ");
+// print("elguesabal@VampetaOS:~$ "); // AGORA O SERVIDOR QUE RESPONDE COM O OUTPUT INICIAL

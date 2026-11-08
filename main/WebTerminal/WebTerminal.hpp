@@ -44,6 +44,7 @@ class WebTerminal {
 		static esp_err_t	events_js(httpd_req_t *req);
 		static esp_err_t	keys_js(httpd_req_t *req);
 		static esp_err_t	print_js(httpd_req_t *req);
+		static esp_err_t	connect_ws(httpd_req_t *req);
 		static esp_err_t	webterminal(httpd_req_t *req);
 };
 

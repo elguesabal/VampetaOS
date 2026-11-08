@@ -8,14 +8,26 @@
   |                                                                            |
   |  elguesabal@VampetaOS:~$ functions                                         |
   |                                                                            |
+  |                                                                            |
   + -------------------------------------------------------------------------- +
 */
 
 #include "WebShell.hpp"
 
 std::string WebShell::shell(std::string command) {
-	if (command == "ls") return ("a.out VampetaOS.c");
-	if (command == "pwd") return ("/VampetaOS/");
-	if (command == "echo VampetaOS") return ("VampetaOS");
-	return ("Command not found");
+	if (command == "ls") return ("a.out VampetaOS.c\n");
+	if (command == "pwd") return ("/VampetaOS/\n");
+	if (command == "echo VampetaOS") return ("VampetaOS\n");
+	return ("Command not found\n");
 }
+
+
+
+
+// WebShell::WebShell() {
+
+// }
+
+// void  run_command(void) {
+
+// }

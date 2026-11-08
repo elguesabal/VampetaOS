@@ -113,7 +113,7 @@ esp_err_t	WebServer::send_text_http(httpd_req_t *req, const uint16_t status, con
 	if (err != ESP_OK) return (err);
 	err = httpd_resp_set_type(req, "text/plain; charset=UTF-8");
 	if (err != ESP_OK) return (err);
-	return (httpd_resp_send(req, text, HTTPD_RESP_USE_STRLEN));
+	return (httpd_resp_sendstr(req, text));
 }
 
 /**
@@ -138,5 +138,5 @@ esp_err_t	WebServer::send_json_http(httpd_req_t *req, const uint16_t status, con
 	if (err != ESP_OK) return (err);
 	err = httpd_resp_set_type(req, "application/json; charset=UTF-8");
 	if (err != ESP_OK) return (err);
-	return (httpd_resp_send(req, json, HTTPD_RESP_USE_STRLEN));
+	return (httpd_resp_sendstr(req, json));
 }
