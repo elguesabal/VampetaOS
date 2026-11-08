@@ -15,6 +15,7 @@
 #include "../VampetaOS.hpp"
 #include "../WebServer/WebServer.hpp"
 #include "../HttpServer/HttpServer.hpp"
+#include "../WebShell/WebShell.hpp"
 
 #define PORT 80
 

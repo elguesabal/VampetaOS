@@ -160,20 +160,40 @@ esp_err_t	WebTerminal::webterminal(httpd_req_t *req) {
 
 
 
-	httpd_ws_frame_t frame = {};
-	esp_err_t ret = httpd_ws_recv_frame(req, &frame, 0);
-	if (ret != ESP_OK) return (ret);
-	printf("Frame recebido: %d bytes\n", (int)frame.len);
-	if (frame.type != HTTPD_WS_TYPE_TEXT) return (ESP_OK);
-	char *payload = (char *)malloc(frame.len + 1);
-	if (payload == NULL) return (ESP_ERR_NO_MEM);
-	frame.payload = (uint8_t *)payload;
-	ret = httpd_ws_recv_frame(req, &frame, frame.len);
-	if (ret == ESP_OK) {
-		payload[frame.len] = '\0';
-		printf("Mensagem: %s\n\n", payload);
-		ret = WebServer::send_text_ws(req, "VampetaOS\n");
-	}
-	free(payload);
+	// httpd_ws_frame_t frame = {};
+	// esp_err_t ret = httpd_ws_recv_frame(req, &frame, 0);
+	// if (ret != ESP_OK) return (ret);
+	// printf("Frame recebido: %d bytes\n", (int)frame.len);
+	// if (frame.type != HTTPD_WS_TYPE_TEXT) return (ESP_OK);
+	// char *payload = (char *)malloc(frame.len + 1);
+	// if (payload == NULL) return (ESP_ERR_NO_MEM);
+	// frame.payload = (uint8_t *)payload;
+	// ret = httpd_ws_recv_frame(req, &frame, frame.len);
+	// if (ret == ESP_OK) {
+	// 	payload[frame.len] = '\0';
+	// 	printf("Mensagem: %s\n\n", payload);
+	// 	ret = WebServer::send_text_ws(req, "VampetaOS\n");
+	// }
+	// free(payload);
+	// return (ret);
+
+
+
+	WebSocket_frame frame = WebServer::build_websocket_frame(req);
+	// printf("\n========== WS REQUEST ==========\n");
+	// printf("Valid: %s\n", (frame.valid) ? "true" : "false");
+	// printf("Type: %d\n", frame.type);
+	// printf("Length: %zu\n", frame.length);
+	// printf("Final: %s\n", (frame.final) ? "true" : "false");
+    // printf("Payload: ");
+    // if (frame.type == HTTPD_WS_TYPE_TEXT) {
+    //     printf("%.*s\n", (int)frame.length, frame.payload.c_str());
+	// } else {
+    //     printf("[binary data]\n");
+	// }
+	// printf("==================================\n\n");
+	// esp_err_t ret = WebServer::send_text_ws(req, "VampetaOS\n");
+	std::string output = WebShell::shell(frame.payload);
+	esp_err_t ret = WebServer::send_text_ws(req, output.c_str());
 	return (ret);
 }

@@ -16,6 +16,7 @@
 #include "../Sd/Sd.hpp"
 
 #define MAX_REQUEST_BODY_SIZE 4096
+#define MAX_WEBSOCKET_FRAME_SIZE 1024
 
 /**
  * @author elguesabal
@@ -35,12 +36,46 @@ struct Resquest_http {
 	// authorization
 };
 
+// /**
+//  * @author elguesabal
+//  * @brief STRUCT USADO PARA ARMAZENAR OS DADOS INTERPRETADOS DE UMA REQUISICAO WS REBIDA
+// */
+// struct Resquest_ws {
+// 	bool                    valid;
+
+// 	// Handshake
+// 	std::string             path;
+// 	std::string             query;
+// 	std::string             origin;
+// 	std::string             user_agent;
+// 	std::string             protocol;
+
+// 	// Frame
+// 	httpd_ws_type_t         type;
+// 	std::string             payload;
+// 	size_t                  length;
+// 	bool                    final;
+// };
+
+// /**
+//  * @author elguesabal
+//  * @brief STRUCT USADO PARA ARMAZENAR OS DADOS INTERPRETADOS DE UMA REQUISICAO DE CONEXAO WS REBIDA
+// */
+// struct WebSocket_connection {
+// 	bool	valid;
+// 	int		socket;
+// };
+
 /**
  * @author elguesabal
- * @brief STRUCT USADO PARA ARMAZENAR OS DADOS INTERPRETADOS DE UMA REQUISICAO WS REBIDA
+ * @brief STRUCT USADO PARA ARMAZENAR OS DADOS INTERPRETADOS DE UM FRAME WEBSOCKET
 */
-struct Resquest_ws {
-
+struct WebSocket_frame {
+	bool			valid;
+	httpd_ws_type_t	type;
+	std::string		payload;
+	size_t			length;
+	bool			final;
 };
 
 /**
@@ -70,7 +105,7 @@ class WebServer {
 		static Resquest_http	build_request_http(httpd_req_t *req);
 
 		// /WebServer/request_ws.cpp
-		// static Resquest_http	build_request_ws(httpd_req_t *req);
+		static WebSocket_frame	build_websocket_frame(httpd_req_t *req);
 
 		// /WebServer/response_http.cpp
 		static const char		*status_http(const uint16_t code);
@@ -88,6 +123,20 @@ class WebServer {
 
 		// /WebServer/route.cpp
 		static bool				register_route(uint16_t port, httpd_method_t method, const char *url, esp_err_t (*handler)(httpd_req_t *), bool websocket);
+
+		// /WebServer/request_http.cpp
+		static bool				get_request_method(httpd_req_t *req, Resquest_http *request);
+		static bool				get_request_path(httpd_req_t *req, Resquest_http *request);
+		static bool				get_request_query(httpd_req_t *req, Resquest_http *request);
+		static bool				get_request_body(httpd_req_t *req, Resquest_http *request);
+		static bool				get_request_content_type(httpd_req_t *req, Resquest_http *request);
+		static bool				get_request_content_length(httpd_req_t *req, Resquest_http *request);
+
+		// /WebServer/request_ws.cpp
+		static bool				get_websocket_frame_type(httpd_ws_frame_t *ws_frame, WebSocket_frame *frame);
+		static bool				get_websocket_frame_payload(httpd_req_t *req, httpd_ws_frame_t *ws_frame, WebSocket_frame *frame);
+		static bool				get_websocket_frame_length(httpd_ws_frame_t *ws_frame, WebSocket_frame *frame);
+		static bool				get_websocket_frame_final(httpd_ws_frame_t *ws_frame, WebSocket_frame *frame);
 };
 
 #endif

@@ -19,6 +19,7 @@ idf_component_register(
         "WebServer/port.cpp"
         "WebServer/route.cpp"
         "WebServer/request_http.cpp"
+        "WebServer/request_ws.cpp"
         "WebServer/response_http.cpp"
         "WebServer/response_ws.cpp"
         "HttpServer/httpserver.cpp"
@@ -26,6 +27,7 @@ idf_component_register(
         "HttpServer/route.cpp"
         "WebTerminal/webterminal.cpp"
         "WebTerminal/routes.cpp"
+        "WebShell/webshell.cpp"
 
     INCLUDE_DIRS
         "."
@@ -33,6 +35,9 @@ idf_component_register(
         "System"
         "Wifi"
         "WebServer"
+        "HttpServer"
+        "WebTerminal"
+        "WebShell"
 
     PRIV_REQUIRES
         nvs_flash
