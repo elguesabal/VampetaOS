@@ -15,7 +15,7 @@
 #include "../VampetaOS.hpp"
 #include "../WebServer/WebServer.hpp"
 #include "../HttpServer/HttpServer.hpp"
-#include "../WebShell/WebShell.hpp"
+#include "../Shell/Shell.hpp"
 
 #define PORT 80
 
@@ -45,7 +45,7 @@ class WebTerminal {
 		static esp_err_t	keys_js(httpd_req_t *req);
 		static esp_err_t	print_js(httpd_req_t *req);
 		static esp_err_t	connect_ws(httpd_req_t *req);
-		static esp_err_t	webterminal(httpd_req_t *req);
+		static esp_err_t	input_shell(httpd_req_t *req);
 };
 
 #endif

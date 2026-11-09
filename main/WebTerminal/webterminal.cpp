@@ -61,6 +61,6 @@ bool	WebTerminal::init_routes(void) {
 	if (!server->add_get("/js/events.js", WebTerminal::events_js)) return (false);
 	if (!server->add_get("/js/keys.js", WebTerminal::keys_js)) return (false);
 	if (!server->add_get("/js/print.js", WebTerminal::print_js)) return (false);
-	if (!server->add_websocket("/webterminal", WebTerminal::webterminal, WebTerminal::connect_ws)) return (false);
+	if (!server->add_websocket("/webterminal", WebTerminal::input_shell, WebTerminal::connect_ws)) return (false);
 	return (true);
 }

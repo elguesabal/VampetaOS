@@ -17,18 +17,18 @@
 /**
  * @author elguesabal
  * @brief VERIFICA SE OS ARQUIVOS NECESSARIOS ESTAO OK
- * @return RETORNA true CASO O DIRETORIO /VampetaOS/WebServer OU SEJA CRIADO COM SUCESSO
- * @return RETORNA false SE EXISTIR UM ARQUIVO COM O NOME /VampetaOS/WebServer
- * @return RETORNA false SE O DIRETORIO /VampetaOS/WebServer NAO EXISTE A FALHE NA CRIACAO
+ * @return RETORNA true CASO O DIRETORIO /VampetaOS/webServer OU SEJA CRIADO COM SUCESSO
+ * @return RETORNA false SE EXISTIR UM ARQUIVO COM O NOME /VampetaOS/webServer
+ * @return RETORNA false SE O DIRETORIO /VampetaOS/webServer NAO EXISTE A FALHE NA CRIACAO
 */
 bool	WebServer::check_dir(void) {
-	if (!Sd::exist_dir("/WebServer")) {
-		if (Sd::exist_file("/WebServer")) {
-			printf("/VampetaOS/WebServer must be a directory\n");
+	if (!Sd::exist_dir("/webServer")) {
+		if (Sd::exist_file("/webServer")) {
+			printf("/VampetaOS/webServer must be a directory\n");
 			return (false);
 		}
-		if (!Sd::create_dir("/WebServer")) {
-			printf("Failed to create /VampetaOS/WebServer: %s\n", strerror(errno));
+		if (!Sd::create_dir("/webServer")) {
+			printf("Failed to create /VampetaOS/webServer: %s\n", strerror(errno));
 			return (false);
 		}
 	}

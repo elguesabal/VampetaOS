@@ -4,24 +4,31 @@
   + -------------------------------------------------------------------------- +
   |                                                                            |
   |  elguesabal@VampetaOS:~$ pwd                                               |
-  |  /WebShell/WebShell.hpp                                                    |
+  |  /Shell/Shell.hpp                                                          |
   |                                                                            |
   + -------------------------------------------------------------------------- +
 */
 
-#ifndef WEBSHELL_H
-#define WEBSHELL_H
+#ifndef SHELL_H
+#define SHELL_H
 
 #include "../VampetaOS.hpp"
+#include "../Sd/Sd.hpp"
 #include "../WebServer/WebServer.hpp"
 
 /**
  * @author elguesabal
- * @brief CLASSE RESPONSAVEL POR GERENCIAR O WEBSHELL
+ * @brief CLASSE RESPONSAVEL POR GERENCIAR O SHELL
 */
-class WebShell {
+class Shell {
 	public:
-		static std::string shell(std::string command);
+		// /Shell/shell.cpp
+		static bool			init_shell(void);
+		static std::string	shell(std::string command);
+
+	private:
+		// /Shell/directory.cpp
+		static bool			check_dir(void);
 };
 
 #endif

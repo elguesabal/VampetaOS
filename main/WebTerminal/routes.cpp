@@ -120,26 +120,17 @@ esp_err_t	WebTerminal::print_js(httpd_req_t *req) {
  * @return RETORNA ESP_OK
 */
 esp_err_t	WebTerminal::connect_ws(httpd_req_t *req) {
-	printf("WebTerminal: client connected\n");
+printf("fd -> %d\n", httpd_req_to_sockfd(req));
 	extern const uint8_t ascii_art_start[] asm("_binary_ascii_art_start");
 	extern const uint8_t ascii_art_end[] asm("_binary_ascii_art_end");
-	// return (WebServer::send_text_ws(req, "testeeeee VampetaOS\n"));
-
-
-
-size_t len = ascii_art_end - ascii_art_start;
-
-char *ascii_art = new (std::nothrow) char[len + 1];
-if (ascii_art == nullptr) return (ESP_ERR_NO_MEM);
-
-memcpy(ascii_art, ascii_art_start, len);
-ascii_art[len] = '\0';
-
-esp_err_t ret = WebServer::send_text_ws(req, ascii_art);
-
-delete[] ascii_art;
-
-return (ret);
+	size_t len = ascii_art_end - ascii_art_start;
+	char *ascii_art = new (std::nothrow) char[len + 1];
+	if (ascii_art == nullptr) return (ESP_ERR_NO_MEM);
+	memcpy(ascii_art, ascii_art_start, len);
+	ascii_art[len] = '\0';
+	esp_err_t ret = WebServer::send_text_ws(req, ascii_art);
+	delete[] ascii_art;
+	return (ret);
 }
 
 /**
@@ -149,9 +140,29 @@ return (ret);
  * @return RETORNA true EM CASO DE RESPONDER CORRETAMENTE COM UM "VampetaOS"
  * @return RETORNA false CASO httpd_ws_send_frame FALHE
 */
-esp_err_t	WebTerminal::webterminal(httpd_req_t *req) {
+esp_err_t	WebTerminal::input_shell(httpd_req_t *req) {
 	WebSocket_frame frame = WebServer::build_websocket_frame(req);
-	std::string output = WebShell::shell(frame.payload);
+	std::string output = Shell::shell(frame.payload);
 	esp_err_t ret = WebServer::send_text_ws(req, output.c_str());
 	return (ret);
 }
+
+
+
+
+// void WebTerminal::connect_ws(int fd) {
+//     shells[fd] = new Shell();
+// }
+
+// void WebTerminal::disconnect_ws(int fd) {
+//     delete shells[fd];
+//     shells.erase(fd);
+// }
+
+// esp_err_t WebTerminal::connect_ws(httpd_handle_t hd, httpd_req_t *req) {
+//     int fd = httpd_req_to_sockfd(req);
+
+//     // Criar ShellSession associada ao fd.
+
+//     return ESP_OK;
+// }

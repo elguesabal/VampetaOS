@@ -21,6 +21,7 @@
 #include "WebServer/WebServer.hpp"
 #include "HttpServer/HttpServer.hpp"
 #include "WebTerminal/WebTerminal.hpp"
+#include "Shell/Shell.hpp"
 
 // #include "esp_heap_caps.h"
 
@@ -86,6 +87,7 @@ extern "C" void	app_main(void) {
 	if (!WebServer::init_webserver()) return;
 	if (!HttpServer::init_httpserver()) return;
 	if (!WebTerminal::init_webterminal()) return;
+	if (!Shell::init_shell()) return;
 
 	test();
 

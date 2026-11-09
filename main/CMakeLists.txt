@@ -28,7 +28,8 @@ idf_component_register(
         "HttpServer/route.cpp"
         "WebTerminal/webterminal.cpp"
         "WebTerminal/routes.cpp"
-        "WebShell/webshell.cpp"
+        "Shell/shell.cpp"
+        "Shell/directory.cpp"
 
     INCLUDE_DIRS
         "."
@@ -38,7 +39,7 @@ idf_component_register(
         "WebServer"
         "HttpServer"
         "WebTerminal"
-        "WebShell"
+        "Shell"
 
     PRIV_REQUIRES
         nvs_flash
