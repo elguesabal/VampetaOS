@@ -120,7 +120,9 @@ esp_err_t	WebTerminal::print_js(httpd_req_t *req) {
  * @return RETORNA ESP_OK
 */
 esp_err_t	WebTerminal::connect_ws(httpd_req_t *req) {
-printf("fd -> %d\n", httpd_req_to_sockfd(req));
+	WebSocket_connect connect = WebServer::build_websocket_connect(req);
+	if (connect.error != ESP_OK) return (connect.error);
+// printf("fd -> %d\n", connect.fd);
 	extern const uint8_t ascii_art_start[] asm("_binary_ascii_art_start");
 	extern const uint8_t ascii_art_end[] asm("_binary_ascii_art_end");
 	size_t len = ascii_art_end - ascii_art_start;
@@ -142,6 +144,7 @@ printf("fd -> %d\n", httpd_req_to_sockfd(req));
 */
 esp_err_t	WebTerminal::input_shell(httpd_req_t *req) {
 	WebSocket_frame frame = WebServer::build_websocket_frame(req);
+	if (frame.error != ESP_OK) return (frame.error);
 	std::string output = Shell::shell(frame.payload);
 	esp_err_t ret = WebServer::send_text_ws(req, output.c_str());
 	return (ret);
@@ -154,7 +157,7 @@ esp_err_t	WebTerminal::input_shell(httpd_req_t *req) {
 //     shells[fd] = new Shell();
 // }
 
-// void WebTerminal::disconnect_ws(int fd) {
+// void WebTerminal::disconnect_ws(int fd) {		// COMECAR A CAPTURAR FIM DE CONEXAO PARA TRABALHAR COM INSTANCIAS DE SHELL
 //     delete shells[fd];
 //     shells.erase(fd);
 // }

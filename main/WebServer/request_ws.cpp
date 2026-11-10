@@ -7,16 +7,50 @@
   |  /WebServer/request_ws.cpp                                                 |
   |                                                                            |
   |  elguesabal@VampetaOS:~$ functions                                         |
+  |  build_websocket_connect                                                   |
+  |  get_websocket_connect_fd                                                  |
   |  build_websocket_frame                                                     |
   |  get_websocket_frame_type                                                  |
-  |  get_websocket_frame_payload                                               |
   |  get_websocket_frame_length                                                |
   |  get_websocket_frame_final                                                 |
+  |  get_websocket_frame_payload                                               |
   |                                                                            |
   + -------------------------------------------------------------------------- +
 */
 
 #include "WebServer.hpp"
+
+/**
+ * @author elguesabal
+ * @brief METODO QUE INTERPRETA INFORMACOES DE CONEXAO DO WS E SALVA E RETORNA UM STRUCT WebSocket_frame
+ * @param req PONTEIRO PARA ESTRUTURA QUE CONTEM AS INFORMACOES DE CONEXAO WS RECEBIDA PELO SERVIDOR
+ * @return RETORNA UM WebSocket_disconnect COMPLETO EM CASO DA CONEXAO FOR VALIDA
+ * @return RETORNA UM WebSocket_disconnect VAZIO CASO req SEJA NULL
+ * @return RETORNA UM WebSocket_disconnect VAZIO CASO get_websocket_connect_fd FALHE
+*/
+WebSocket_connect	WebServer::build_websocket_connect(httpd_req_t *req) {
+	WebSocket_connect connect = {};
+	if (req == NULL) {
+		connect.error = ESP_ERR_INVALID_ARG;
+		return (connect);
+	}
+	connect.error = ESP_OK;
+	WebServer::get_websocket_connect_fd(req, &connect);
+	if (connect.error != ESP_OK) return (connect);
+	return (connect);
+}
+
+/**
+ * @author elguesabal
+ * @brief INTERPRETA E SALVA O FD DA CONEXAO
+ * @param req PONTEIRO PARA ESTRUTURA QUE CONTEM AS INFORMACOES DE CONEXAO WS RECEBIDA PELO SERVIDOR
+ * @param connect STRUCT QUE ESTA SENDO MONTADO POR WebSocket_connect
+ * @details SALVA ESP_FAIL EM connect.error CASO O FD SEJA NEGATIVO
+*/
+void	WebServer::get_websocket_connect_fd(httpd_req_t *req, WebSocket_connect *connect) {
+	connect->fd = httpd_req_to_sockfd(req);
+	if (connect->fd < 0) connect->error = ESP_FAIL;
+}
 
 /**
  * @author elguesabal
@@ -32,15 +66,22 @@
 */
 WebSocket_frame	WebServer::build_websocket_frame(httpd_req_t *req) {
 	WebSocket_frame frame = {};
-	frame.valid = false;
-	if (req == NULL) return (frame);
+	if (req == NULL) {
+		frame.error = ESP_ERR_INVALID_ARG;
+		return (frame);
+	}
+	frame.error = ESP_OK;
 	httpd_ws_frame_t ws_frame = {};
-	if (httpd_ws_recv_frame(req, &ws_frame, 0) != ESP_OK) return (frame);
-	if (!WebServer::get_websocket_frame_type(&ws_frame, &frame)) return (frame);
-	if (!WebServer::get_websocket_frame_payload(req, &ws_frame, &frame)) return (frame);
-	if (!WebServer::get_websocket_frame_length(&ws_frame, &frame)) return (frame);
-	if (!WebServer::get_websocket_frame_final(&ws_frame, &frame)) return (frame);
-	frame.valid = true;
+	esp_err_t ret = httpd_ws_recv_frame(req, &ws_frame, 0);
+	if (ret != ESP_OK) {
+		frame.error = ret;
+		return (frame);
+	}
+	WebServer::get_websocket_frame_type(&ws_frame, &frame);
+	WebServer::get_websocket_frame_length(&ws_frame, &frame);
+	WebServer::get_websocket_frame_final(&ws_frame, &frame);
+	WebServer::get_websocket_frame_payload(req, &ws_frame, &frame);
+	if (frame.error != ESP_OK) return (frame);
 	return (frame);
 }
 
@@ -49,14 +90,29 @@ WebSocket_frame	WebServer::build_websocket_frame(httpd_req_t *req) {
  * @brief INTERPRETA E SALVA O TIPO DO FRAME
  * @param ws_frame PONTEIRO PARA ESTRUTURA QUE CONTEM AS INFORMACOES DA REQUISICAO WS RECEBIDA PELO SERVIDOR
  * @param frame STRUCT QUE ESTA SENDO MONTADO POR build_websocket_frame
- * @return RETORNA true CASO O METODO SEJA SALVO NO STRUCT
- * @return RETORNA false CASO ws_frame SEJA NULL
- * @return RETORNA false CASO frame SEJA NULL
 */
-bool	WebServer::get_websocket_frame_type(httpd_ws_frame_t *ws_frame, WebSocket_frame *frame) {
-	if (ws_frame == NULL || frame == NULL) return (false);
+void	WebServer::get_websocket_frame_type(httpd_ws_frame_t *ws_frame, WebSocket_frame *frame) {
 	frame->type = ws_frame->type;
-	return (true);
+}
+
+/**
+ * @author elguesabal
+ * @brief INTERPRETA E SALVA O TAMANHO DO FRAME
+ * @param ws_frame PONTEIRO PARA ESTRUTURA QUE CONTEM AS INFORMACOES DA REQUISICAO WS RECEBIDA PELO SERVIDOR
+ * @param frame STRUCT QUE ESTA SENDO MONTADO POR build_websocket_frame
+*/
+void	WebServer::get_websocket_frame_length(httpd_ws_frame_t *ws_frame, WebSocket_frame *frame) {
+	frame->length = ws_frame->len;
+}
+
+/**
+ * @author elguesabal
+ * @brief INTERPRETA E SALVA SE JA CHEGOU NO FINAL DO FRAME
+ * @param ws_frame PONTEIRO PARA ESTRUTURA QUE CONTEM AS INFORMACOES DA REQUISICAO WS RECEBIDA PELO SERVIDOR
+ * @param frame STRUCT QUE ESTA SENDO MONTADO POR build_websocket_frame
+*/
+void	WebServer::get_websocket_frame_final(httpd_ws_frame_t *ws_frame, WebSocket_frame *frame) {
+	frame->final = ws_frame->final;
 }
 
 /**
@@ -65,57 +121,30 @@ bool	WebServer::get_websocket_frame_type(httpd_ws_frame_t *ws_frame, WebSocket_f
  * @param req PONTEIRO PARA ESTRUTURA QUE CONTEM AS INFORMACOES DO FRAME WS RECEBIDA PELO SERVIDOR
  * @param ws_frame PONTEIRO PARA ESTRUTURA QUE CONTEM AS INFORMACOES DA REQUISICAO WS RECEBIDA PELO SERVIDOR
  * @param frame STRUCT QUE ESTA SENDO MONTADO POR build_websocket_frame
- * @return RETORNA true CASO O METODO SEJA SALVO NO STRUCT
- * @return RETORNA false CASO req SEJA NULL
- * @return RETORNA false CASO ws_frame SEJA NULL
- * @return RETORNA false CASO frame SEJA NULL
- * @return RETORNA false CASO O TAMANHO DO PAYLOAD ULTRAPASSE MAX_REQUEST_BODY_SIZE
- * @return RETORNA false CASO O TAMANHO DO PAYLOAD SEJA 0
- * @return RETORNA false CASO ws_frame->payload SEJA NULL AO TENTAR ALOCAR MEMORIA
- * @return RETORNA false CASO httpd_ws_recv_frame FALHE
+ * @details SALVA ESP_ERR_INVALID_SIZE EM frame->error CASO O TAMANHO DO PAYLOAD ULTRAPASSE MAX_WEBSOCKET_FRAME_SIZE
+ * @details SALVA ESP_ERR_NO_MEM EM frame->error CASO ws_frame->payload SEJA NULL AO TENTAR ALOCAR MEMORIA
+ * @details SALVA ret EM frame->error CASO httpd_ws_recv_frame FALHE
 */
-bool	WebServer::get_websocket_frame_payload(httpd_req_t *req, httpd_ws_frame_t *ws_frame, WebSocket_frame *frame) {
-	if (req == NULL || ws_frame == NULL || frame == NULL) return (false);
-	if (ws_frame->len > MAX_WEBSOCKET_FRAME_SIZE) return (false);
+void	WebServer::get_websocket_frame_payload(httpd_req_t *req, httpd_ws_frame_t *ws_frame, WebSocket_frame *frame) {
+	if (ws_frame->len > MAX_WEBSOCKET_FRAME_SIZE) {
+		frame->error = ESP_ERR_INVALID_SIZE;
+		return;
+	}
 	if (ws_frame->len == 0) {
 		frame->payload.clear();
-		return (true);
+		return;
 	}
 	ws_frame->payload = (uint8_t *)malloc(ws_frame->len);
-	if (ws_frame->payload == NULL) return (false);
+	if (ws_frame->payload == NULL) {
+		frame->error = ESP_ERR_NO_MEM;
+		return;
+	}
 	esp_err_t ret = httpd_ws_recv_frame(req, ws_frame, ws_frame->len);
 	if (ret == ESP_OK) frame->payload.assign(reinterpret_cast<const char *>(ws_frame->payload), ws_frame->len);
 	free(ws_frame->payload);
 	ws_frame->payload = NULL;
-	return (ret == ESP_OK);
-}
-
-/**
- * @author elguesabal
- * @brief INTERPRETA E SALVA O TAMANHO DO FRAME
- * @param ws_frame PONTEIRO PARA ESTRUTURA QUE CONTEM AS INFORMACOES DA REQUISICAO WS RECEBIDA PELO SERVIDOR
- * @param frame STRUCT QUE ESTA SENDO MONTADO POR build_websocket_frame
- * @return RETORNA true CASO O METODO SEJA SALVO NO STRUCT
- * @return RETORNA false CASO ws_frame SEJA NULL
- * @return RETORNA false CASO frame SEJA NULL
-*/
-bool	WebServer::get_websocket_frame_length(httpd_ws_frame_t *ws_frame, WebSocket_frame *frame) {
-	if (ws_frame == NULL || frame == NULL) return (false);
-	frame->length = ws_frame->len;
-	return (true);
-}
-
-/**
- * @author elguesabal
- * @brief INTERPRETA E SALVA SE JA CHEGOU NO FINAL DO FRAME
- * @param ws_frame PONTEIRO PARA ESTRUTURA QUE CONTEM AS INFORMACOES DA REQUISICAO WS RECEBIDA PELO SERVIDOR
- * @param frame STRUCT QUE ESTA SENDO MONTADO POR build_websocket_frame
- * @return RETORNA true CASO O METODO SEJA SALVO NO STRUCT
- * @return RETORNA false CASO ws_frame SEJA NULL
- * @return RETORNA false CASO frame SEJA NULL
-*/
-bool	WebServer::get_websocket_frame_final(httpd_ws_frame_t *ws_frame, WebSocket_frame *frame) {
-	if (ws_frame == NULL || frame == NULL) return (false);
-	frame->final = ws_frame->final;
-	return (true);
+	if (ret != ESP_OK) {
+		frame->error = ret;
+		return;
+	}
 }

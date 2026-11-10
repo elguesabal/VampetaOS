@@ -21,6 +21,12 @@
  * @brief CLASSE RESPONSAVEL POR GERENCIAR O SHELL
 */
 class Shell {
+	// private:
+	// 	bool				logged_in = false;
+	// 	bool				adm;
+	// 	std::string			user;
+	// 	std::string			pwd;
+
 	public:
 		// /Shell/shell.cpp
 		static bool			init_shell(void);

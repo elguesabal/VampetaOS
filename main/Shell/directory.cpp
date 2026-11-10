@@ -22,6 +22,8 @@
  * @return RETORNA false CASO /VampetaOS/shell NAO EXISTA E FALHE NA CRIACAO
  * @return RETORNA false CASO /VampetaOS/shell/ENVIRONMENT SEJA UM DIRETORIO
  * @return RETORNA false CASO /VampetaOS/shell/ENVIRONMENT NAO EXISTA E FALHE NA CRIACAO
+ * @return RETORNA false CASO /VampetaOS/home SEJA UM ARQUIVO
+ * @return RETORNA false CASO /VampetaOS/home NAO EXISTA E FALHE NA CRIACAO
 */
 bool	Shell::check_dir(void) {
 	if (!Sd::exist_dir("/shell")) {
@@ -46,6 +48,15 @@ bool	Shell::check_dir(void) {
 		printf("Failed to create /shell/ENVIRONMENT: %s\n", strerror(errno));
 		return (false);
 	}
-// DEVERIA CRIAR O DIRETORIO home ???
+if (!Sd::exist_dir("/home")) { // DEVERIA CRIAR O DIRETORIO home ???
+	if (Sd::exist_file("/home")) {
+		printf("/VampetaOS/home must be a directory\n");
+		return (false);
+	}
+	if (!Sd::create_dir("/home")) {
+		printf("Failed to create /VampetaOS/home: %s\n", strerror(errno));
+		return (false);
+	}
+}
 	return (true);
 }
