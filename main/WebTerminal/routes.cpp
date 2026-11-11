@@ -117,17 +117,37 @@ esp_err_t	WebTerminal::print_js(httpd_req_t *req) {
  * @author elguesabal
  * @brief METODO QUE SERA DISPARADO CADA VEZ QUE UM WEBSOCKET E CONECTADO
  * @param req PONTEIRO PARA ESTRUTURA QUE CONTEM AS INFORMACOES DA REQUISICAO HTTP RECEBIDA PELO SERVIDOR
- * @return RETORNA ESP_OK
+ * @return RETORNA connect.error CASO build_websocket_connect FALHE
+ * @return RETORNA ESP_ERR_NO_MEM CASO OCORRA UMA FALHA NA ALOCACAO DE MEMORIA DO OBJETO Shell
+ * @return RETORNA ESP_FAIL CASO OCORRA UMA FALHA AO REGISTRAR A NOVA SESSAO NO MAP sessions
+ * @return RETORNA ESP_ERR_NO_MEM EM CASO DE FALHA DE ALOCACAO DA MEMORIA DE ascii_art
+ * @return RETORNA ret CASO WebServer::send_text_ws FALHE
 */
 esp_err_t	WebTerminal::connect_ws(httpd_req_t *req) {
 	WebSocket_connect connect = WebServer::build_websocket_connect(req);
 	if (connect.error != ESP_OK) return (connect.error);
-// printf("fd -> %d\n", connect.fd);
+
+
+
+// MUTEX???
+Shell *shell = new (std::nothrow) Shell();
+if (shell == NULL) return (ESP_ERR_NO_MEM);
+WebTerminal_session session;
+session.fd = connect.fd;
+session.shell = shell;
+std::pair<std::map<int, WebTerminal_session>::iterator, bool> result = WebTerminal::sessions.insert(std::make_pair(connect.fd, session));
+if (!result.second) {
+    delete shell;
+    return (ESP_FAIL);
+}
+
+
+
 	extern const uint8_t ascii_art_start[] asm("_binary_ascii_art_start");
 	extern const uint8_t ascii_art_end[] asm("_binary_ascii_art_end");
 	size_t len = ascii_art_end - ascii_art_start;
 	char *ascii_art = new (std::nothrow) char[len + 1];
-	if (ascii_art == nullptr) return (ESP_ERR_NO_MEM);
+	if (ascii_art == nullptr) return (ESP_ERR_NO_MEM);	// DEVERIA REMOVER O FD DE session???
 	memcpy(ascii_art, ascii_art_start, len);
 	ascii_art[len] = '\0';
 	esp_err_t ret = WebServer::send_text_ws(req, ascii_art);
@@ -150,22 +170,22 @@ esp_err_t	WebTerminal::input_shell(httpd_req_t *req) {
 	return (ret);
 }
 
-
-
-
-// void WebTerminal::connect_ws(int fd) {
-//     shells[fd] = new Shell();
-// }
-
-// void WebTerminal::disconnect_ws(int fd) {		// COMECAR A CAPTURAR FIM DE CONEXAO PARA TRABALHAR COM INSTANCIAS DE SHELL
-//     delete shells[fd];
-//     shells.erase(fd);
-// }
-
-// esp_err_t WebTerminal::connect_ws(httpd_handle_t hd, httpd_req_t *req) {
-//     int fd = httpd_req_to_sockfd(req);
-
-//     // Criar ShellSession associada ao fd.
-
-//     return ESP_OK;
-// }
+/**
+ * @author elguesabal
+ * @brief METODO DE CONTROLE DE DISCONECT DO WEBSOCKET 
+ * @param arg PONTEIRO PARA ARGUMENTOS ADICIONAIS PASSADOS DURANTE O REGISTRO DO EVENT HANDLER
+ * @param event_base IDENTIFICADOR DA BASE DO EVENTO RECEBIDO
+ * @param event_id IDENTIFICADOR DO EVENTO DISPARADO PELO SERVIDOR HTTP
+ * @param event_data PONTEIRO PARA OS DADOS DO EVENTO CONTENDO O FD DA CONEXAO DESCONECTADA
+*/
+void	WebTerminal::disconnect_ws(void *arg, esp_event_base_t event_base, int32_t event_id, void *event_data) {
+	(void)arg;
+	(void)event_base;
+	if (event_id != HTTP_SERVER_EVENT_DISCONNECTED) return;
+	int fd = *(int *)event_data;
+	if (fd < 0) return;
+	std::map<int, WebTerminal_session>::iterator session = WebTerminal::sessions.find(fd);
+	if (session == WebTerminal::sessions.end()) return;
+	delete session->second.shell;
+	WebTerminal::sessions.erase(session);
+}
