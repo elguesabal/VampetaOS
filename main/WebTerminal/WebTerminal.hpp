@@ -21,21 +21,12 @@
 
 /**
  * @author elguesabal
- * @brief STRUCT USADO PARA ARMAZENAR QUAIS CONEXOES FD ESTAO ASSOCIADOS A QUAIS SHELLS
-*/
-struct WebTerminal_session {
-	int		fd;
-	Shell	*shell;
-};
-
-/**
- * @author elguesabal
  * @brief CLASSE RESPONSAVEL POR GERENCIAR O WEBTERMINAL
 */
 class WebTerminal {
 	private:
 		static HttpServer	*server;
-		static std::map<int, WebTerminal_session> sessions;
+		static std::map<int, Shell> sessions;
 
 	public:
 		// /WebTerminal/webterminal.cpp
@@ -55,8 +46,10 @@ class WebTerminal {
 		static esp_err_t	events_js(httpd_req_t *req);
 		static esp_err_t	keys_js(httpd_req_t *req);
 		static esp_err_t	print_js(httpd_req_t *req);
+
+		// /WebTerminal/websocket_shell.cpp
 		static esp_err_t	connect_ws(httpd_req_t *req);
-		static esp_err_t	input_shell(httpd_req_t *req);
+		static esp_err_t	frame_ws(httpd_req_t *req);
 		static void			disconnect_ws(void *arg, esp_event_base_t event_base, int32_t event_id, void *event_data);
 };
 

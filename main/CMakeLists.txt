@@ -28,6 +28,7 @@ idf_component_register(
         "HttpServer/route.cpp"
         "WebTerminal/webterminal.cpp"
         "WebTerminal/routes.cpp"
+        "WebTerminal/websocket_shell.cpp"
         "Shell/shell.cpp"
         "Shell/directory.cpp"
 

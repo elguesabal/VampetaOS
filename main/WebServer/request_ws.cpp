@@ -10,6 +10,7 @@
   |  build_websocket_connect                                                   |
   |  get_websocket_connect_fd                                                  |
   |  build_websocket_frame                                                     |
+  |  get_websocket_frame_fd                                                    |
   |  get_websocket_frame_type                                                  |
   |  get_websocket_frame_length                                                |
   |  get_websocket_frame_final                                                 |
@@ -77,12 +78,25 @@ WebSocket_frame	WebServer::build_websocket_frame(httpd_req_t *req) {
 		frame.error = ret;
 		return (frame);
 	}
+	WebServer::get_websocket_frame_fd(req, &frame);
+	if (frame.error != ESP_OK) return (frame);
 	WebServer::get_websocket_frame_type(&ws_frame, &frame);
 	WebServer::get_websocket_frame_length(&ws_frame, &frame);
 	WebServer::get_websocket_frame_final(&ws_frame, &frame);
 	WebServer::get_websocket_frame_payload(req, &ws_frame, &frame);
 	if (frame.error != ESP_OK) return (frame);
 	return (frame);
+}
+
+/**
+ * @author elguesabal
+ * @brief INTERPRETA E SALVA O FD DO FRAME
+ * @param req PONTEIRO PARA ESTRUTURA QUE CONTEM AS INFORMACOES DO FRAME WS RECEBIDA PELO SERVIDOR
+ * @param frame STRUCT QUE ESTA SENDO MONTADO POR build_websocket_frame
+*/
+void	WebServer::get_websocket_frame_fd(httpd_req_t *req, WebSocket_frame *frame) {
+	frame->fd = httpd_req_to_sockfd(req);
+	if (frame->fd < 0) frame->error = ESP_FAIL;
 }
 
 /**

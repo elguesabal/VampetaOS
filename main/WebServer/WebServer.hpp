@@ -51,20 +51,12 @@ struct WebSocket_connect {
 */
 struct WebSocket_frame {
 	esp_err_t		error;
+	int				fd;
 	httpd_ws_type_t	type;
 	size_t			length;
 	bool			final;
 	std::string		payload;
 };
-
-// /**
-//  * @author elguesabal
-//  * @brief STRUCT USADO PARA ARMAZENAR OS DADOS INTERPRETADOS DE UM WEBSOCKET DESCONECTADO
-// */
-// struct WebSocket_disconnect {
-// 	int		fd;
-// 	bool	valid;
-// };
 
 /**
  * @author elguesabal
@@ -123,6 +115,7 @@ class WebServer {
 
 		// /WebServer/request_ws.cpp
 		static void					get_websocket_connect_fd(httpd_req_t *req, WebSocket_connect *connect);
+		static void					get_websocket_frame_fd(httpd_req_t *req, WebSocket_frame *connect);
 		static void					get_websocket_frame_type(httpd_ws_frame_t *ws_frame, WebSocket_frame *frame);
 		static void					get_websocket_frame_length(httpd_ws_frame_t *ws_frame, WebSocket_frame *frame);
 		static void					get_websocket_frame_final(httpd_ws_frame_t *ws_frame, WebSocket_frame *frame);
