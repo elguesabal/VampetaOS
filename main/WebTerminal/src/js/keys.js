@@ -5,7 +5,7 @@
 */
 function Enter(event) {
 	event.preventDefault();
-	const command = input.textContent;
+	const command = input.textContent;	// DEVERIA ME PREOCUPAR COM CARACTERES DE SCAPE
 	print(command + "\n");
 	input.textContent = "";
 	if (command === "") {
