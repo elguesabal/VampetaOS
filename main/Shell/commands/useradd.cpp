@@ -4,34 +4,21 @@
   + -------------------------------------------------------------------------- +
   |                                                                            |
   |  elguesabal@VampetaOS:~$ pwd                                               |
-  |  /UserManager/UserManager.hpp                                              |
+  |  /Shell/commnads/useradd.cpp                                               |
+  |                                                                            |
+  |  elguesabal@VampetaOS:~$ functions                                         |
+  |  useradd                                                                   |
   |                                                                            |
   + -------------------------------------------------------------------------- +
 */
 
-#ifndef USERMANAGER_H
-#define USERMANAGER_H
-
-#include "../../VampetaOS.hpp"
-#include "../Command.hpp"
+#include "../Shell.hpp"
 
 /**
  * @author elguesabal
- * @brief CLASSE RESPONSAVEL POR GERENCIAR O CRIACAO DE USER E LOGIN
+ * @brief METODO RESPONSAVEL PELO COMANDO useradd
+ * @return RETORNA UMA STRING DE RESPOSTA
 */
-class UserManager {
-	private:
-		bool		logged_in;
-		std::string	user;
-
-	public:
-		// /UserManager/usermanager.cpp
-		UserManager(void);
-		~UserManager(void);
-		bool		get_logeed_in(void);
-		std::string	get_user(void);
-		bool		user_manager(const Command &command);
-
-};
-
-#endif
+std::string	Shell::useradd(void) {
+	return ("");
+}

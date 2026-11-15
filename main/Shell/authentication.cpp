@@ -4,39 +4,27 @@
   + -------------------------------------------------------------------------- +
   |                                                                            |
   |  elguesabal@VampetaOS:~$ pwd                                               |
-  |  /UserManager/usermanager.cpp                                             |
+  |  /Shell/authentication.cpp                                                 |
   |                                                                            |
   |  elguesabal@VampetaOS:~$ functions                                         |
+  |  check_authentication                                                      |
   |                                                                            |
   + -------------------------------------------------------------------------- +
 */
 
-#include "UserManager.hpp"
-
-UserManager::UserManager(void) : logged_in(false), user("") {
-
-}
-
-UserManager::~UserManager(void) {
-
-}
-
-bool	UserManager::get_logeed_in(void) {
-	return (this->logged_in);
-}
-
-std::string	UserManager::get_user(void) {
-	return (this->user);
-}
+#include "Shell.hpp"
 
 /**
  * @author elguesabal
- * @brief 
- * @param command STRUCT QUE ARMAZENA O NOME DO COMANDO E SEUS ARGUMENTOS
- * @return RETORNA true 
- * @return RETORNA false 
+ * @brief VERIFICA SE O LOGIN ESTA FEITO E QUAIS COMANDOS ESTAO DISPONIVEIS EM CASO DE NAO LOGADO
+ * @return RETORNA true ESTEJA LOGADO
+ * @return RETORNA true NAO ESTEJA LOGADO E O COMANDO SEJA login
+ * @return RETORNA true NAO ESTEJA LOGADO E O COMANDO SEJA useradd
+ * @return RETORNA false NAO ESTEJA LOGADO E NOA SEJA NENHUM COMANDO MENCIONADO ACIMA
 */
-bool	UserManager::user_manager(const Command &command) {
-	(void)command;
-	return (true);
+bool	Shell::check_authentication(void) {
+	if (this->logged_in) return (true);
+	if (this->command.command == "login") return (true);
+	if (this->command.command == "useradd") return (true);
+	return (false);
 }

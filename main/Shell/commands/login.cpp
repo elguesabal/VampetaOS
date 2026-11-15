@@ -4,23 +4,22 @@
   + -------------------------------------------------------------------------- +
   |                                                                            |
   |  elguesabal@VampetaOS:~$ pwd                                               |
-  |  /Shell/Command.hpp                                                        |
+  |  /Shell/commnads/login.cpp                                                 |
+  |                                                                            |
+  |  elguesabal@VampetaOS:~$ functions                                         |
+  |  login                                                                     |
   |                                                                            |
   + -------------------------------------------------------------------------- +
 */
 
-#ifndef COMMAND_HPP
-#define COMMAND_HPP
-
-#include "../VampetaOS.hpp"
+#include "../Shell.hpp"
 
 /**
  * @author elguesabal
- * @brief STRUCT RESPONSAVEL POR ORGANIZAR OS COMANDOS E ARGUMENTOS
+ * @brief METODO RESPONSAVEL PELO COMANDO login
+ * @return RETORNA UMA STRING DE RESPOSTA
 */
-struct Command {
-	std::string					command;
-	std::vector<std::string>	args;
-};
-
-#endif
+std::string	Shell::login(void) {
+	this->logged_in = true;
+	return ("OK\n");
+}

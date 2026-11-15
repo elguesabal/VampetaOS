@@ -31,7 +31,11 @@ idf_component_register(
         "WebTerminal/websocket_shell.cpp"
         "Shell/shell.cpp"
         "Shell/directory.cpp"
-        "Shell/UserManager/usermanager.cpp"
+        "Shell/input.cpp"
+        "Shell/authentication.cpp"
+        "Shell/commands/useradd.cpp"
+        "Shell/commands/login.cpp"
+        "Shell/commands/echo.cpp"
 
     INCLUDE_DIRS
         "."
@@ -42,7 +46,6 @@ idf_component_register(
         "HttpServer"
         "WebTerminal"
         "Shell"
-        "Shell/UserManager"
 
     PRIV_REQUIRES
         nvs_flash
