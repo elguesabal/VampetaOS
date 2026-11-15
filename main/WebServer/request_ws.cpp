@@ -9,6 +9,7 @@
   |  elguesabal@VampetaOS:~$ functions                                         |
   |  build_websocket_connect                                                   |
   |  get_websocket_connect_fd                                                  |
+  |  get_websocket_connect_port                                                |
   |  build_websocket_frame                                                     |
   |  get_websocket_frame_fd                                                    |
   |  get_websocket_frame_type                                                  |
@@ -38,6 +39,8 @@ WebSocket_connect	WebServer::build_websocket_connect(httpd_req_t *req) {
 	connect.error = ESP_OK;
 	WebServer::get_websocket_connect_fd(req, &connect);
 	if (connect.error != ESP_OK) return (connect);
+	WebServer::get_websocket_connect_port(req, &connect);
+	if (connect.error != ESP_OK) return (connect);
 	return (connect);
 }
 
@@ -51,6 +54,23 @@ WebSocket_connect	WebServer::build_websocket_connect(httpd_req_t *req) {
 void	WebServer::get_websocket_connect_fd(httpd_req_t *req, WebSocket_connect *connect) {
 	connect->fd = httpd_req_to_sockfd(req);
 	if (connect->fd < 0) connect->error = ESP_FAIL;
+}
+
+/**
+ * @author elguesabal
+ * @brief INTERPRETA E SALVA A PORTA DA CONEXAO
+ * @param req PONTEIRO PARA ESTRUTURA QUE CONTEM AS INFORMACOES DE CONEXAO WS RECEBIDA PELO SERVIDOR
+ * @param connect STRUCT QUE ESTA SENDO MONTADO POR WebSocket_connect
+ * @details SALVA ESP_FAIL EM connect.error CASO getsockname FALHE
+*/
+void	WebServer::get_websocket_connect_port(httpd_req_t *req, WebSocket_connect *connect) {
+	struct sockaddr_in addr = {};
+	socklen_t addr_len = sizeof(addr);
+	if (getsockname(connect->fd, (struct sockaddr *)&addr, &addr_len) < 0) {
+		connect->error = ESP_FAIL;
+		return;
+	}
+	connect->port = ntohs(addr.sin_port);
 }
 
 /**

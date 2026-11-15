@@ -42,6 +42,7 @@ struct Resquest_http {
 */
 struct WebSocket_connect {
 	esp_err_t	error;
+	uint16_t	port;
 	int			fd;
 };
 
@@ -97,6 +98,7 @@ class WebServer {
 
 		// /WebServer/response_ws.cpp
 		static esp_err_t			send_text_ws(httpd_req_t *req, const char *text);
+		static esp_err_t			send_text_ws_fd(uint16_t port, int fd, const char *text);
 
 	private:
 		// /WebServer/directory.cpp
@@ -114,6 +116,7 @@ class WebServer {
 		static void					get_request_content_length(httpd_req_t *req, Resquest_http *request);
 
 		// /WebServer/request_ws.cpp
+		static void					get_websocket_connect_port(httpd_req_t *req, WebSocket_connect *connect);
 		static void					get_websocket_connect_fd(httpd_req_t *req, WebSocket_connect *connect);
 		static void					get_websocket_frame_fd(httpd_req_t *req, WebSocket_frame *connect);
 		static void					get_websocket_frame_type(httpd_ws_frame_t *ws_frame, WebSocket_frame *frame);

@@ -13,8 +13,20 @@ function onopen(event) {
  * @param event OBJETO CONTENDO INFORMACOES SOBRE RECEBIMENTO DA MENSAGEM
 */
 function onmessage(event) {
-	print(event.data);
-	print("elguesabal@VampetaOS:~$ ");
+console.log(event); // AINDA NAO VI ISSO AKI
+	try {
+		const data = JSON.parse(event.data);
+		if (data.type === "OUTPUT") {
+			print(data.output);
+		} else if (data.type === "INPUT") {
+			print(data.output);
+		} else if (data.type === "FINISHED") {
+			print(data.output);
+		}
+	} catch (error) {
+		print("Invalid response\n");
+		print("elguesabal@VampetaOS:~$ ");
+	}
 }
 
 /**

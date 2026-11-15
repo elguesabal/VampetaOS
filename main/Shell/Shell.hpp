@@ -14,6 +14,7 @@
 
 #include "../VampetaOS.hpp"
 #include "../Sd/Sd.hpp"
+#include "../WebServer/WebServer.hpp"
 
 /**
  * @author elguesabal
@@ -39,6 +40,8 @@ struct Command {
 */
 class Shell {
 	private:
+		uint16_t			port;
+		int					fd;
 		bool				logged_in;
 		// bool				sudo;
 		std::string			user;
@@ -49,7 +52,7 @@ class Shell {
 	public:
 		// /Shell/shell.cpp
 		static bool	init_shell(void);
-		Shell(void);
+		Shell(uint16_t port, int fd);
 		~Shell(void);
 
 		// /Shell/input.cpp
@@ -61,6 +64,10 @@ class Shell {
 
 		// /Shell/input.cpp
 		bool		parse_input(std::string &input);
+
+		// /Shell/output.cpp
+		void		emit_output(const char *type, const char *output);
+		std::string	json_escape(const char *input);
 
 		// /Shell/authentication.cpp
 		bool		check_authentication(void);

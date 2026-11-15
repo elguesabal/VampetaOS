@@ -35,7 +35,7 @@ std::string	Shell::input_shell(std::string input) {
 	if (!this->parse_input(input)) return ("ERROR INPUT\n");
 print_command(command);
 // VERIFICAR SE JA ESTA LOGADO
-	if (!this->check_authentication()) return ("Access denied: no active user session.\nPlease authenticate using \"login\" or create an account using \"useradd\".\n");
+	// if (!this->check_authentication()) return ("Access denied: no active user session.\nPlease authenticate using \"login\" or create an account using \"useradd\".\n");
 // EXECUTAR OS COMANDOS
 
 

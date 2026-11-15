@@ -31,10 +31,12 @@ bool	Shell::init_shell(void) {
 /**
  * @author elguesabal
  * @brief CONSTRUTOR DA CLASSE Shell
+ * @param port PORTA DA CONEXAO
+ * @param fd FILE DESCRIPTION DA CONEAXO
 */
-// Shell::Shell(void) : logged_in(false), user(""), pwd("") {
-Shell::Shell(void) : logged_in(false), user(""), pwd(""), command() {
-
+Shell::Shell(uint16_t port, int fd) : port(port), fd(fd), logged_in(false), user(""), pwd(""), command() {
+printf("Shell port ---> %d\n", port);
+printf("Shell fd ---> %d\n", fd);
 }
 
 /**

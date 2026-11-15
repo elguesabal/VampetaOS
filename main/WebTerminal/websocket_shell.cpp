@@ -30,9 +30,9 @@ esp_err_t	WebTerminal::connect_ws(httpd_req_t *req) {
 	WebSocket_connect connect = WebServer::build_websocket_connect(req);
 	if (connect.error != ESP_OK) return (connect.error);
 	// MUTEX???
-	Shell *shell = new (std::nothrow) Shell();
+	Shell *shell = new (std::nothrow) Shell(connect.port ,connect.fd);
 	if (shell == NULL) return (ESP_ERR_NO_MEM);
-	std::pair<std::map<int, Shell>::iterator, bool> result = WebTerminal::sessions.insert(std::make_pair(connect.fd, Shell()));
+	std::pair<std::map<int, Shell>::iterator, bool> result = WebTerminal::sessions.insert(std::make_pair(connect.fd, Shell(connect.port, connect.fd)));
 	if (!result.second) return (ESP_FAIL);
 	// MUTEX???
 	extern const uint8_t ascii_art_start[] asm("_binary_ascii_art_start");

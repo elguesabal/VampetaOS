@@ -32,6 +32,7 @@ idf_component_register(
         "Shell/shell.cpp"
         "Shell/directory.cpp"
         "Shell/input.cpp"
+        "Shell/output.cpp"
         "Shell/authentication.cpp"
         "Shell/commands/useradd.cpp"
         "Shell/commands/login.cpp"
