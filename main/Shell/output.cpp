@@ -8,6 +8,7 @@
   |                                                                            |
   |  elguesabal@VampetaOS:~$ functions                                         |
   |  emit_output                                                               |
+  |  json_escape                                                               |
   |                                                                            |
   + -------------------------------------------------------------------------- +
 */
@@ -33,20 +34,23 @@ void	Shell::emit_output(const char *type, const char *output) {
 	json += "\"}";
 printf("%s\n", json.c_str());
 	WebServer::send_text_ws_fd(this->port, this->fd, json.c_str());
+// OUTPUT
+// INPUT
+// FINISHED
 }
 
 /**
  * @author elguesabal
- * @brief 
- * @param input
+ * @brief FAZ UMA MODIFICACAO NO TEXTO QUE DEVE SER ENVIADO PARA SER INTERPRETADO CORRETAMENTE CARACTERES DE ESCAPE
+ * @param text TEXTO A SER MODIFICADO
  * @return RETORNA UMA STRING DE RESPOSTA
- * @return RETORNA UMA STRING VAZIA CASO input SEJA nullptr
+ * @return RETORNA UMA STRING VAZIA CASO text SEJA nullptr
 */
-std::string Shell::json_escape(const char *input) {
+std::string Shell::json_escape(const char *text) {
     std::string output;
-    if (input == nullptr) return (output);
-    while (*input) {
-        switch (*input) {
+    if (text == nullptr) return (output);
+    while (*text) {
+        switch (*text) {
             case '"':
                 output += "\\\"";
                 break;
@@ -69,18 +73,14 @@ std::string Shell::json_escape(const char *input) {
                 output += "\\t";
                 break;
             default:
-                if (static_cast<unsigned char>(*input) < 0x20) {
+                if (static_cast<unsigned char>(*text) < 0x20) {
                     output += "?";
 				} else {
-                    output += *input;
+                    output += *text;
 				}
                 break;
         }
-        input++;
+        text++;
     }
     return (output);
 }
-
-// OUTPUT
-// INPUT
-// FINISHED

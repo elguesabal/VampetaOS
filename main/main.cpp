@@ -15,15 +15,13 @@
 
 #include "VampetaOS.hpp"
 
-#include "Sd/Sd.hpp"
-#include "System/System.hpp"
-#include "Wifi/Wifi.hpp"
-#include "WebServer/WebServer.hpp"
-#include "HttpServer/HttpServer.hpp"
-#include "WebTerminal/WebTerminal.hpp"
-#include "Shell/Shell.hpp"
-
-// #include "esp_heap_caps.h"
+// #include "Sd/Sd.hpp"
+// #include "System/System.hpp"
+// #include "Wifi/Wifi.hpp"
+// #include "WebServer/WebServer.hpp"
+// #include "HttpServer/HttpServer.hpp"
+// #include "WebTerminal/WebTerminal.hpp"
+// #include "Shell/Shell.hpp"
 
 /**
  * @author elguesabal
@@ -76,20 +74,44 @@ void	test(void) {
 // printf("\n\n\n");
 }
 
+void	task1(void *arg) {
+	// printf("task1\n");
+	// vTaskDelete(NULL);
+
+	vTaskDelay(pdMS_TO_TICKS(100));
+	while (true) {
+		printf("task1\n");
+		taskYIELD();
+	}
+}
+void	task2(void *arg) {
+	// printf("task2\n");
+	// vTaskDelete(NULL);
+
+	while (true) {
+		printf("task2\n");
+		taskYIELD();
+	}
+}
 /**
  * @author elguesabal
  * @brief FUNCAO PRINCIPAL
 */
 extern "C" void	app_main(void) {
-	if (!Sd::init_sd()) return;
-	if (!System::init_system()) return;
-	if (!Wifi::init_wifi()) return;
-	if (!WebServer::init_webserver()) return;
-	if (!HttpServer::init_httpserver()) return;
-	if (!WebTerminal::init_webterminal()) return;
-	if (!Shell::init_shell()) return;
+// COMENTADO PARA ESTUDAR TASK E QUEUE
+	// if (!Sd::init_sd()) return;
+	// if (!System::init_system()) return;
+	// if (!Wifi::init_wifi()) return;
+	// if (!WebServer::init_webserver()) return;
+	// if (!HttpServer::init_httpserver()) return;
+	// if (!WebTerminal::init_webterminal()) return;
+	// if (!Shell::init_shell()) return;
+	// test();
+// COMENTADO PARA ESTUDAR TASK E QUEUE
 
-	test();
 
+
+	xTaskCreate(task1, "task1", 4094, NULL, 1, NULL);
+	xTaskCreate(task2, "task2", 4094, NULL, 1, NULL);
 	printf("VampetaOS\n");
 }

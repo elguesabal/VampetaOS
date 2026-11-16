@@ -13,7 +13,6 @@ function onopen(event) {
  * @param event OBJETO CONTENDO INFORMACOES SOBRE RECEBIMENTO DA MENSAGEM
 */
 function onmessage(event) {
-console.log(event); // AINDA NAO VI ISSO AKI
 	try {
 		const data = JSON.parse(event.data);
 		if (data.type === "OUTPUT") {

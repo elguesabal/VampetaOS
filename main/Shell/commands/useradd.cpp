@@ -17,8 +17,7 @@
 /**
  * @author elguesabal
  * @brief METODO RESPONSAVEL PELO COMANDO useradd
- * @return RETORNA UMA STRING DE RESPOSTA
 */
-std::string	Shell::useradd(void) {
-	return ("");
+void	Shell::useradd(void) {
+	this->emit_output("FINISHED", "\n");
 }

@@ -35,4 +35,8 @@
 #include "esp_wifi.h"
 #include "esp_http_server.h"
 
+
+	#include "freertos/FreeRTOS.h"
+	#include "freertos/task.h"
+
 #endif

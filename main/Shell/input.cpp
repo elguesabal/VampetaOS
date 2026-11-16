@@ -28,25 +28,30 @@
  * @author elguesabal
  * @brief METODO QUE RECEBE UM INPUT E RETORNA A RESPOSTA
  * @param input COMANDO RECEBIDO PARA SER INTERPRETADO PELO SHELL
- * @return RETORNA UMA STRING DE RESPOSTA
 */
-std::string	Shell::input_shell(std::string input) {
+void	Shell::input_shell(std::string input) {
 // INTERPRETAR O input E SEPARAR SEU COMANDO DOS ARGUMENTOS
-	if (!this->parse_input(input)) return ("ERROR INPUT\n");
+	if (!this->parse_input(input)) {
+		this->emit_output("FINISHED", "ERROR INPUT\n");
+		return;
+	}
 print_command(command);
 // VERIFICAR SE JA ESTA LOGADO
-	// if (!this->check_authentication()) return ("Access denied: no active user session.\nPlease authenticate using \"login\" or create an account using \"useradd\".\n");
+	if (!this->check_authentication()) {
+		this->emit_output("FINISHED", "Access denied: no active user session.\nPlease authenticate using \"login\" or create an account using \"useradd\".\n");
+		return;
+	}
 // EXECUTAR OS COMANDOS
 
 
 
-	if (this->command.command == "useradd") return (this->useradd());
-	if (this->command.command == "login") return (this->login());
-	if (this->command.command == "echo") return (this->echo());
-	if (this->command.command == "ls") return ("a.out VampetaOS.c\n");
-	if (this->command.command == "pwd") return ("/VampetaOS/\n");
-	if (this->command.command == "echo VampetaOS") return ("VampetaOS\n");
-	return ("Command not found\n");
+	if (this->command.command == "useradd") this->useradd();
+	else if (this->command.command == "login") this->login();
+	else if (this->command.command == "echo") this->echo();
+	else if (this->command.command == "ls") this->emit_output("FINISHED", "a.out VampetaOS.c\n");
+	else if (this->command.command == "pwd") this->emit_output("FINISHED", "/VampetaOS/\n");
+	else if (this->command.command == "echo VampetaOS") this->emit_output("FINISHED", "VampetaOS\n");
+	else this->emit_output("FINISHED", "Command not found\n");
 // DEVO ME PREOCUPAR COM A FORMA QUE FACO O ENVIO DO OUTPUT E PERMITIR QUE SEJA ENVIADA POR PARTES
 // TALVEZ EU CRIE UM MECANISMO DE ENVIO POR PARTES DENTRO DO PROPRIO Shell USANDO JSON
 }

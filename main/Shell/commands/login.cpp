@@ -17,9 +17,8 @@
 /**
  * @author elguesabal
  * @brief METODO RESPONSAVEL PELO COMANDO login
- * @return RETORNA UMA STRING DE RESPOSTA
 */
-std::string	Shell::login(void) {
+void	Shell::login(void) {
 	this->logged_in = true;
-	return ("OK\n");
+	this->emit_output("FINISHED", "OK\n");
 }

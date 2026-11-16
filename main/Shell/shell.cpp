@@ -35,8 +35,7 @@ bool	Shell::init_shell(void) {
  * @param fd FILE DESCRIPTION DA CONEAXO
 */
 Shell::Shell(uint16_t port, int fd) : port(port), fd(fd), logged_in(false), user(""), pwd(""), command() {
-printf("Shell port ---> %d\n", port);
-printf("Shell fd ---> %d\n", fd);
+
 }
 
 /**

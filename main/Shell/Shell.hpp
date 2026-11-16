@@ -56,7 +56,7 @@ class Shell {
 		~Shell(void);
 
 		// /Shell/input.cpp
-		std::string	input_shell(std::string input);
+		void		input_shell(std::string input);
 
 	private:
 		// /Shell/directory.cpp
@@ -73,13 +73,13 @@ class Shell {
 		bool		check_authentication(void);
 
 		// /Shell/commands/useradd.cpp
-		std::string	useradd(void);
+		void		useradd(void);
 
 		// /Shell/commands/login.cpp
-		std::string	login(void);
+		void		login(void);
 
 		// /Shell/commands/echo.cpp
-		std::string	echo(void);
+		void		echo(void);
 };
 
 #endif
