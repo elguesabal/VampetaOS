@@ -58,9 +58,9 @@ esp_err_t	WebTerminal::connect_ws(httpd_req_t *req) {
 esp_err_t	WebTerminal::frame_ws(httpd_req_t *req) {
 	WebSocket_frame frame = WebServer::build_websocket_frame(req);
 	if (frame.error != ESP_OK) return (frame.error);
-	// std::map<int, Shell>::iterator it = WebTerminal::sessions.find(frame.fd); // DESATIVADO PARA PQ VOU ESTUDAR TASK E QUEUE DO ESP-IDF
-	// if (it == WebTerminal::sessions.end()) return (ESP_ERR_NOT_FOUND);
-	// it->second.input_shell(frame.payload);
+	std::map<int, Shell>::iterator it = WebTerminal::sessions.find(frame.fd); // DEVO USAR TASK POREM PAREI PQ VOU ESTUDAR TASK E QUEUE DO ESP-IDF
+	if (it == WebTerminal::sessions.end()) return (ESP_ERR_NOT_FOUND);
+	it->second.input_shell(frame.payload);
 	return (ESP_OK);
 }
 
