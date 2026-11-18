@@ -8,8 +8,15 @@ idf_component_register(
         "task/task5.cpp"
         "task/task6.cpp"
         "task/task7.cpp"
+        "task/task8.cpp"
+        "task/task9.cpp"
+        "task/task10.cpp"
+        "queue/queue1.cpp"
+        "queue/queue2.cpp"
+        "queue/queue3.cpp"
 
     INCLUDE_DIRS
         "."
         "task"
+        "queue"
 )

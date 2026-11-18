@@ -34,6 +34,7 @@ esp_err_t	WebTerminal::connect_ws(httpd_req_t *req) {
 	if (shell == NULL) return (ESP_ERR_NO_MEM);
 	std::pair<std::map<int, Shell>::iterator, bool> result = WebTerminal::sessions.insert(std::make_pair(connect.fd, Shell(connect.port, connect.fd)));
 	if (!result.second) return (ESP_FAIL);
+// EU DEVERIA CRIAR A TASK AKI
 	// MUTEX???
 	extern const uint8_t ascii_art_start[] asm("_binary_ascii_art_start");
 	extern const uint8_t ascii_art_end[] asm("_binary_ascii_art_end");
@@ -61,6 +62,8 @@ esp_err_t	WebTerminal::frame_ws(httpd_req_t *req) {
 	std::map<int, Shell>::iterator it = WebTerminal::sessions.find(frame.fd); // DEVO USAR TASK POREM PAREI PQ VOU ESTUDAR TASK E QUEUE DO ESP-IDF
 	if (it == WebTerminal::sessions.end()) return (ESP_ERR_NOT_FOUND);
 	it->second.input_shell(frame.payload);
+// xTaskCreate(it->second.input_shell, "handler", 4094, frame.payload, 1, NULL); // CRIACAO DA TASK
+// EU DEVERIA USAR QUEUE AKI PARA PASSAR O INPUT PARA A TASK
 	return (ESP_OK);
 }
 
@@ -81,4 +84,5 @@ void	WebTerminal::disconnect_ws(void *arg, esp_event_base_t event_base, int32_t 
 	std::map<int, Shell>::iterator session = WebTerminal::sessions.find(fd);
 	if (session == WebTerminal::sessions.end()) return;
 	WebTerminal::sessions.erase(session);
+// EU DEVERIA FECHAR A TASK AKI
 }

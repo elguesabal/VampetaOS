@@ -7,6 +7,12 @@ extern "C" void	app_main(void) {
 	// task4();
 	// task5();
 	// task6();
-	task7();
+	// task7();
+	// task8();
+	// task9();
+	// task10();
+	// queue1();
+	queue2();
+	// queue3();
 	printf("studies\n");
 }
