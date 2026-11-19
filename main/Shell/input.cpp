@@ -7,13 +7,27 @@
   |  /Shell/authentication.cpp                                                 |
   |                                                                            |
   |  elguesabal@VampetaOS:~$ functions                                         |
+  |  task_shell                                                                |
   |  input_shell                                                               |
+  |  run                                                                       |
   |  parse_input                                                               |
   |                                                                            |
   + -------------------------------------------------------------------------- +
 */
 
 #include "Shell.hpp"
+
+void	Shell::task_shell(void *arg) {
+	Shell *shell = static_cast<Shell *>(arg);
+	while (true) {
+		std::string input;
+		if (xQueueReceive(shell->queue, &input, portMAX_DELAY) == pdPASS) shell->run(input);
+	}
+}
+
+void	Shell::input_shell(std::string input) {
+	xQueueSend(queue, &input, portMAX_DELAY);
+}
 
 			void	print_command(const Command &command) {
 				printf("command.command ---> %s\n", command.command.c_str());
@@ -29,7 +43,7 @@
  * @brief METODO QUE RECEBE UM INPUT E RETORNA A RESPOSTA
  * @param input COMANDO RECEBIDO PARA SER INTERPRETADO PELO SHELL
 */
-void	Shell::input_shell(std::string input) {
+void	Shell::run(std::string input) {
 // INTERPRETAR O input E SEPARAR SEU COMANDO DOS ARGUMENTOS
 	if (!this->parse_input(input)) {
 		this->emit_output("FINISHED", "ERROR INPUT\n");

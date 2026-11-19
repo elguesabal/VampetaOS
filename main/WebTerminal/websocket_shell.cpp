@@ -60,10 +60,14 @@ esp_err_t	WebTerminal::frame_ws(httpd_req_t *req) {
 	WebSocket_frame frame = WebServer::build_websocket_frame(req);
 	if (frame.error != ESP_OK) return (frame.error);
 	std::map<int, Shell>::iterator it = WebTerminal::sessions.find(frame.fd); // DEVO USAR TASK POREM PAREI PQ VOU ESTUDAR TASK E QUEUE DO ESP-IDF
+// O construtor cria um objeto temporário Shell.
+// O construtor inicia a Task passando this.
+// O objeto temporário é copiado para dentro do map.
+// O temporário é destruído.
+// A Task continua utilizando o endereço do objeto temporário.
+// DEVO CRIAR UM MAP DE Shell*???
 	if (it == WebTerminal::sessions.end()) return (ESP_ERR_NOT_FOUND);
 	it->second.input_shell(frame.payload);
-// xTaskCreate(it->second.input_shell, "handler", 4094, frame.payload, 1, NULL); // CRIACAO DA TASK
-// EU DEVERIA USAR QUEUE AKI PARA PASSAR O INPUT PARA A TASK
 	return (ESP_OK);
 }
 

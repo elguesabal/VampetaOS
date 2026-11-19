@@ -12,7 +12,7 @@ extern "C" void	app_main(void) {
 	// task9();
 	// task10();
 	// queue1();
-	queue2();
+	// queue2();
 	// queue3();
 	printf("studies\n");
 }
