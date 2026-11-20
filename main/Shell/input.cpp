@@ -18,15 +18,35 @@
 #include "Shell.hpp"
 
 void	Shell::task_shell(void *arg) {
-	Shell *shell = static_cast<Shell *>(arg);
-	while (true) {
-		std::string input;
-		if (xQueueReceive(shell->queue, &input, portMAX_DELAY) == pdPASS) shell->run(input);
-	}
+	// Shell *shell = static_cast<Shell *>(arg);
+	// while (true) {
+	// 	std::string input;
+	// 	if (xQueueReceive(shell->queue, &input, portMAX_DELAY) == pdPASS) shell->run(input);
+	// }
+
+
+
+    Shell *shell = static_cast<Shell *>(arg);
+    while (true) {
+        char input[SHELL_INPUT_MAX];
+        if (xQueueReceive(shell->queue, input, portMAX_DELAY) == pdPASS) shell->run(input);
+    }
 }
 
-void	Shell::input_shell(std::string input) {
-	xQueueSend(queue, &input, portMAX_DELAY);
+// void	Shell::input_shell(std::string input) {
+// 	xQueueSend(queue, &input, portMAX_DELAY);
+// }
+void	Shell::input_shell(const char *input) {
+	// xQueueSend(queue, &input, portMAX_DELAY);
+
+
+
+	if (input == nullptr) return;
+	size_t len = strlen(input);
+	if (len >= SHELL_INPUT_MAX) return;
+	char buffer[SHELL_INPUT_MAX] = {};
+	memcpy(buffer, input, len);
+	xQueueSend(queue, buffer, 0);
 }
 
 			void	print_command(const Command &command) {

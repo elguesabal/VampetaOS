@@ -29,13 +29,12 @@
 esp_err_t	WebTerminal::connect_ws(httpd_req_t *req) {
 	WebSocket_connect connect = WebServer::build_websocket_connect(req);
 	if (connect.error != ESP_OK) return (connect.error);
-	// MUTEX???
+// MUTEX???
 	Shell *shell = new (std::nothrow) Shell(connect.port ,connect.fd);
-	if (shell == NULL) return (ESP_ERR_NO_MEM);
-	std::pair<std::map<int, Shell>::iterator, bool> result = WebTerminal::sessions.insert(std::make_pair(connect.fd, Shell(connect.port, connect.fd)));
+	if (shell == nullptr) return (ESP_ERR_NO_MEM);
+	std::pair<std::map<int, Shell*>::iterator, bool> result = WebTerminal::sessions.insert(std::make_pair(connect.fd, shell));
 	if (!result.second) return (ESP_FAIL);
-// EU DEVERIA CRIAR A TASK AKI
-	// MUTEX???
+// MUTEX???
 	extern const uint8_t ascii_art_start[] asm("_binary_ascii_art_start");
 	extern const uint8_t ascii_art_end[] asm("_binary_ascii_art_end");
 	size_t len = ascii_art_end - ascii_art_start;
@@ -59,15 +58,9 @@ esp_err_t	WebTerminal::connect_ws(httpd_req_t *req) {
 esp_err_t	WebTerminal::frame_ws(httpd_req_t *req) {
 	WebSocket_frame frame = WebServer::build_websocket_frame(req);
 	if (frame.error != ESP_OK) return (frame.error);
-	std::map<int, Shell>::iterator it = WebTerminal::sessions.find(frame.fd); // DEVO USAR TASK POREM PAREI PQ VOU ESTUDAR TASK E QUEUE DO ESP-IDF
-// O construtor cria um objeto temporário Shell.
-// O construtor inicia a Task passando this.
-// O objeto temporário é copiado para dentro do map.
-// O temporário é destruído.
-// A Task continua utilizando o endereço do objeto temporário.
-// DEVO CRIAR UM MAP DE Shell*???
+	std::map<int, Shell*>::iterator it = WebTerminal::sessions.find(frame.fd);
 	if (it == WebTerminal::sessions.end()) return (ESP_ERR_NOT_FOUND);
-	it->second.input_shell(frame.payload);
+	it->second->input_shell(frame.payload.c_str());
 	return (ESP_OK);
 }
 
@@ -83,10 +76,11 @@ void	WebTerminal::disconnect_ws(void *arg, esp_event_base_t event_base, int32_t 
 	(void)arg;
 	(void)event_base;
 	if (event_id != HTTP_SERVER_EVENT_DISCONNECTED) return;
+	if (event_data == nullptr) return;
 	int fd = *(int *)event_data;
 	if (fd < 0) return;
-	std::map<int, Shell>::iterator session = WebTerminal::sessions.find(fd);
+	std::map<int, Shell*>::iterator session = WebTerminal::sessions.find(fd);
 	if (session == WebTerminal::sessions.end()) return;
+	delete session->second;
 	WebTerminal::sessions.erase(session);
-// EU DEVERIA FECHAR A TASK AKI
 }

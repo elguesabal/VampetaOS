@@ -26,7 +26,7 @@
 class WebTerminal {
 	private:
 		static HttpServer	*server;
-		static std::map<int, Shell> sessions;
+		static std::map<int, Shell*> sessions;
 
 	public:
 		// /WebTerminal/webterminal.cpp

@@ -20,7 +20,7 @@
  * @author elguesabal
  * @brief INICIA O SHELL
  * @return RETORNA true EM CASO DO SHELL INICIADO COM SUCESSO
- * @return RETORNA false CASO ??? FALHE
+ * @return RETORNA false CASO check_dir FALHE
 */
 bool	Shell::init_shell(void) {
 	if (!Shell::check_dir()) return (false);

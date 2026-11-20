@@ -18,7 +18,7 @@
 #include "WebTerminal.hpp"
 
 HttpServer *WebTerminal::server = NULL;
-std::map<int, Shell> WebTerminal::sessions;
+std::map<int, Shell*> WebTerminal::sessions;
 
 /**
  * @author elguesabal

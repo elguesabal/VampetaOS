@@ -16,6 +16,8 @@
 #include "../Sd/Sd.hpp"
 #include "../WebServer/WebServer.hpp"
 
+#define SHELL_INPUT_MAX 256
+
 /**
  * @author elguesabal
  * @brief STRUCT RESPONSAVEL POR ORGANIZAR OS COMANDOS E ARGUMENTOS
@@ -42,8 +44,8 @@ class Shell {
 	private:
 		uint16_t			port;
 		int					fd;
-TaskHandle_t		task;
-QueueHandle_t		queue;
+		TaskHandle_t		task;
+		QueueHandle_t		queue;
 		bool				logged_in;
 		// bool				sudo;
 		std::string			user;
@@ -58,9 +60,10 @@ QueueHandle_t		queue;
 		~Shell(void);
 
 		// /Shell/input.cpp
-static void	task_shell(void *arg);
-		void		input_shell(std::string input);
-void		run(std::string input);
+		static void	task_shell(void *arg);
+		// void		input_shell(std::string input);
+		void		input_shell(const char *input);
+		void		run(std::string input);
 
 	private:
 		// /Shell/directory.cpp
