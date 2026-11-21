@@ -60,16 +60,15 @@ class Shell {
 		~Shell(void);
 
 		// /Shell/input.cpp
-		static void	task_shell(void *arg);
-		// void		input_shell(std::string input);
 		void		input_shell(const char *input);
-		void		run(std::string input);
 
 	private:
 		// /Shell/directory.cpp
 		static bool	check_dir(void);
 
 		// /Shell/input.cpp
+		static void	task_shell(void *arg);
+		void		run(std::string input);
 		bool		parse_input(std::string &input);
 
 		// /Shell/output.cpp

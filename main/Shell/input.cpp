@@ -17,15 +17,12 @@
 
 #include "Shell.hpp"
 
+/**
+ * @author elguesabal
+ * @brief METODO QUE SERA USADO COMO HANDLER PARA A TASK DE EXECUCAO DE COMANDOS DOS SHELL
+ * @param arg ARGUMENTO PASSADO NA CRIACAO DA TASK (ESSE ARGUMENTO RECEBE this DA PROPRIA CLASSE)
+*/
 void	Shell::task_shell(void *arg) {
-	// Shell *shell = static_cast<Shell *>(arg);
-	// while (true) {
-	// 	std::string input;
-	// 	if (xQueueReceive(shell->queue, &input, portMAX_DELAY) == pdPASS) shell->run(input);
-	// }
-
-
-
     Shell *shell = static_cast<Shell *>(arg);
     while (true) {
         char input[SHELL_INPUT_MAX];
@@ -33,14 +30,12 @@ void	Shell::task_shell(void *arg) {
     }
 }
 
-// void	Shell::input_shell(std::string input) {
-// 	xQueueSend(queue, &input, portMAX_DELAY);
-// }
+/**
+ * @author elguesabal
+ * @brief METODO QUE RECEBE A NOTIFICACAO DE UM FRAME E ENVIA O COMANDO PARA A TASK RESOLVER DE FORMA ṔARALELA
+ * @param input STRING RECEBIDA DO WEBSOCKET
+*/
 void	Shell::input_shell(const char *input) {
-	// xQueueSend(queue, &input, portMAX_DELAY);
-
-
-
 	if (input == nullptr) return;
 	size_t len = strlen(input);
 	if (len >= SHELL_INPUT_MAX) return;
@@ -60,7 +55,7 @@ void	Shell::input_shell(const char *input) {
 			}
 /**
  * @author elguesabal
- * @brief METODO QUE RECEBE UM INPUT E RETORNA A RESPOSTA
+ * @brief METODO QUE RECEBE O INPUT E EXECUTA O COMANDO (METODO CHAMADO POR task_shell)
  * @param input COMANDO RECEBIDO PARA SER INTERPRETADO PELO SHELL
 */
 void	Shell::run(std::string input) {
