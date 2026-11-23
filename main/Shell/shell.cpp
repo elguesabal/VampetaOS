@@ -35,7 +35,7 @@ bool	Shell::init_shell(void) {
  * @param fd FILE DESCRIPTION DA CONEAXO
 */
 Shell::Shell(uint16_t port, int fd) : port(port), fd(fd), task(nullptr), queue(nullptr), logged_in(false), user(""), pwd(""), command() {
-	this->queue = xQueueCreate(10, sizeof(std::string)); // EU DEVERIA USAR char* EM VEZ DE std::string
+	this->queue = xQueueCreate(10, SHELL_INPUT_MAX);
 	if (this->queue == nullptr) return;
 	if (xTaskCreate(this->task_shell, "Shell", 4096, this, 1, &this->task) != pdPASS) {
 		vQueueDelete(this->queue);

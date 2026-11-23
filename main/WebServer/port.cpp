@@ -31,11 +31,21 @@ bool	WebServer::open_port(uint16_t port) {
 		printf("Port already in use\n");
 		return (false);
 	}
+// printf("Opening HTTP server on port %u\n", port);
 	httpd_config_t config = HTTPD_DEFAULT_CONFIG();
 	config.server_port = port;
-    config.ctrl_port = port;
+    // config.ctrl_port = port; // UE PQ AGOR ISSO FUNCIONA SEM ESSA CONFIGURACAO??????????????
+// config.max_open_sockets = 7;
+// config.lru_purge_enable = true;
+// config.lru_purge_enable = false;
+// config.max_open_sockets = 7;
+// config.max_uri_handlers = 20;
+// config.recv_wait_timeout = 5;
+// config.send_wait_timeout = 5;
+// printf("Starting HTTP server...\n");
 	httpd_handle_t handle = NULL;
 	esp_err_t ret = httpd_start(&handle, &config);
+// printf("httpd_start: %s\n", esp_err_to_name(ret));
 	if (ret != ESP_OK) {
 		printf("%s\n", esp_err_to_name(ret));
 		return (false);

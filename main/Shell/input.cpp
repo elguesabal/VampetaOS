@@ -38,7 +38,10 @@ void	Shell::task_shell(void *arg) {
 void	Shell::input_shell(const char *input) {
 	if (input == nullptr) return;
 	size_t len = strlen(input);
-	if (len >= SHELL_INPUT_MAX) return;
+	if (len >= SHELL_INPUT_MAX) {
+		this->emit_output("FINISHED", "SHELL_INPUT_MAX\n");
+		return;
+	}
 	char buffer[SHELL_INPUT_MAX] = {};
 	memcpy(buffer, input, len);
 	xQueueSend(queue, buffer, 0);

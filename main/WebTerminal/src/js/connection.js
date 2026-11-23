@@ -4,7 +4,7 @@
  * @param event OBJETO CONTENDO INFORMACOES SOBRE A ABERTURA DA CONEXAO WEBSOCKET
 */
 function onopen(event) {
-
+	console.log(event)
 }
 
 /**
@@ -34,7 +34,7 @@ function onmessage(event) {
  * @param event OBJETO CONTENDO INFORMACOES SOBRE ERROS OCORRIDOS NA CONEXAO
 */
 function onerror(event) {
-
+	console.log(event)
 }
 
 /**
@@ -43,10 +43,16 @@ function onerror(event) {
  * @param event OBJETO CONTENDO INFORMACOES SOBRE O FECHAMENTO DA CONEXAO
 */
 function onclose(event) {
-	
+	console.log(event)
 }
 
 ws.onopen = onopen;
 ws.onmessage = onmessage;
 ws.onerror = onerror;
 ws.onclose = onclose;
+
+
+
+// const monitor = setInterval(() => {
+//     console.log("WebSocket state:", ws.readyState);
+// }, 1000);

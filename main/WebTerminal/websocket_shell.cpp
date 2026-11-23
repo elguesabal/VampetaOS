@@ -27,6 +27,7 @@
  * @return RETORNA ret CASO WebServer::send_text_ws FALHE
 */
 esp_err_t	WebTerminal::connect_ws(httpd_req_t *req) {
+// printf("New WebSocket connection\n");
 	WebSocket_connect connect = WebServer::build_websocket_connect(req);
 	if (connect.error != ESP_OK) return (connect.error);
 // MUTEX???
@@ -43,6 +44,7 @@ esp_err_t	WebTerminal::connect_ws(httpd_req_t *req) {
 	memcpy(ascii_art, ascii_art_start, len);
 	ascii_art[len] = '\0';
 	esp_err_t ret = WebServer::send_text_ws(req, ascii_art);
+// printf("WebSocket connect: fd=%d, ret=%s\n", connect.fd, esp_err_to_name(ret));
 	delete[] ascii_art;
 	return (ret);
 }
@@ -56,6 +58,7 @@ esp_err_t	WebTerminal::connect_ws(httpd_req_t *req) {
  * @return RETORNA ESP_ERR_NOT_FOUND CASO O FILE DESCRIPTION NAO ESTEJA ABERTO DENTRO DE WebTerminal::sessions
 */
 esp_err_t	WebTerminal::frame_ws(httpd_req_t *req) {
+// printf("WebSocket frame received\n");
 	WebSocket_frame frame = WebServer::build_websocket_frame(req);
 	if (frame.error != ESP_OK) return (frame.error);
 	std::map<int, Shell*>::iterator it = WebTerminal::sessions.find(frame.fd);
@@ -78,6 +81,7 @@ void	WebTerminal::disconnect_ws(void *arg, esp_event_base_t event_base, int32_t 
 	if (event_id != HTTP_SERVER_EVENT_DISCONNECTED) return;
 	if (event_data == nullptr) return;
 	int fd = *(int *)event_data;
+// printf("HTTP SERVER DISCONNECTED: fd=%d\n", fd);
 	if (fd < 0) return;
 	std::map<int, Shell*>::iterator session = WebTerminal::sessions.find(fd);
 	if (session == WebTerminal::sessions.end()) return;
