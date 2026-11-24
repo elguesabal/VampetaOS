@@ -10,6 +10,7 @@
   |  init_shell                                                                |
   |  Shell                                                                     |
   |  ~Shell                                                                    |
+  |  is_initialized                                                            |
   |                                                                            |
   + -------------------------------------------------------------------------- +
 */
@@ -31,10 +32,9 @@ bool	Shell::init_shell(void) {
 /**
  * @author elguesabal
  * @brief CONSTRUTOR DA CLASSE Shell
- * @param port PORTA DA CONEXAO
- * @param fd FILE DESCRIPTION DA CONEAXO
+ * @param connect STRUCT CONTENDO port E fd DA CONEXAO
 */
-Shell::Shell(uint16_t port, int fd) : port(port), fd(fd), task(nullptr), queue(nullptr), logged_in(false), user(""), pwd(""), command() {
+Shell::Shell(const WebSocket_connect &connect) : port(connect.port), fd(connect.fd), task(nullptr), queue(nullptr), logged_in(false), user(""), pwd(""), command() {
 	this->queue = xQueueCreate(10, SHELL_INPUT_MAX);
 	if (this->queue == nullptr) return;
 	if (xTaskCreate(this->task_shell, "Shell", 4096, this, 1, &this->task) != pdPASS) {
@@ -48,10 +48,22 @@ Shell::Shell(uint16_t port, int fd) : port(port), fd(fd), task(nullptr), queue(n
  * @brief DESTRUTOR DA CLASSE Shell
 */
 Shell::~Shell(void) {
-	if (this->task == nullptr) return;
-	vTaskDelete(this->task);
-	this->task = nullptr;
-	if (this->queue == nullptr) return;
-	vQueueDelete(this->queue);
-	this->queue = nullptr;
+	if (this->task != nullptr) {
+		vTaskDelete(this->task);
+		this->task = nullptr;
+	}
+	if (this->queue != nullptr) {
+		vQueueDelete(this->queue);
+		this->queue = nullptr;
+	}
+}
+
+/**
+ * @author elguesabal
+ * @brief VERIFICA SE A TASK E O QUEUE FORAM CRIADOS CORRETAMENTE
+ * @return RETORNA true EM CASO DA TASK E QUEUE INICIADOS COM SUCESSO
+ * @return RETORNA false EM CASO DE FALHA NA CRIACAO DA TASK OU QUEUE
+*/
+bool	Shell::is_initialized(void) const {
+	return (this->task != nullptr && this->queue != nullptr);
 }

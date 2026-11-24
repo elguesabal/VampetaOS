@@ -15,8 +15,9 @@
 #include "../VampetaOS.hpp"
 #include "../Sd/Sd.hpp"
 
-#define MAX_REQUEST_BODY_SIZE 4096
-#define MAX_WEBSOCKET_FRAME_SIZE 1024
+#define MAX_REQUEST_BODY_SIZE		4096
+#define MAX_WEBSOCKET_FRAME_SIZE	1024
+#define MAS_OPEN_SOCKETS			13
 
 /**
  * @author elguesabal

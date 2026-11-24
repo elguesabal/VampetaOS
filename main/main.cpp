@@ -74,11 +74,18 @@ void	test(void) {
 // printf("\n\n\n");
 }
 
+esp_err_t	test(httpd_req_t *req) {
+	WebSocket_frame frame = WebServer::build_websocket_frame(req);
+	if (frame.error != ESP_OK) return (frame.error);
+	printf("%s\n", frame.payload.c_str());
+	return (WebServer::send_text_ws(req, "VampetaOS"));
+}
+
 /**
  * @author elguesabal
  * @brief FUNCAO PRINCIPAL
 */
-extern "C" void	app_main(void) { // PAREI PARA ESTUDAR TASK E QUEUE
+extern "C" void	app_main(void) {
 	if (!Sd::init_sd()) return;
 	if (!System::init_system()) return;
 	if (!Wifi::init_wifi()) return;

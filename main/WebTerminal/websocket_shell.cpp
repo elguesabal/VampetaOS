@@ -22,30 +22,45 @@
  * @param req PONTEIRO PARA ESTRUTURA QUE CONTEM AS INFORMACOES DA REQUISICAO HTTP RECEBIDA PELO SERVIDOR
  * @return RETORNA connect.error CASO build_websocket_connect FALHE
  * @return RETORNA ESP_ERR_NO_MEM CASO OCORRA UMA FALHA NA ALOCACAO DE MEMORIA DO OBJETO Shell
+ * @return RETORNA ESP_FAIL CASO OCORRA UMA FALHA NA CRIACAO DA TASK OU QUEUE DO Shell
  * @return RETORNA ESP_FAIL CASO OCORRA UMA FALHA AO REGISTRAR A NOVA SESSAO NO MAP sessions
  * @return RETORNA ESP_ERR_NO_MEM EM CASO DE FALHA DE ALOCACAO DA MEMORIA DE ascii_art
  * @return RETORNA ret CASO WebServer::send_text_ws FALHE
 */
 esp_err_t	WebTerminal::connect_ws(httpd_req_t *req) {
-// printf("New WebSocket connection\n");
 	WebSocket_connect connect = WebServer::build_websocket_connect(req);
 	if (connect.error != ESP_OK) return (connect.error);
 // MUTEX???
-	Shell *shell = new (std::nothrow) Shell(connect.port ,connect.fd);
+	Shell *shell = new (std::nothrow) Shell(connect);
 	if (shell == nullptr) return (ESP_ERR_NO_MEM);
+	if (!shell->is_initialized()) {
+		delete shell;
+		return (ESP_FAIL);
+	}
 	std::pair<std::map<int, Shell*>::iterator, bool> result = WebTerminal::sessions.insert(std::make_pair(connect.fd, shell));
-	if (!result.second) return (ESP_FAIL);
+	if (!result.second) {
+		delete shell;
+		return (ESP_FAIL);
+	}
 // MUTEX???
 	extern const uint8_t ascii_art_start[] asm("_binary_ascii_art_start");
 	extern const uint8_t ascii_art_end[] asm("_binary_ascii_art_end");
 	size_t len = ascii_art_end - ascii_art_start;
 	char *ascii_art = new (std::nothrow) char[len + 1];
-	if (ascii_art == nullptr) return (ESP_ERR_NO_MEM);	// DEVERIA REMOVER O FD DE session???
+	if (ascii_art == nullptr) {
+		WebTerminal::sessions.erase(connect.fd);
+		delete shell;
+		return (ESP_ERR_NO_MEM);
+	}
 	memcpy(ascii_art, ascii_art_start, len);
 	ascii_art[len] = '\0';
 	esp_err_t ret = WebServer::send_text_ws(req, ascii_art);
-// printf("WebSocket connect: fd=%d, ret=%s\n", connect.fd, esp_err_to_name(ret));
 	delete[] ascii_art;
+	if (ret != ESP_OK) {
+		WebTerminal::sessions.erase(connect.fd);
+		delete shell;
+		return (ret);
+	}
 	return (ret);
 }
 
@@ -58,7 +73,6 @@ esp_err_t	WebTerminal::connect_ws(httpd_req_t *req) {
  * @return RETORNA ESP_ERR_NOT_FOUND CASO O FILE DESCRIPTION NAO ESTEJA ABERTO DENTRO DE WebTerminal::sessions
 */
 esp_err_t	WebTerminal::frame_ws(httpd_req_t *req) {
-// printf("WebSocket frame received\n");
 	WebSocket_frame frame = WebServer::build_websocket_frame(req);
 	if (frame.error != ESP_OK) return (frame.error);
 	std::map<int, Shell*>::iterator it = WebTerminal::sessions.find(frame.fd);
@@ -81,7 +95,6 @@ void	WebTerminal::disconnect_ws(void *arg, esp_event_base_t event_base, int32_t 
 	if (event_id != HTTP_SERVER_EVENT_DISCONNECTED) return;
 	if (event_data == nullptr) return;
 	int fd = *(int *)event_data;
-// printf("HTTP SERVER DISCONNECTED: fd=%d\n", fd);
 	if (fd < 0) return;
 	std::map<int, Shell*>::iterator session = WebTerminal::sessions.find(fd);
 	if (session == WebTerminal::sessions.end()) return;

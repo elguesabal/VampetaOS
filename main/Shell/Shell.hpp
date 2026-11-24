@@ -56,8 +56,9 @@ class Shell {
 	public:
 		// /Shell/shell.cpp
 		static bool	init_shell(void);
-		Shell(uint16_t port, int fd);
+		Shell(const WebSocket_connect &connect);
 		~Shell(void);
+		bool		is_initialized(void) const;
 
 		// /Shell/input.cpp
 		void		input_shell(const char *input);

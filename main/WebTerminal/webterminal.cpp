@@ -54,7 +54,7 @@ bool	WebTerminal::init_server(void) {
 
 /**
  * @author elguesabal
- * @brief REGISTRA UM EVENTO PERSONALIZADO DE DEDSCONEXAO DE WEBSOCKET
+ * @brief REGISTRA UM EVENTO PERSONALIZADO DE DESCONEXAO DE WEBSOCKET
  * @return RETORNA true EM CASO DO EVENTO REGISTRADO COM SUCESSO
  * @return RETORNA false CASO esp_event_handler_register FALHE
 */

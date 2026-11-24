@@ -50,9 +50,3 @@ ws.onopen = onopen;
 ws.onmessage = onmessage;
 ws.onerror = onerror;
 ws.onclose = onclose;
-
-
-
-// const monitor = setInterval(() => {
-//     console.log("WebSocket state:", ws.readyState);
-// }, 1000);
