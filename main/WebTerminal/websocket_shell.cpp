@@ -20,12 +20,11 @@
  * @author elguesabal
  * @brief METODO QUE SERA DISPARADO CADA VEZ QUE UM WEBSOCKET E CONECTADO
  * @param req PONTEIRO PARA ESTRUTURA QUE CONTEM AS INFORMACOES DA REQUISICAO HTTP RECEBIDA PELO SERVIDOR
+ * @return RETORNA ESP_OK EM CASO DE SUCESSO NA CONEXAO
  * @return RETORNA connect.error CASO build_websocket_connect FALHE
  * @return RETORNA ESP_ERR_NO_MEM CASO OCORRA UMA FALHA NA ALOCACAO DE MEMORIA DO OBJETO Shell
  * @return RETORNA ESP_FAIL CASO OCORRA UMA FALHA NA CRIACAO DA TASK OU QUEUE DO Shell
  * @return RETORNA ESP_FAIL CASO OCORRA UMA FALHA AO REGISTRAR A NOVA SESSAO NO MAP sessions
- * @return RETORNA ESP_ERR_NO_MEM EM CASO DE FALHA DE ALOCACAO DA MEMORIA DE ascii_art
- * @return RETORNA ret CASO WebServer::send_text_ws FALHE
 */
 esp_err_t	WebTerminal::connect_ws(httpd_req_t *req) {
 	WebSocket_connect connect = WebServer::build_websocket_connect(req);
@@ -43,25 +42,7 @@ esp_err_t	WebTerminal::connect_ws(httpd_req_t *req) {
 		return (ESP_FAIL);
 	}
 // MUTEX???
-	extern const uint8_t ascii_art_start[] asm("_binary_ascii_art_start");
-	extern const uint8_t ascii_art_end[] asm("_binary_ascii_art_end");
-	size_t len = ascii_art_end - ascii_art_start;
-	char *ascii_art = new (std::nothrow) char[len + 1];
-	if (ascii_art == nullptr) {
-		WebTerminal::sessions.erase(connect.fd);
-		delete shell;
-		return (ESP_ERR_NO_MEM);
-	}
-	memcpy(ascii_art, ascii_art_start, len);
-	ascii_art[len] = '\0';
-	esp_err_t ret = WebServer::send_text_ws(req, ascii_art);
-	delete[] ascii_art;
-	if (ret != ESP_OK) {
-		WebTerminal::sessions.erase(connect.fd);
-		delete shell;
-		return (ret);
-	}
-	return (ret);
+	return (ESP_OK);
 }
 
 /**

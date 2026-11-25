@@ -20,5 +20,6 @@
 */
 void	Shell::login(void) {
 	this->logged_in = true;
-	this->emit_output("FINISHED", "OK\n");
+	// this->emit_output("FINISHED", "OK\n");
+WebServer::send_text_ws_fd(this->port, this->fd, "OK\n");
 }

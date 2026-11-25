@@ -34,7 +34,7 @@ bool	Shell::init_shell(void) {
  * @brief CONSTRUTOR DA CLASSE Shell
  * @param connect STRUCT CONTENDO port E fd DA CONEXAO
 */
-Shell::Shell(const WebSocket_connect &connect) : port(connect.port), fd(connect.fd), task(nullptr), queue(nullptr), logged_in(false), user(""), pwd(""), command() {
+Shell::Shell(const WebSocket_connect &connect) : port(connect.port), fd(connect.fd), fd_output(connect.fd), task(nullptr), queue(nullptr), logged_in(false), user(""), pwd(""), command() {
 	this->queue = xQueueCreate(10, SHELL_INPUT_MAX);
 	if (this->queue == nullptr) return;
 	if (xTaskCreate(this->task_shell, "Shell", 4096, this, 1, &this->task) != pdPASS) {

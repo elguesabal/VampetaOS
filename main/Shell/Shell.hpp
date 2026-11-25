@@ -17,6 +17,9 @@
 #include "../WebServer/WebServer.hpp"
 
 #define SHELL_INPUT_MAX 256
+#define OUTPUT_WEBSOCKET 0
+#define OUTPUT_FILE 1
+#define OUTPUT_SERIAL 2	// VOU USAR???
 
 /**
  * @author elguesabal
@@ -44,6 +47,7 @@ class Shell {
 	private:
 		uint16_t			port;
 		int					fd;
+		int					fd_output;
 		TaskHandle_t		task;
 		QueueHandle_t		queue;
 		bool				logged_in;
@@ -68,9 +72,11 @@ class Shell {
 		static bool	check_dir(void);
 
 		// /Shell/input.cpp
+		esp_err_t	wellcome_shell(void);
 		static void	task_shell(void *arg);
 		void		run(std::string input);
 		bool		parse_input(std::string &input);
+		ssize_t		write(int fd, const void *buffer, size_t size);
 
 		// /Shell/output.cpp
 		void		emit_output(const char *type, const char *output);

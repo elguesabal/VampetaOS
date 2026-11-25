@@ -65,7 +65,7 @@ idf_component_register(
         "WebTerminal/src/js/events.js"
         "WebTerminal/src/js/keys.js"
         "WebTerminal/src/js/print.js"
-        "WebTerminal/src/ascii_art"
+        "Shell/ascii_art"
 )
 
 target_compile_options(${COMPONENT_LIB} PRIVATE
