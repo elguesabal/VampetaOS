@@ -71,16 +71,20 @@ class Shell {
 		// /Shell/directory.cpp
 		static bool	check_dir(void);
 
-		// /Shell/input.cpp
+		// /Shell/task.cpp
 		esp_err_t	wellcome_shell(void);
 		static void	task_shell(void *arg);
 		void		run(std::string input);
+		void		stop_task_shell(void);
+
+		// /Shell/input.cpp
 		bool		parse_input(std::string &input);
-		ssize_t		write(int fd, const void *buffer, size_t size);
 
 		// /Shell/output.cpp
-		void		emit_output(const char *type, const char *output);
-		std::string	json_escape(const char *input);
+		// void		emit_output(const char *type, const char *output);
+		// std::string	json_escape(const char *input);
+		ssize_t		write(int fd, const void *buffer, size_t size);
+		int			printf(const char *format, ...);
 
 		// /Shell/authentication.cpp
 		bool		check_authentication(void);

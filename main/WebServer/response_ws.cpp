@@ -43,13 +43,13 @@ esp_err_t	WebServer::send_text_ws(httpd_req_t *req, const char *text) {
  * @return RETORNA ESP_ERR_INVALID_ARG EM CASO text SER nullptr
  * @return RETORNA ESP_ERR_NOT_FOUND EM CASO DA PORTA NAO ESTEJA ABERTA
 */
-esp_err_t	WebServer::send_text_ws_fd(uint16_t port, int fd, const char *text) {
+esp_err_t	WebServer::send_text_ws_fd(uint16_t port, int fd, const char *text, size_t size) {
 	if (text == nullptr) return (ESP_ERR_INVALID_ARG);
 	std::map<uint16_t, httpd_handle_t>::iterator server = WebServer::servers.find(port);
 	if (server == WebServer::servers.end()) return (ESP_ERR_NOT_FOUND);
 	httpd_ws_frame_t frame = {};
 	frame.type = HTTPD_WS_TYPE_TEXT;
 	frame.payload = (uint8_t *)text;
-	frame.len = strlen(text);
+	frame.len = size;
 	return (httpd_ws_send_frame_async(server->second, fd, &frame));
 }

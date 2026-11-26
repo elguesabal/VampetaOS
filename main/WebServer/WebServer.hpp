@@ -99,7 +99,7 @@ class WebServer {
 
 		// /WebServer/response_ws.cpp
 		static esp_err_t			send_text_ws(httpd_req_t *req, const char *text);
-		static esp_err_t			send_text_ws_fd(uint16_t port, int fd, const char *text);
+		static esp_err_t			send_text_ws_fd(uint16_t port, int fd, const char *text, size_t size);
 
 	private:
 		// /WebServer/directory.cpp

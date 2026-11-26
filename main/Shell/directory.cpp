@@ -28,11 +28,11 @@
 bool	Shell::check_dir(void) {
 	if (!Sd::exist_dir("/shell")) {
 		if (Sd::exist_file("/shell")) {
-			printf("/VampetaOS/shell must be a directory\n");
+			::printf("/VampetaOS/shell must be a directory\n");
 			return (false);
 		}
 		if (!Sd::create_dir("/shell")) {
-			printf("Failed to create /VampetaOS/shell: %s\n", strerror(errno));
+			::printf("Failed to create /VampetaOS/shell: %s\n", strerror(errno));
 			return (false);
 		}
 	}
@@ -41,20 +41,20 @@ bool	Shell::check_dir(void) {
 		return (true);
 	}
 	if (Sd::exist_dir("/shell/ENVIRONMENT")) {
-		printf("/shell/ENVIRONMENT must be a file\n");
+		::printf("/shell/ENVIRONMENT must be a file\n");
 		return (false);
 	}
 	if (!Sd::create_file("/shell/ENVIRONMENT", "WIFI=\"\"\nPASSWORD=\"\"")) {
-		printf("Failed to create /shell/ENVIRONMENT: %s\n", strerror(errno));
+		::printf("Failed to create /shell/ENVIRONMENT: %s\n", strerror(errno));
 		return (false);
 	}
 if (!Sd::exist_dir("/home")) { // DEVERIA CRIAR O DIRETORIO home ???
 	if (Sd::exist_file("/home")) {
-		printf("/VampetaOS/home must be a directory\n");
+		::printf("/VampetaOS/home must be a directory\n");
 		return (false);
 	}
 	if (!Sd::create_dir("/home")) {
-		printf("Failed to create /VampetaOS/home: %s\n", strerror(errno));
+		::printf("Failed to create /VampetaOS/home: %s\n", strerror(errno));
 		return (false);
 	}
 }

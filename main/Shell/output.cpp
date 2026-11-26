@@ -9,83 +9,84 @@
   |  elguesabal@VampetaOS:~$ functions                                         |
   |  emit_output                                                               |
   |  json_escape                                                               |
-  |                                                                            |
-  |                                                                            |
+  |  write                                                                     |
+  |  printf                                                                    |
   |                                                                            |
   + -------------------------------------------------------------------------- +
 */
 
 #include "Shell.hpp"
 
-/**
-* @author elguesabal
-* @brief METODO RESPONSAVEL POR FAZER O ENVIO DE UMA MENSAGEM
-* @param type TIPO DA RESPOSTA
-* @param output TEXTO A SER PRINTADO NO FRONT END
-* @details PARA O CODIGO CASO type SEJA nullptr
-* @details PARA O CODIGO CASO output SEJA nullptr
-*/
-void	Shell::emit_output(const char *type, const char *output) {
-	if (type == nullptr || output == nullptr) return;
-	std::string json;
-	json += "{\"type\":\"";
-	json += type;
-	json += "\",\"output\":\"";
-	json += Shell::json_escape(output);
-	if (strcmp(type, "FINISHED") == 0) json += "elguesabal@VampetaOS:~$ ";
-	json += "\"}";
-printf("%s\n", json.c_str());
-	WebServer::send_text_ws_fd(this->port, this->fd, json.c_str());
-// OUTPUT
-// INPUT
-// FINISHED
-}
+// /**
+// * @author elguesabal
+// * @brief METODO RESPONSAVEL POR FAZER O ENVIO DE UMA MENSAGEM
+// * @param type TIPO DA RESPOSTA
+// * @param output TEXTO A SER PRINTADO NO FRONT END
+// * @details PARA O CODIGO CASO type SEJA nullptr
+// * @details PARA O CODIGO CASO output SEJA nullptr
+// */
+// void	Shell::emit_output(const char *type, const char *output) {
+// 	if (type == nullptr || output == nullptr) return;
+// 	std::string json;
+// 	json += "{\"type\":\"";
+// 	json += type;
+// 	json += "\",\"output\":\"";
+// 	json += Shell::json_escape(output);
+// 	if (strcmp(type, "FINISHED") == 0) json += "elguesabal@VampetaOS:~$ ";
+// 	json += "\"}";
+// printf("%s\n", json.c_str());
+// 	WebServer::send_text_ws_fd(this->port, this->fd, json.c_str(), json.size());
+// // OUTPUT
+// // INPUT
+// // FINISHED
+// }
 
-/**
-* @author elguesabal
-* @brief FAZ UMA MODIFICACAO NO TEXTO QUE DEVE SER ENVIADO PARA SER INTERPRETADO CORRETAMENTE CARACTERES DE ESCAPE
-* @param text TEXTO A SER MODIFICADO
-* @return RETORNA UMA STRING DE RESPOSTA
-* @return RETORNA UMA STRING VAZIA CASO text SEJA nullptr
-*/
-std::string Shell::json_escape(const char *text) {
-	std::string output;
-	if (text == nullptr) return (output);
-	while (*text) {
-		switch (*text) {
-			case '"':
-				output += "\\\"";
-				break;
-			case '\\':
-				output += "\\\\";
-				break;
-			case '\b':
-				output += "\\b";
-				break;
-			case '\f':
-				output += "\\f";
-				break;
-			case '\n':
-				output += "\\n";
-				break;
-			case '\r':
-				output += "\\r";
-				break;
-			case '\t':
-				output += "\\t";
-				break;
-			default:
-				if (static_cast<unsigned char>(*text) < 0x20) {
-					output += "?";
-				} else {
-					output += *text;
-				}
-				break;
-		}
-		text++;
-	}
-	return (output);
-}
+// /**
+// * @author elguesabal
+// * @brief FAZ UMA MODIFICACAO NO TEXTO QUE DEVE SER ENVIADO PARA SER INTERPRETADO CORRETAMENTE CARACTERES DE ESCAPE
+// * @param text TEXTO A SER MODIFICADO
+// * @return RETORNA UMA STRING DE RESPOSTA
+// * @return RETORNA UMA STRING VAZIA CASO text SEJA nullptr
+// */
+// std::string Shell::json_escape(const char *text) {
+// 	std::string output;
+// 	if (text == nullptr) return (output);
+// 	while (*text) {
+// 		switch (*text) {
+// 			case '"':
+// 				output += "\\\"";
+// 				break;
+// 			case '\\':
+// 				output += "\\\\";
+// 				break;
+// 			case '\b':
+// 				output += "\\b";
+// 				break;
+// 			case '\f':
+// 				output += "\\f";
+// 				break;
+// 			case '\n':
+// 				output += "\\n";
+// 				break;
+// 			case '\r':
+// 				output += "\\r";
+// 				break;
+// 			case '\t':
+// 				output += "\\t";
+// 				break;
+// 			default:
+// 				if (static_cast<unsigned char>(*text) < 0x20) {
+// 					output += "?";
+// 				} else {
+// 					output += *text;
+// 				}
+// 				break;
+// 		}
+// 		text++;
+// 	}
+// 	return (output);
+// }
+
 
 
 
@@ -97,7 +98,7 @@ std::string Shell::json_escape(const char *text) {
 * @param size TAMANHO DE buffer
 * @return RETORNA O TAMANHO DA STRING ENVIADA AO WEBSOCKET OU ESCRITA NO FD
 * @return RETORNA 0 CASO sizer FOR 0
-* @return RETORNA -1 CASO buffer SER nullptr
+* @return RETORNA -1 CASO buffer FOR nullptr
 */
 ssize_t Shell::write(int fd, const void *buffer, size_t size) {
 	if (buffer == nullptr && size > 0) {
@@ -107,7 +108,7 @@ ssize_t Shell::write(int fd, const void *buffer, size_t size) {
 	if (size == 0) return (0);
 	if (this->fd == fd) {
 		std::string text(static_cast<const char *>(buffer), size);
-		esp_err_t ret = WebServer::send_text_ws_fd(this->port, fd, text.c_str());
+		esp_err_t ret = WebServer::send_text_ws_fd(this->port, fd, text.c_str(), text.size());
 		if (ret != ESP_OK) {
 			errno = EIO;
 			return (-1);
@@ -117,6 +118,36 @@ ssize_t Shell::write(int fd, const void *buffer, size_t size) {
 	return (::write(fd, buffer, size));
 }
 
-// void    Shell::printf() {
-
-// }
+/**
+* @author elguesabal
+* @brief ESCREVE UMA STRING FORMATADA NO FD PADRAO DO SHELL (this->fd_output)
+* @param format
+* @param ... ARGUMENTOS ADICIONAIS
+* @return RETORNA O TAMANHO DA STRING ESCRITA COM this->write
+* @return RETORNA -1 CASO format FOR nullptr
+* @return RETORNA -1 CASO vsnprintf RETORNAR UM NUMERO NEGATIVO
+* @return RETORNA -1 CASO this->write RETORNAR UM NUMERO NEGATIVO
+*/
+int	Shell::printf(const char *format, ...) {
+	if (format == nullptr) {
+		errno = EFAULT;
+		return (-1);
+	}
+	va_list args;
+	va_start(args, format);
+	va_list args_copy;
+	va_copy(args_copy, args);
+	int size = vsnprintf(nullptr, 0, format, args);
+	va_end(args);
+	if (size < 0) {
+		va_end(args_copy);
+		errno = EIO;
+		return (-1);
+	}
+	std::vector<char> buffer(size + 1);
+	vsnprintf(buffer.data(), buffer.size(), format, args_copy);
+	va_end(args_copy);
+	ssize_t written = this->write(this->fd_output, buffer.data(), size);
+	if (written < 0) return (-1);
+	return (static_cast<int>(written));
+}

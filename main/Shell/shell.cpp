@@ -25,7 +25,7 @@
 */
 bool	Shell::init_shell(void) {
 	if (!Shell::check_dir()) return (false);
-	printf("Shell: OK\n");
+	::printf("Shell: OK\n");
 	return (true);
 }
 

@@ -31,6 +31,7 @@ idf_component_register(
         "WebTerminal/websocket_shell.cpp"
         "Shell/shell.cpp"
         "Shell/directory.cpp"
+        "Shell/task.cpp"
         "Shell/input.cpp"
         "Shell/output.cpp"
         "Shell/authentication.cpp"
