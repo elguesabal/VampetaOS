@@ -86,16 +86,24 @@ print_command(command);
 	}
 // EXECUTAR OS COMANDOS
 
-if (this->command.command == "test") { // PQ NAO FUNCIONOU??? // ATA FUNCIONA COM O COMANDO login ANTES
-this->fd_output = 1;
-	this->printf("===== TEST ====\n");
-	for (int i = 0; i < this->command.args.size(); i++) {
-		std::string output = this->command.args[i] + " ";
-		this->printf(output.c_str());
-sleep(1);
+if (this->command.command == "test") {
+	int fd = open("/sdcard/VampetaOS/test.txt", O_CREAT | O_WRONLY, 0644);
+	if (fd == -1) {
+		::printf("deu erro\n");
+		return;
 	}
-	this->printf("\n===== TEST ====\n");
+this->fd_output = fd;
+// 	this->printf("===== TEST ====\n");
+// 	for (int i = 0; i < this->command.args.size(); i++) {
+// 		std::string output = this->command.args[i] + " ";
+// 		this->printf(output.c_str());
+// sleep(1);
+// 	}
+// 	this->printf("\n===== TEST ====\n");
+this->printf("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+close(fd);
 this->fd_output = this->fd;
+::printf("terminou\n");
 }
 	if (this->command.command == "useradd") this->useradd();
 	else if (this->command.command == "login") this->login();

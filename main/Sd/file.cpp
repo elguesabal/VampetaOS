@@ -101,6 +101,19 @@ bool	Sd::create_file(const char *path, const char *content) {
 
 /**
  * @author elguesabal
+ * @brief ABRE UM ARQUIVO COM PERMISSOES DE LEITURA E ESCRITA E CASO NAO EXISTA CRIA O ARQUIVO
+ * @param path CAMINHO QUE DESEJA CRIAR O ARQUIVO
+ * @return RETORNA fd CASO O ARQUIVO SEJA ABERTO COM SUCESSO
+ * @return RETORNA -1 CASO A FUNCAO open RETORNE -1
+*/
+int	Sd::open_file(const char *path) {
+	int fd = open(System::full_path(path).c_str(), O_CREAT | O_RDWR, 0666);
+	if (fd == -1) return (-1);
+	return (fd);
+}
+
+/**
+ * @author elguesabal
  * @brief SOBRESCREVE TODO O CONTEUDO DO ARQUIVO COM O VALOR INFORMADO
  * @param path CAMINHO QUE DESEJA ESCREVER NO ARQUIVO
  * @param content VALOR QUE VAI SER ESCRITO NO ARQUIVO
